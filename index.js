@@ -86,6 +86,18 @@ const productRoute = require("./routes/ecommerce/productRoute")
 
 const authRoute = require("./routes/authRoute")
 
+const cors = require("cors")
+
+
+app.use(
+    cors({
+      origin: [
+        "http://localhost:5000",
+      ],
+      credentials: true,
+    })
+);
+
 app.use('/api/user', userRoute)
 app.use('/api/usertype', userTypeRoute)
 app.use('/api/client', clientRoute)
@@ -162,3 +174,5 @@ const port = 5000
 app.listen(port,()=>{
     console.log("server is running on port",port)
 })
+
+module.exports = app
