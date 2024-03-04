@@ -1,4 +1,4 @@
-const CityModel = require("../models/CityModel")
+const CityModel = require("../models/cityModel")
 
 const getCity = async(req,res,next)=>{
     try{

@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getOrderResponseType, getOrderResponseTypeById, addOrderResponseType, updateOrderResponseType, deleteOrderResponseType} = require("../../controllers/order/OrderResponseTypeCtrl")
+const {getOrderResponseType, getOrderResponseTypeById, addOrderResponseType, updateOrderResponseType, deleteOrderResponseType} = require("../../controllers/order/orderResponseTypeCtrl")
 
 router.get('/', getOrderResponseType)
 
