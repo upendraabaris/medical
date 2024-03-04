@@ -170,9 +170,9 @@ app.use('/api/product', productRoute)
 app.use('/api/auth', authRoute)
 
 app.use(responseSend)
-const port = 5000
+// const port = 5000
 app.listen(port,()=>{
-    console.log("server is running on port",port)
+    console.log("server is running on port",process.env.PORT)
 })
 
 module.exports = app
