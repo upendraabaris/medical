@@ -171,7 +171,7 @@ app.use('/api/auth', authRoute)
 
 app.use(responseSend)
 // const port = 5000
-app.listen(port,()=>{
+app.listen(process.env.PORT,()=>{
     console.log("server is running on port",process.env.PORT)
 })
 
