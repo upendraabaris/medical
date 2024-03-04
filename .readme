@@ -1,0 +1,35 @@
+slug
+meta_title
+meta_description
+meta_keyword
+meta_image
+meta_alt
+
+
+ActiveStatus
+Entry date
+IP address
+browser
+update date
+userID
+CompanyID
+
+
+
+slug: { type: String },
+    metaTitle: { type: String },
+    metaDescription: { type: String },
+    metaKeyword: { type: String },
+    metaImage: {
+        public_id: { type: String },
+        url: String
+    },
+    metaAlt: { type: String }
+
+activeStatus: { type: Boolean, default: true },
+    entryDate: { type: Date, default: Date.now },
+    ipAddress: { type: String },
+    browser: { type: String },
+    updateDate: { type: Date },
+    userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    companyID: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' }
