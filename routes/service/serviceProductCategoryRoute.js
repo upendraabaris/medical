@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getServiceProductCategory, getServiceProductCategoryById, addServiceProductCategory, updateServiceProductCategory, deleteServiceProductCategory} = require("../../controllers/service/serviceProductCategoryCtrl")
 
-router.get('/', getServiceProductCategory)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getServiceProductCategoryById)
+router.get('/', getServiceProductCategory, responseSend)
 
-router.post('/addServiceProductCategory', addServiceProductCategory)
+router.get('/:id', getServiceProductCategoryById, responseSend)
 
-router.put('/updateServiceProductCategory/:id', updateServiceProductCategory)
+router.post('/addServiceProductCategory', addServiceProductCategory, responseSend)
 
-router.delete('/deleteServiceProductCategory/:id', deleteServiceProductCategory)
+router.put('/updateServiceProductCategory/:id', updateServiceProductCategory, responseSend)
+
+router.delete('/deleteServiceProductCategory/:id', deleteServiceProductCategory, responseSend)
 
 module.exports = router

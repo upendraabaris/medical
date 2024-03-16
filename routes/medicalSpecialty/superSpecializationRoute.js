@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getSuperSpecialization, getSuperSpecializationById, addSuperSpecialization, updateSuperSpecialization, deleteSuperSpecialization} = require("../../controllers/medicalSpecialty/superSpecializationCtrl")
 
-router.get('/', getSuperSpecialization)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getSuperSpecializationById)
+router.get('/', getSuperSpecialization, responseSend)
 
-router.post('/addSuperSpecialization', addSuperSpecialization)
+router.get('/:id', getSuperSpecializationById, responseSend)
 
-router.put('/updateSuperSpecialization/:id', updateSuperSpecialization)
+router.post('/addSuperSpecialization', addSuperSpecialization, responseSend)
 
-router.delete('/deleteSuperSpecialization/:id', deleteSuperSpecialization)
+router.put('/updateSuperSpecialization/:id', updateSuperSpecialization, responseSend)
+
+router.delete('/deleteSuperSpecialization/:id', deleteSuperSpecialization, responseSend)
 
 module.exports = router

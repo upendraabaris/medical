@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getUserInsurance, getUserInsuranceById, addUserInsurance, updateUserInsurance, deleteUserInsurance} = require("../../controllers/user/userInsuranceCtrl")
 
-router.get('/', getUserInsurance)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getUserInsuranceById)
+router.get('/', getUserInsurance, responseSend)
 
-router.post('/addUserInsurance', addUserInsurance)
+router.get('/:id', getUserInsuranceById, responseSend)
 
-router.put('/updateUserInsurance/:id', updateUserInsurance)
+router.post('/addUserInsurance', addUserInsurance, responseSend)
 
-router.delete('/deleteUserInsurance/:id', deleteUserInsurance)
+router.put('/updateUserInsurance/:id', updateUserInsurance, responseSend)
+
+router.delete('/deleteUserInsurance/:id', deleteUserInsurance, responseSend)
 
 module.exports = router

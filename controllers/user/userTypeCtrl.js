@@ -75,4 +75,27 @@ const deleteUserType = async(req,res,next)=>{
     }
 }
 
-module.exports = {getUserType, getUserTypeById, addUserType, updateUserType, deleteUserType}
+const pagination = async(req, res, next) =>{
+    try{
+      const user = await UserTypeModel.aggregate([
+        {
+          $skip: req.params.page * req.params.count
+        },
+        {
+          $limit: Number(req.params.count)
+        }
+      ])
+      res.data = user
+      res.status_Code = "200"
+      next()
+    }
+    catch(error){
+          res.error = true;
+          res.status_Code = "403";
+          res.message = error.message
+          res.data = {}
+          next()
+    }
+  }
+
+module.exports = {getUserType, getUserTypeById, addUserType, updateUserType, deleteUserType, pagination}

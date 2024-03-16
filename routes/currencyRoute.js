@@ -1,14 +1,16 @@
 const router = require("express").Router()
 const {getCurrency, getCurrencyById, addCurrency, updateCurrency, deleteCurrency} = require("../controllers/currencyCtrl")
 
-router.get('/',  getCurrency)
+const {responseSend} = require("../utils/response")
 
-router.get('/:id', getCurrencyById)
+router.get('/',  getCurrency, responseSend)
 
-router.post('/addcurrency', addCurrency)
+router.get('/:id', getCurrencyById, responseSend)
 
-router.put('/updatcurrency/:id', updateCurrency)
+router.post('/addcurrency', addCurrency, responseSend)
 
-router.delete('/deletecurrency/:id', deleteCurrency)
+router.put('/updatcurrency/:id', updateCurrency, responseSend)
+
+router.delete('/deletecurrency/:id', deleteCurrency, responseSend)
 
 module.exports = router

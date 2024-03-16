@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getMedicalSpecialty, getMedicalSpecialtyById, addMedicalSpecialty, updateMedicalSpecialty, deleteMedicalSpecialty} = require("../../controllers/medicalSpecialty/medicalSpecialtyCtrl")
 
-router.get('/', getMedicalSpecialty)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getMedicalSpecialtyById)
+router.get('/', getMedicalSpecialty, responseSend)
 
-router.post('/addMedicalSpecialty', addMedicalSpecialty)
+router.get('/:id', getMedicalSpecialtyById, responseSend)
 
-router.put('/updateMedicalSpecialty/:id', updateMedicalSpecialty)
+router.post('/addMedicalSpecialty', addMedicalSpecialty, responseSend)
 
-router.delete('/deleteMedicalSpecialty/:id', deleteMedicalSpecialty)
+router.put('/updateMedicalSpecialty/:id', updateMedicalSpecialty, responseSend)
+
+router.delete('/deleteMedicalSpecialty/:id', deleteMedicalSpecialty, responseSend)
 
 module.exports = router

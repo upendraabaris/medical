@@ -1,15 +1,16 @@
 const router = require("express").Router()
-
 const {getDepartment, getDepartmentById, addDepartment, updateDepartment, deleteDepartment} = require("../controllers/departmentCtrl")
 
-router.get('/', getDepartment)
+const {responseSend} = require("../utils/response")
 
-router.get('/:id', getDepartmentById)
+router.get('/', getDepartment, responseSend)
 
-router.post('/addDepartment', addDepartment)
+router.get('/:id', getDepartmentById, responseSend)
 
-router.put('/updateDepartment/:id', updateDepartment)
+router.post('/addDepartment', addDepartment, responseSend)
 
-router.delete('/deleteDepartment/:id', deleteDepartment)
+router.put('/updateDepartment/:id', updateDepartment, responseSend)
+
+router.delete('/deleteDepartment/:id', deleteDepartment, responseSend)
 
 module.exports = router

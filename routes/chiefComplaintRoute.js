@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getChiefComplaint, getChiefComplaintById, addChiefComplaint, updateChiefComplaint, deleteChiefComplaint} = require("../controllers/chiefComplaintCtrl")
 
-router.get('/', getChiefComplaint)
+const {responseSend} = require("../utils/response")
 
-router.get('/:id', getChiefComplaintById)
+router.get('/', getChiefComplaint, responseSend)
 
-router.post('/addChiefComplaint', addChiefComplaint)
+router.get('/:id', getChiefComplaintById, responseSend)
 
-router.put('/updateChiefComplaint/:id', updateChiefComplaint)
+router.post('/addChiefComplaint', addChiefComplaint, responseSend)
 
-router.delete('/deleteChiefComplaint/:id', deleteChiefComplaint)
+router.put('/updateChiefComplaint/:id', updateChiefComplaint, responseSend)
+
+router.delete('/deleteChiefComplaint/:id', deleteChiefComplaint, responseSend)
 
 module.exports = router

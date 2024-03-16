@@ -1,15 +1,19 @@
 const router = require("express").Router()
 
-const {getUserType, getUserTypeById, addUserType, updateUserType, deleteUserType} = require("../../controllers/user/userTypeCtrl")
+const {getUserType, getUserTypeById, addUserType, updateUserType, deleteUserType, pagination} = require("../../controllers/user/userTypeCtrl")
 
-router.get('/', getUserType)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getUserTypeById)
+router.get('/', getUserType, responseSend)
 
-router.post('/addUserType', addUserType)
+router.get('/:id', getUserTypeById, responseSend)
 
-router.put('/updateUserType/:id', updateUserType)
+router.post('/addUserType', addUserType, responseSend)
 
-router.delete('/deleteUserType/:id', deleteUserType)
+router.put('/updateUserType/:id', updateUserType, responseSend)
+
+router.delete('/deleteUserType/:id', deleteUserType, responseSend)
+
+router.get('/page/:page&:count', pagination, responseSend)
 
 module.exports = router

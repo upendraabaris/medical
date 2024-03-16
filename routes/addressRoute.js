@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getAddress, getAddressById, addAddress, updateAddress, deleteAddress} = require("../controllers/addressCtrl")
 
-router.get('/', getAddress)
+const {responseSend} = require("../utils/response")
 
-router.get('/:id', getAddressById)
+router.get('/', getAddress, responseSend)
 
-router.post('/addAddress', addAddress)
+router.get('/:id', getAddressById, responseSend)
 
-router.put('/updateAddress/:id', updateAddress)
+router.post('/addAddress', addAddress, responseSend)
 
-router.delete('/deleteAddress/:id', deleteAddress)
+router.put('/updateAddress/:id', updateAddress, responseSend)
+
+router.delete('/deleteAddress/:id', deleteAddress, responseSend)
 
 module.exports = router

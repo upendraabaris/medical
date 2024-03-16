@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getSosApplicationForm, getSosApplicationFormById, addSosApplicationForm, updateSosApplicationForm, deleteSosApplicationForm} = require("../../controllers/sos/sosApplicationFormCtrl")
 
-router.get('/', getSosApplicationForm)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getSosApplicationFormById)
+router.get('/', getSosApplicationForm, responseSend)
 
-router.post('/addSosApplicationForm', addSosApplicationForm)
+router.get('/:id', getSosApplicationFormById, responseSend)
 
-router.put('/updateSosApplicationForm/:id', updateSosApplicationForm)
+router.post('/addSosApplicationForm', addSosApplicationForm, responseSend)
 
-router.delete('/deleteSosApplicationForm/:id', deleteSosApplicationForm)
+router.put('/updateSosApplicationForm/:id', updateSosApplicationForm, responseSend)
+
+router.delete('/deleteSosApplicationForm/:id', deleteSosApplicationForm, responseSend)
 
 module.exports = router

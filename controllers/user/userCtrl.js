@@ -2,17 +2,41 @@ const UserModel = require("../../models/user/userModel")
 
 const getUser = async(req,res,next)=>{
     try{
-        const user = await UserModel.find().populate('user_type_id').populate('nationality').populate('country_of_residence').exec();
-        // const user = await UserModel.aggregate([
-        //     {
-        //         $lookup:{
-        //             from: "User",
-        //             localField: "user_type_id",
-        //             foreignField: "_id",
-        //             as:"usertype"
-        //         }
-        //     }
-        // ]);
+        // const user = await UserModel.find().populate('user_type_id').populate('nationality').populate('country_of_residence').exec();
+        // const user = await UserModel.find().populate(['user_type_id', 'nationality', 'country_of_residence']).exec();
+        const user = await UserModel.aggregate([
+            {
+              $lookup: {
+                from: "usertypes",
+                localField: "user_type_id",
+                foreignField: "_id",
+                as: "userfullinfo"
+              }
+            },
+            {
+                $lookup: {
+                  from: "countries",
+                  localField: "nationality",
+                  foreignField: "_id",
+                  as: "countryinfo"
+                }
+              },
+            {
+              $unwind: "$countryinfo"
+            },
+            {
+              $project: {
+                _id:0,
+                "user_type": 1,
+                "fullName": { $concat: ["$first_name", " ", "$second_name", " ", "$last_name"] },
+                "nationality": "$countryinfo.country_name",
+                "mobile":1,
+                "email":1,
+                "country_of_residence":"$countryinfo.country_name"
+              }
+            },
+          ]);
+          
         res.data = user
         res.status_Code = "200"
         next()
@@ -86,4 +110,58 @@ const deleteUser = async(req,res,next)=>{
     }
 }
 
-module.exports = {getUser, getUserById, addUser, updateUser, deleteUser}
+const pagination = async(req, res, next) =>{
+  try{
+    const user = await UserModel.aggregate([
+      {
+        $skip: req.params.page * req.params.count
+      },
+      {
+        $limit: Number(req.params.count)
+      }
+    ])
+    res.data = user
+    res.status_Code = "200"
+    next()
+  }
+  catch(error){
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message
+        res.data = {}
+        next()
+  }
+}
+
+const addToFavorites = async (req, res) => {
+  try {
+      const userId  = req.user; // Assuming userId is passed as a parameter
+      const { favoriteUserId } = req.body; // Assuming favoriteUserId is passed in the request body
+
+      // Check if the user already exists
+      let user = await UserModel.findOne({ _id: userId });
+
+      // Check if the favoriteUserId already exists in the isFavorite array
+      if (user.isFavorite.includes(favoriteUserId)) {
+        user.isFavorite = user.isFavorite.filter((fav) => fav != favoriteUserId );
+        await user.save();
+          // If favoriteUserId already exists, return a message indicating it's already a favorite
+          return res.json({ message: "Removed from favorite", status: "203" });
+      }
+
+      // Add favoriteUserId to the isFavorite array
+      user.isFavorite.push(favoriteUserId);
+
+      // Save the updated user
+      await user.save();
+
+      // Return success response
+      res.status(200).json({ message: 'User added to favorites successfully.', status: "202" });
+  } catch (error) {
+      console.error('Error adding user to favorites:', error);
+      res.status(500).json({ message: 'Internal server error.' });
+  }
+}
+
+
+module.exports = {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites}

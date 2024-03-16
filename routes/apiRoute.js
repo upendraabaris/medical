@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getApi, getApiById, addApi, updateApi, deleteApi} = require("../controllers/apiCtrl")
 
-router.get('/', getApi)
+const {responseSend} = require("../utils/response")
 
-router.get('/:id', getApiById)
+router.get('/', getApi, responseSend)
 
-router.post('/addApi', addApi)
+router.get('/:id', getApiById, responseSend)
 
-router.put('/updateApi/:id', updateApi)
+router.post('/addApi', addApi, responseSend)
 
-router.delete('/deleteApi/:id', deleteApi)
+router.put('/updateApi/:id', updateApi, responseSend)
+
+router.delete('/deleteApi/:id', deleteApi, responseSend)
 
 module.exports = router

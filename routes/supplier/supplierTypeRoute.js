@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getSupplierType, getSupplierTypeById, addSupplierType, updateSupplierType, deleteSupplierType} = require("../../controllers/supplier/supplierTypeCtrl")
 
-router.get('/', getSupplierType)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getSupplierTypeById)
+router.get('/', getSupplierType, responseSend)
 
-router.post('/addSupplierType', addSupplierType)
+router.get('/:id', getSupplierTypeById, responseSend)
 
-router.put('/updateSupplierType/:id', updateSupplierType)
+router.post('/addSupplierType', addSupplierType, responseSend)
 
-router.delete('/deleteSupplierType/:id', deleteSupplierType)
+router.put('/updateSupplierType/:id', updateSupplierType, responseSend)
+
+router.delete('/deleteSupplierType/:id', deleteSupplierType, responseSend)
 
 module.exports = router

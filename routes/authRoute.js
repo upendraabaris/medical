@@ -1,6 +1,26 @@
 const router = require("express").Router()
-const { login } = require("../controllers/authCtrl")
+const { login, /* verifyToken, */ isEmailExist, isMobileNoExist, verifyEmail, verifyEmailOtp, register, register2, register3, forgotPasswordChange } = require("../controllers/authCtrl")
 
-router.post('/login', login)
+const {responseSend} = require("../utils/response")
+
+router.get("/isEmailExist/:email", isEmailExist)
+
+router.get("/isMobileNoExist/:mobile", isMobileNoExist)
+
+router.post("/mb/verifyEmail", verifyEmail)
+
+router.post("/mb/verifyEmailOtp", verifyEmailOtp)
+
+router.post('/mb/login', login, responseSend)
+
+// router.post("/register-step1", register)
+
+// router.post("/register-step2", register2)
+
+router.post("/register-step1", register3)
+
+router.post("/mb/forgotPassword", forgotPasswordChange)
+
+// router.post('/verifyToken', verifyToken, responseSend)
 
 module.exports = router

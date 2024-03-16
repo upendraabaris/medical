@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getHospitalClinicType, getHospitalClinicTypeById, addHospitalClinicType, updateHospitalClinicType, deleteHospitalClinicType} = require("../../controllers/hospital/hospitalClinicTypeCtrl")
 
-router.get('/', getHospitalClinicType)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getHospitalClinicTypeById)
+router.get('/', getHospitalClinicType, responseSend)
 
-router.post('/addHospitalClinicType', addHospitalClinicType)
+router.get('/:id', getHospitalClinicTypeById, responseSend)
 
-router.put('/updateHospitalClinicType/:id', updateHospitalClinicType)
+router.post('/addHospitalClinicType', addHospitalClinicType, responseSend)
 
-router.delete('/deleteHospitalClinicType/:id', deleteHospitalClinicType)
+router.put('/updateHospitalClinicType/:id', updateHospitalClinicType, responseSend)
+
+router.delete('/deleteHospitalClinicType/:id', deleteHospitalClinicType, responseSend)
 
 module.exports = router

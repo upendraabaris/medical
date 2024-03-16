@@ -1,14 +1,16 @@
 const router = require("express").Router()
 const {getCountry, getCountryById, addCountry, updateCountry, deleteCountry} = require("../controllers/countryCtrl")
+const {responseSend} = require("../utils/response")
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/',  getCountry)
+router.get('/', verifyToken, getCountry, responseSend)
 
-router.get('/:id', getCountryById)
+router.get('/:id', verifyToken, getCountryById, responseSend)
 
-router.post('/addCountry', addCountry)
+router.post('/addCountry', verifyToken, addCountry, responseSend)
 
-router.put('/updatCountry/:id', updateCountry)
+router.put('/updatCountry/:id', verifyToken, updateCountry, responseSend)
 
-router.delete('/deleteCountry/:id', deleteCountry)
+router.delete('/deleteCountry/:id', verifyToken, deleteCountry, responseSend)
 
 module.exports = router

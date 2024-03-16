@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getSosTransaction, getSosTransactionById, addSosTransaction, updateSosTransaction, deleteSosTransaction} = require("../../controllers/sos/sosTransactionCtrl")
 
-router.get('/', getSosTransaction)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getSosTransactionById)
+router.get('/', getSosTransaction, responseSend)
 
-router.post('/addSosTransaction', addSosTransaction)
+router.get('/:id', getSosTransactionById, responseSend)
 
-router.put('/updateSosTransaction/:id', updateSosTransaction)
+router.post('/addSosTransaction', addSosTransaction, responseSend)
 
-router.delete('/deleteSosTransaction/:id', deleteSosTransaction)
+router.put('/updateSosTransaction/:id', updateSosTransaction, responseSend)
+
+router.delete('/deleteSosTransaction/:id', deleteSosTransaction, responseSend)
 
 module.exports = router

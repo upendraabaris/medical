@@ -1,14 +1,19 @@
 const router = require("express").Router()
-const {getCity, getCityById, addCity, updateCity, deleteCity} = require("../controllers/cityCtrl")
+const {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping} = require("../controllers/cityCtrl")
+const {responseSend} = require("../utils/response")
 
-router.get('/',  getCity)
+router.get('/',  getCity, responseSend)
 
-router.get('/:id', getCityById)
+router.get('/getCityMapping', getCityMapping, responseSend)
 
-router.post('/addCity', addCity)
+router.get('/:id', getCityById, responseSend)
 
-router.put('/updatCity/:id', updateCity)
+router.post('/addCity', addCity, responseSend)
 
-router.delete('/deleteCity/:id', deleteCity)
+router.put('/updatCity/:id', updateCity, responseSend)
+
+router.delete('/deleteCity/:id', deleteCity, responseSend)
+
+
 
 module.exports = router

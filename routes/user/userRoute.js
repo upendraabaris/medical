@@ -1,15 +1,23 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser} = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites} = require("../../controllers/user/userCtrl")
 
-router.get('/', getUser)
+const {responseSend} = require("../../utils/response")
 
-router.get('/:id', getUserById)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.post('/adduser', addUser)
+router.get('/', verifyToken, getUser, responseSend)
 
-router.put('/updateuser/:id', updateUser)
+router.get('/:id',verifyToken, getUserById, responseSend)
 
-router.delete('/deleteuser/:id', deleteUser)
+router.post('/adduser', verifyToken, addUser, responseSend)
+
+router.put('/updateuser/:id', verifyToken, updateUser, responseSend)
+
+router.delete('/deleteuser/:id', verifyToken, deleteUser, responseSend)
+
+router.get('/page/:page&:count', pagination, responseSend)
+
+router.post('/addToFavorites', verifyToken, addToFavorites, responseSend)
 
 module.exports = router

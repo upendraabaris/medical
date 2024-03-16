@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getBusinessPartner, getBusinessPartnerById, addBusinessPartner, updateBusinessPartner, deleteBusinessPartner} = require("../controllers/businessPartnerCtrl")
 
-router.get('/', getBusinessPartner)
+const {responseSend} = require("../utils/response")
 
-router.get('/:id', getBusinessPartnerById)
+router.get('/', getBusinessPartner, responseSend)
 
-router.post('/addBusinessPartner', addBusinessPartner)
+router.get('/:id', getBusinessPartnerById, responseSend)
 
-router.put('/updateBusinessPartner/:id', updateBusinessPartner)
+router.post('/addBusinessPartner', addBusinessPartner, responseSend)
 
-router.delete('/deleteBusinessPartner/:id', deleteBusinessPartner)
+router.put('/updateBusinessPartner/:id', updateBusinessPartner, responseSend)
+
+router.delete('/deleteBusinessPartner/:id', deleteBusinessPartner, responseSend)
 
 module.exports = router

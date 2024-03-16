@@ -86,6 +86,34 @@ const productRoute = require("./routes/ecommerce/productRoute")
 
 const authRoute = require("./routes/authRoute")
 
+const healthTipRoute = require("./routes/healthTipRoute")
+const diseaseRoute = require("./routes/disease/diseaseRoute")
+const diseaseCategoryRoute = require("./routes/disease/diseaseCategoryRoute")
+const diseaseSubCategoryRoute = require("./routes/disease/diseaseSubCategoryRoute")
+const diseaseSubRoute = require("./routes/disease/diseaseSubRoute")
+const preExistingDiseaseRoute = require("./routes/disease/preExistingDiseaseRoute")
+
+const qrCodeRegisterRoute = require("./routes/user/qrCodeRegisterRoute")
+const userRelationRoute = require("./routes/user/userRelationRoute")
+const userReferenceRoute = require("./routes/user/userReferenceRoute")
+const favoriteContactRoute = require("./routes/favoriteContactRoute")
+
+
+const postRoute = require("./routes/posts/postRoute")
+const likeRoute = require("./routes/posts/likeRoute")
+const commentRoute = require("./routes/posts/commentRoute")
+// const orderRoute = require("./routes/ecommerce/orderRoute")
+const cancelOrderRoute = require("./routes/ecommerce/cancelOrderRoute")
+const cancelReasonRoute = require("./routes/ecommerce/cancelReasonRoute")
+const orderTransactionRoute = require("./routes/ecommerce/orderTransactionRoute")
+const cancelDeliveryRoute = require("./routes/ecommerce/cancelDeliveryRoute")
+
+const bannerSellerRoute = require("./routes/ecommerce/bannerSellerRoute")
+const blogRoute = require("./routes/ecommerce/blogsRoute")
+const blogCategoryRoute = require("./routes/ecommerce/blogsCatRoute")
+
+const zoneRoute = require("./routes/zoneRoute")
+
 const cors = require("cors")
 
 
@@ -168,6 +196,32 @@ app.use('/api/product-category', productCategoryRoute)
 app.use('/api/product', productRoute)
 
 app.use('/api/auth', authRoute)
+
+app.use('/api/health-tip', healthTipRoute)
+app.use('/api/disease', diseaseRoute)
+app.use('/api/disease-category', diseaseCategoryRoute)
+app.use('/api/disease-subcategory', diseaseSubCategoryRoute)
+app.use('/api/diseasesub', diseaseSubRoute)
+app.use('/api/pre-existing-disease', preExistingDiseaseRoute)
+
+app.use('/api/qr-code-register', qrCodeRegisterRoute)
+app.use('/api/user/user-relation-type', userRelationRoute)
+app.use('/api/user/user-reference', userReferenceRoute)
+app.use('/api/favorite-contact', favoriteContactRoute)
+
+app.use('/api/posts', postRoute)
+app.use('/api/likes', likeRoute)
+app.use('/api/comments', commentRoute)
+app.use('/api/order/cancel-order', cancelOrderRoute)
+app.use('/api/order/cancel-reason', cancelReasonRoute)
+app.use('/api/order/order-transaction', orderTransactionRoute)
+app.use('/api/order/cancel-delivery', cancelDeliveryRoute)
+
+app.use('/api/order/banner-seller', bannerSellerRoute)
+app.use('/api/order/blogs', blogRoute)
+app.use('/api/order/blog-category', blogCategoryRoute)
+
+app.use('/api/zone', zoneRoute)
 
 app.use(responseSend)
 // const port = 5000

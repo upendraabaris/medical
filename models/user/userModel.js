@@ -23,12 +23,16 @@ const userSchema = new mongoose.Schema({
   blood_group: { type: String, maxlength: 2 },
   nationality: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
   country_of_residence: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
-  mobile_no: { type: String },
+  mobile: { type: String },
   email: { type: String },
+  otp: { type : Number },
   entry_date: { type: Date },
   status: { type: String },
   expiry_date: { type: Date },
-  password: { type: String }
+  password: { type: String },
+  isFavorite: [ { type: mongoose.Schema.Types.ObjectId }]
+  // emailVerified: {type: Boolean, default: false, index: true},
+  // mobileVerified: {type: Boolean, default: false, index: true},
 },
 {
   timestamps: true,

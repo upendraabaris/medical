@@ -75,4 +75,38 @@ const deleteCity = async(req,res,next)=>{
     }
 }
 
-module.exports = {getCity, getCityById, addCity, updateCity, deleteCity}
+const getCityMapping = async(req,res,next)=>{
+    try{
+        // const City = await CityModel.find().populate('state_id').exec();
+        const City = await CityModel.aggregate([
+            {
+                $lookup:{
+                    from: "cities",
+                    localField: "city_name",
+                    foreignField: "city_name",
+                    as: "cityinfo"
+                }
+            },
+            {
+                    $unwind:"$cityinfo"
+            },
+            {
+                $project:{
+                    _id:0,
+                    "city_name": "$cityinfo.city_name"
+                }
+            }
+        ]);
+        res.data = City
+        res.status_Code = "200"
+        next()
+    }catch(error){
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message
+        res.data = {}
+        next()
+    }
+}
+
+module.exports = {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping}
