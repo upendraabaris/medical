@@ -2,14 +2,16 @@ const router = require("express").Router()
 const {getHealthTip, getHealthTipById, addHealthTip, updateHealthTip, deleteHealthTip} = require("../controllers/healthTipCtrl")
 const {responseSend} = require("../utils/response")
 
-router.get('/', getHealthTip, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/:id', getHealthTipById, responseSend)
+router.get('/', verifyToken, getHealthTip, responseSend)
 
-router.post('/addHealthTip', addHealthTip, responseSend)
+router.get('/:id', verifyToken, getHealthTipById, responseSend)
 
-router.put('/updateHealthTip/:id', updateHealthTip, responseSend)
+router.post('/addHealthTip', verifyToken, addHealthTip, responseSend)
 
-router.delete('/deleteHealthTip/:id', deleteHealthTip, responseSend)
+router.put('/updateHealthTip/:id', verifyToken, updateHealthTip, responseSend)
+
+router.delete('/deleteHealthTip/:id', verifyToken, deleteHealthTip, responseSend)
 
 module.exports = router

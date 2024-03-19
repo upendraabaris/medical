@@ -75,4 +75,46 @@ const deleteEmrResponse = async(req,res,next)=>{
     }
 }
 
-module.exports = {getEmrResponse, getEmrResponseById, addEmrResponse, updateEmrResponse, deleteEmrResponse}
+const getQuestionnaire = async(req, res, next) =>{
+    try{
+        const EmrResponse = await EmrResponseModel.aggregate([
+            {
+                $lookup:{
+                    from: "emrs",
+                    localField: "emr_id",
+                    foreignField: "_id",
+                    as: "emr",
+                }
+            },
+            {
+                $lookup: {
+                  from: 'emroptionmasters',
+                  localField: 'emr_option_id',
+                  foreignField: '_id',
+                  as: 'emr_option'
+                }
+            },
+            {
+                $project: {
+                  emr_response_id: 1,
+                //   order: { $arrayElemAt: ['$order', 0] }, // Extract first element from array
+                  emr: { $arrayElemAt: ['$emr', 0] },
+                  emr_option: { $arrayElemAt: ['$emr_option', 0] }
+                }
+              }
+        ])
+        console.log(EmrResponse)
+        res.data = EmrResponse
+        res.status_Code = "200"
+        next()
+    }
+    catch(error){
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message
+        res.data = {}
+        next()
+    }
+}
+
+module.exports = {getEmrResponse, getEmrResponseById, addEmrResponse, updateEmrResponse, deleteEmrResponse, getQuestionnaire}

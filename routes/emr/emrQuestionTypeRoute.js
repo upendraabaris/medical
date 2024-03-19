@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getEmrQuestionType, getEmrQuestionTypeById, addEmrQuestionType, updateEmrQuestionType, deleteEmrQuestionType} = require("../../controllers/emr/emrQuestionTypeCtrl")
 
-router.get('/', getEmrQuestionType)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getEmrQuestionTypeById)
+router.get('/', verifyToken, getEmrQuestionType)
 
-router.post('/addEmrQuestionType', addEmrQuestionType)
+router.get('/:id', verifyToken, getEmrQuestionTypeById)
 
-router.put('/updateEmrQuestionType/:id', updateEmrQuestionType)
+router.post('/addEmrQuestionType', verifyToken, addEmrQuestionType)
 
-router.delete('/deleteEmrQuestionType/:id', deleteEmrQuestionType)
+router.put('/updateEmrQuestionType/:id', verifyToken, updateEmrQuestionType)
+
+router.delete('/deleteEmrQuestionType/:id', verifyToken, deleteEmrQuestionType)
 
 module.exports = router

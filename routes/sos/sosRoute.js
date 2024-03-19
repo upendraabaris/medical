@@ -4,14 +4,16 @@ const {getSos, getSosById, addSos, updateSos, deleteSos} = require("../../contro
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getSos, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getSosById, responseSend)
+router.get('/', verifyToken, getSos, responseSend)
 
-router.post('/addSos', addSos, responseSend)
+router.get('/:id', verifyToken, getSosById, responseSend)
 
-router.put('/updateSos/:id', updateSos, responseSend)
+router.post('/addSos', verifyToken, addSos, responseSend)
 
-router.delete('/deleteSos/:id', deleteSos, responseSend)
+router.put('/updateSos/:id', verifyToken, updateSos, responseSend)
+
+router.delete('/deleteSos/:id', verifyToken, deleteSos, responseSend)
 
 module.exports = router

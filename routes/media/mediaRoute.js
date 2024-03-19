@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getMedia, getMediaById, addMedia, updateMedia, deleteMedia} = require("../../controllers/media/mediaCtrl")
 
-router.get('/', getMedia)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getMediaById)
+router.get('/', verifyToken, getMedia)
 
-router.post('/addMedia', addMedia)
+router.get('/:id', verifyToken, getMediaById)
 
-router.put('/updateMedia/:id', updateMedia)
+router.post('/addMedia', verifyToken, addMedia)
 
-router.delete('/deleteMedia/:id', deleteMedia)
+router.put('/updateMedia/:id', verifyToken, updateMedia)
+
+router.delete('/deleteMedia/:id', verifyToken, deleteMedia)
 
 module.exports = router

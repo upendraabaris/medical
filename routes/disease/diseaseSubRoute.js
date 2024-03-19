@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getDiseaseSub, getDiseaseSubById, addDiseaseSub, updateDiseaseSub, deleteDiseaseSub} = require("../../controllers/disease/diseaseSubCtrl")
 
-router.get('/', getDiseaseSub)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getDiseaseSubById)
+router.get('/', verifyToken, getDiseaseSub)
 
-router.post('/addDiseaseSub', addDiseaseSub)
+router.get('/:id', verifyToken, getDiseaseSubById)
 
-router.put('/updateDiseaseSub/:id', updateDiseaseSub)
+router.post('/addDiseaseSub', verifyToken, addDiseaseSub)
 
-router.delete('/deleteDiseaseSub/:id', deleteDiseaseSub)
+router.put('/updateDiseaseSub/:id', verifyToken, updateDiseaseSub)
+
+router.delete('/deleteDiseaseSub/:id', verifyToken, deleteDiseaseSub)
 
 module.exports = router

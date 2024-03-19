@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getEmr, getEmrById, addEmr, updateEmr, deleteEmr} = require("../../controllers/emr/emrCtrl")
 
-router.get('/', getEmr)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getEmrById)
+router.get('/', verifyToken, getEmr)
 
-router.post('/addEmr', addEmr)
+router.get('/:id', verifyToken, getEmrById)
 
-router.put('/updateEmr/:id', updateEmr)
+router.post('/addEmr', verifyToken, addEmr)
 
-router.delete('/deleteEmr/:id', deleteEmr)
+router.put('/updateEmr/:id', verifyToken, updateEmr)
+
+router.delete('/deleteEmr/:id', verifyToken, deleteEmr)
 
 module.exports = router

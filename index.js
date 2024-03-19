@@ -11,8 +11,8 @@ console.log(process.env.MONGODB_URL)
 mongoose.connect(process.env.MONGODB_URL)
 
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json({limit: "50mb"}))
+app.use(bodyParser.urlencoded({extended: false, limit: "50mb"}))
 
 
 const userRoute = require("./routes/user/userRoute")

@@ -2,14 +2,16 @@ const router = require("express").Router()
 const {getProcedure, getProcedureById, addProcedure, updateProcedure, deleteProcedure} = require("../controllers/procedureCtrl")
 const {responseSend} = require("../utils/response")
 
-router.get('/', getProcedure, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/:id', getProcedureById, responseSend)
+router.get('/', verifyToken, getProcedure, responseSend)
 
-router.post('/addProcedure', addProcedure, responseSend)
+router.get('/:id', verifyToken, getProcedureById, responseSend)
 
-router.put('/updateProcedure/:id', updateProcedure, responseSend)
+router.post('/addProcedure', verifyToken, addProcedure, responseSend)
 
-router.delete('/deleteProcedure/:id', deleteProcedure, responseSend)
+router.put('/updateProcedure/:id', verifyToken, updateProcedure, responseSend)
+
+router.delete('/deleteProcedure/:id', verifyToken, deleteProcedure, responseSend)
 
 module.exports = router

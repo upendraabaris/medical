@@ -2,14 +2,16 @@ const router = require("express").Router()
 const {getZone, getZoneById, addZone, updateZone, deleteZone} = require("../controllers/zoneCtrl")
 const {responseSend} = require("../utils/response")
 
-router.get('/',  getZone, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/:id', getZoneById, responseSend)
+router.get('/', verifyToken, getZone, responseSend)
 
-router.post('/addZone', addZone, responseSend)
+router.get('/:id', verifyToken, getZoneById, responseSend)
 
-router.put('/updatZone/:id', updateZone, responseSend)
+router.post('/addZone', verifyToken, addZone, responseSend)
 
-router.delete('/deleteZone/:id', deleteZone, responseSend)
+router.put('/updatZone/:id', verifyToken, updateZone, responseSend)
+
+router.delete('/deleteZone/:id', verifyToken, deleteZone, responseSend)
 
 module.exports = router

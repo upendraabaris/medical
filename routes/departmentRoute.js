@@ -3,14 +3,16 @@ const {getDepartment, getDepartmentById, addDepartment, updateDepartment, delete
 
 const {responseSend} = require("../utils/response")
 
-router.get('/', getDepartment, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/:id', getDepartmentById, responseSend)
+router.get('/', verifyToken, getDepartment, responseSend)
 
-router.post('/addDepartment', addDepartment, responseSend)
+router.get('/:id', verifyToken, getDepartmentById, responseSend)
 
-router.put('/updateDepartment/:id', updateDepartment, responseSend)
+router.post('/addDepartment', verifyToken, addDepartment, responseSend)
 
-router.delete('/deleteDepartment/:id', deleteDepartment, responseSend)
+router.put('/updateDepartment/:id', verifyToken, updateDepartment, responseSend)
+
+router.delete('/deleteDepartment/:id', verifyToken, deleteDepartment, responseSend)
 
 module.exports = router

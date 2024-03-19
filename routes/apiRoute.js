@@ -4,14 +4,16 @@ const {getApi, getApiById, addApi, updateApi, deleteApi} = require("../controlle
 
 const {responseSend} = require("../utils/response")
 
-router.get('/', getApi, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/:id', getApiById, responseSend)
+router.get('/', verifyToken, getApi, responseSend)
 
-router.post('/addApi', addApi, responseSend)
+router.get('/:id', verifyToken, getApiById, responseSend)
 
-router.put('/updateApi/:id', updateApi, responseSend)
+router.post('/addApi', verifyToken, addApi, responseSend)
 
-router.delete('/deleteApi/:id', deleteApi, responseSend)
+router.put('/updateApi/:id', verifyToken, updateApi, responseSend)
+
+router.delete('/deleteApi/:id', verifyToken, deleteApi, responseSend)
 
 module.exports = router

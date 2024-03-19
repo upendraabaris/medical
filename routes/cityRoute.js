@@ -2,18 +2,19 @@ const router = require("express").Router()
 const {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping} = require("../controllers/cityCtrl")
 const {responseSend} = require("../utils/response")
 
-router.get('/',  getCity, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/getCityMapping', getCityMapping, responseSend)
+router.get('/', verifyToken, getCity, responseSend)
 
-router.get('/:id', getCityById, responseSend)
+router.get('/getCityMapping', verifyToken, getCityMapping, responseSend)
 
-router.post('/addCity', addCity, responseSend)
+router.get('/:id', verifyToken, getCityById, responseSend)
 
-router.put('/updatCity/:id', updateCity, responseSend)
+router.post('/addCity', verifyToken, addCity, responseSend)
 
-router.delete('/deleteCity/:id', deleteCity, responseSend)
+router.put('/updatCity/:id', verifyToken, updateCity, responseSend)
 
+router.delete('/deleteCity/:id', verifyToken, deleteCity, responseSend)
 
 
 module.exports = router

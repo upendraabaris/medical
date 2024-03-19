@@ -4,14 +4,16 @@ const {getUserReference, getUserReferenceById, addUserReference, updateUserRefer
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getUserReference, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getUserReferenceById, responseSend)
+router.get('/', verifyToken, getUserReference, responseSend)
 
-router.post('/addUserReference', addUserReference, responseSend)
+router.get('/:id', verifyToken, getUserReferenceById, responseSend)
 
-router.put('/updateUserReference/:id', updateUserReference, responseSend)
+router.post('/addUserReference', verifyToken, addUserReference, responseSend)
 
-router.delete('/deleteUserReference/:id', deleteUserReference, responseSend)
+router.put('/updateUserReference/:id', verifyToken, updateUserReference, responseSend)
+
+router.delete('/deleteUserReference/:id', verifyToken, deleteUserReference, responseSend)
 
 module.exports = router

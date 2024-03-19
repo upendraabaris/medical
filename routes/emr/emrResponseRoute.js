@@ -1,15 +1,19 @@
 const router = require("express").Router()
 
-const {getEmrResponse, getEmrResponseById, addEmrResponse, updateEmrResponse, deleteEmrResponse} = require("../../controllers/emr/emrResponseCtrl")
+const {getEmrResponse, getEmrResponseById, addEmrResponse, updateEmrResponse, deleteEmrResponse, getQuestionnaire} = require("../../controllers/emr/emrResponseCtrl")
 
-router.get('/', getEmrResponse)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getEmrResponseById)
+router.get('/', verifyToken, getEmrResponse)
 
-router.post('/addEmrResponse', addEmrResponse)
+router.get('/:id', verifyToken, getEmrResponseById)
 
-router.put('/updateEmrResponse/:id', updateEmrResponse)
+router.post('/addEmrResponse', verifyToken, addEmrResponse)
 
-router.delete('/deleteEmrResponse/:id', deleteEmrResponse)
+router.put('/updateEmrResponse/:id', verifyToken, updateEmrResponse)
+
+router.delete('/deleteEmrResponse/:id', verifyToken, deleteEmrResponse)
+
+router.get('/questionnaire', verifyToken, getQuestionnaire)
 
 module.exports = router

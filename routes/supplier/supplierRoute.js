@@ -4,14 +4,16 @@ const {getSupplier, getSupplierById, addSupplier, updateSupplier, deleteSupplier
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getSupplier, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getSupplierById, responseSend)
+router.get('/', verifyToken, getSupplier, responseSend)
 
-router.post('/addSupplier', addSupplier, responseSend)
+router.get('/:id', verifyToken, getSupplierById, responseSend)
 
-router.put('/updateSupplier/:id', updateSupplier, responseSend)
+router.post('/addSupplier', verifyToken, addSupplier, responseSend)
 
-router.delete('/deleteSupplier/:id', deleteSupplier, responseSend)
+router.put('/updateSupplier/:id', verifyToken, updateSupplier, responseSend)
+
+router.delete('/deleteSupplier/:id', verifyToken, deleteSupplier, responseSend)
 
 module.exports = router

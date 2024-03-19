@@ -2,14 +2,16 @@ const router = require("express").Router()
 const {getFavoriteContact, getFavoriteContactById, addFavoriteContact, updateFavoriteContact, deleteFavoriteContact} = require("../controllers/favoriteContactCtrl")
 const {responseSend} = require("../utils/response")
 
-router.get('/', getFavoriteContact, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/:id', getFavoriteContactById, responseSend)
+router.get('/', verifyToken, getFavoriteContact, responseSend)
 
-router.post('/addFavoriteContact', addFavoriteContact, responseSend)
+router.get('/:id', verifyToken, getFavoriteContactById, responseSend)
 
-router.put('/updateFavoriteContact/:id', updateFavoriteContact, responseSend)
+router.post('/addFavoriteContact', verifyToken, addFavoriteContact, responseSend)
 
-router.delete('/deleteFavoriteContact/:id', deleteFavoriteContact, responseSend)
+router.put('/updateFavoriteContact/:id', verifyToken, updateFavoriteContact, responseSend)
+
+router.delete('/deleteFavoriteContact/:id', verifyToken, deleteFavoriteContact, responseSend)
 
 module.exports = router

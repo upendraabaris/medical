@@ -1,5 +1,5 @@
 const HospitalClinicModel = require("../../models/hospital/hospitalClinicModel")
-
+const UserModel = require("../../models/user/userModel")
 const getHospitalClinic = async(req,res,next)=>{
     try{
         const HospitalClinic = await HospitalClinicModel.find().populate('hos_clinic_type_id');
@@ -76,4 +76,23 @@ const deleteHospitalClinic = async(req,res,next)=>{
     }
 }
 
-module.exports = {getHospitalClinic, getHospitalClinicById, addHospitalClinic, updateHospitalClinic, deleteHospitalClinic}
+const getFavorite = async(req,res, next) =>{
+    try{
+        const user = await UserModel.findById(req.user)
+        let [favorite, rest] = await Promise.all([HospitalClinicModel.find({ _id: { $in: user.isFavorite }, hos_clinic_type_id: req.params.id }), HospitalClinicModel.find({ _id: { $nin: user.isFavorite }, hos_clinic_type_id: req.params.id }).skip(req.query.page*req.query.count).limit(req.query.count)])
+        res.data = { favorite, rest }
+        console.log(res.data)
+        next()
+    }
+    catch(error){
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message
+        res.data = {}
+        next()
+    }
+}
+
+// http://localhost:5000/api/hospitalclinic/getfavorite/65e08c411c23952bbb684ca9?page=0&count=1
+
+module.exports = {getHospitalClinic, getHospitalClinicById, addHospitalClinic, updateHospitalClinic, deleteHospitalClinic, getFavorite}

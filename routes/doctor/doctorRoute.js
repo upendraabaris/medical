@@ -4,14 +4,16 @@ const {getDoctor, getDoctorById, addDoctor, updateDoctor, deleteDoctor} = requir
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getDoctor, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getDoctorById, responseSend)
+router.get('/', verifyToken, getDoctor, responseSend)
 
-router.post('/addDoctor', addDoctor, responseSend)
+router.get('/:id', verifyToken, getDoctorById, responseSend)
 
-router.put('/updateDoctor/:id', updateDoctor, responseSend)
+router.post('/addDoctor', verifyToken, addDoctor, responseSend)
 
-router.delete('/deleteDoctor/:id', deleteDoctor, responseSend)
+router.put('/updateDoctor/:id', verifyToken, updateDoctor, responseSend)
+
+router.delete('/deleteDoctor/:id', verifyToken, deleteDoctor, responseSend)
 
 module.exports = router

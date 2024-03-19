@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const emrSchema = new mongoose.Schema({
-  emr_id: { type: Number, required: true, unique: true },
+//  emr_id: { type: Number, required: true, unique: true },
   chief_complaint_id: { type: mongoose.Schema.Types.ObjectId, ref: 'ChiefComplaints', required: true },
   medical_specialty_id: { type: mongoose.Schema.Types.ObjectId, ref: 'MedicalSpecialty', required: true },
   emr_question: { type: String, required: true },

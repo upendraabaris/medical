@@ -4,14 +4,16 @@ const {getAddress, getAddressById, addAddress, updateAddress, deleteAddress} = r
 
 const {responseSend} = require("../utils/response")
 
-router.get('/', getAddress, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/:id', getAddressById, responseSend)
+router.get('/', verifyToken, getAddress, responseSend)
 
-router.post('/addAddress', addAddress, responseSend)
+router.get('/:id', verifyToken, getAddressById, responseSend)
 
-router.put('/updateAddress/:id', updateAddress, responseSend)
+router.post('/addAddress', verifyToken, addAddress, responseSend)
 
-router.delete('/deleteAddress/:id', deleteAddress, responseSend)
+router.put('/updateAddress/:id', verifyToken, updateAddress, responseSend)
+
+router.delete('/deleteAddress/:id', verifyToken, deleteAddress, responseSend)
 
 module.exports = router

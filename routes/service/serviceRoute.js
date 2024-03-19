@@ -4,14 +4,16 @@ const {getService, getServiceById, addService, updateService, deleteService} = r
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getService, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getServiceById, responseSend)
+router.get('/', verifyToken, getService, responseSend)
 
-router.post('/addService', addService, responseSend)
+router.get('/:id', verifyToken, getServiceById, responseSend)
 
-router.put('/updateService/:id', updateService, responseSend)
+router.post('/addService', verifyToken, addService, responseSend)
 
-router.delete('/deleteService/:id', deleteService, responseSend)
+router.put('/updateService/:id', verifyToken, updateService, responseSend)
+
+router.delete('/deleteService/:id', verifyToken, deleteService, responseSend)
 
 module.exports = router

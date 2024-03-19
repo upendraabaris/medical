@@ -4,14 +4,16 @@ const {getSosApplicationForm, getSosApplicationFormById, addSosApplicationForm, 
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getSosApplicationForm, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getSosApplicationFormById, responseSend)
+router.get('/', verifyToken, getSosApplicationForm, responseSend)
 
-router.post('/addSosApplicationForm', addSosApplicationForm, responseSend)
+router.get('/:id', verifyToken, getSosApplicationFormById, responseSend)
 
-router.put('/updateSosApplicationForm/:id', updateSosApplicationForm, responseSend)
+router.post('/addSosApplicationForm', verifyToken, addSosApplicationForm, responseSend)
 
-router.delete('/deleteSosApplicationForm/:id', deleteSosApplicationForm, responseSend)
+router.put('/updateSosApplicationForm/:id', verifyToken, updateSosApplicationForm, responseSend)
+
+router.delete('/deleteSosApplicationForm/:id', verifyToken, deleteSosApplicationForm, responseSend)
 
 module.exports = router

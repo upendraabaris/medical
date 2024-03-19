@@ -1,8 +1,18 @@
 const CountryModel = require("../models/countryModel")
-
+const Client = require("../middleware/redis")
 const getCountry = async(req,res,next)=>{
     try{
-        const Country = await CountryModel.find();
+        let client = await Client.get(`country:CountryList`);
+        let country;
+        if(client == null) {
+            country = await CountryModel.find();
+            await Client.set(`country:CountryList`, JSON.stringify(country));
+        }
+        else {
+            country = JSON.parse(client);
+        }
+
+        // const Country = await CountryModel.find();
         res.data = Country
         res.status_Code = "200"
         next()

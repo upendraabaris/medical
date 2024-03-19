@@ -4,14 +4,16 @@ const {getMedicalSpecialty, getMedicalSpecialtyById, addMedicalSpecialty, update
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getMedicalSpecialty, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getMedicalSpecialtyById, responseSend)
+router.get('/', verifyToken, getMedicalSpecialty, responseSend)
 
-router.post('/addMedicalSpecialty', addMedicalSpecialty, responseSend)
+router.get('/:id', verifyToken, getMedicalSpecialtyById, responseSend)
 
-router.put('/updateMedicalSpecialty/:id', updateMedicalSpecialty, responseSend)
+router.post('/addMedicalSpecialty', verifyToken, addMedicalSpecialty, responseSend)
 
-router.delete('/deleteMedicalSpecialty/:id', deleteMedicalSpecialty, responseSend)
+router.put('/updateMedicalSpecialty/:id', verifyToken, updateMedicalSpecialty, responseSend)
+
+router.delete('/deleteMedicalSpecialty/:id', verifyToken, deleteMedicalSpecialty, responseSend)
 
 module.exports = router

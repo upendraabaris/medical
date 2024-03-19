@@ -4,15 +4,17 @@ const {getUserType, getUserTypeById, addUserType, updateUserType, deleteUserType
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getUserType, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getUserTypeById, responseSend)
+router.get('/', verifyToken, getUserType, responseSend)
 
-router.post('/addUserType', addUserType, responseSend)
+router.get('/:id', verifyToken, getUserTypeById, responseSend)
 
-router.put('/updateUserType/:id', updateUserType, responseSend)
+router.post('/addUserType', verifyToken, addUserType, responseSend)
 
-router.delete('/deleteUserType/:id', deleteUserType, responseSend)
+router.put('/updateUserType/:id', verifyToken, updateUserType, responseSend)
+
+router.delete('/deleteUserType/:id', verifyToken, deleteUserType, responseSend)
 
 router.get('/page/:page&:count', pagination, responseSend)
 

@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getEmrPictureGallery, getEmrPictureGalleryById, addEmrPictureGallery, updateEmrPictureGallery, deleteEmrPictureGallery} = require("../../controllers/emr/emrPictureGalleryCtrl")
 
-router.get('/', getEmrPictureGallery)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getEmrPictureGalleryById)
+router.get('/', verifyToken, getEmrPictureGallery)
 
-router.post('/addEmrPictureGallery', addEmrPictureGallery)
+router.get('/:id', verifyToken, getEmrPictureGalleryById)
 
-router.put('/updateEmrPictureGallery/:id', updateEmrPictureGallery)
+router.post('/addEmrPictureGallery', verifyToken, addEmrPictureGallery)
 
-router.delete('/deleteEmrPictureGallery/:id', deleteEmrPictureGallery)
+router.put('/updateEmrPictureGallery/:id', verifyToken, updateEmrPictureGallery)
+
+router.delete('/deleteEmrPictureGallery/:id', verifyToken, deleteEmrPictureGallery)
 
 module.exports = router

@@ -2,14 +2,16 @@ const router = require("express").Router()
 const {getServiceHistory, getServiceHistoryById, addServiceHistory, updateServiceHistory, deleteServiceHistory} = require("../controllers/serviceHistoryCtrl")
 const {responseSend} = require("../utils/response")
 
-router.get('/', getServiceHistory, responseSend)
+const {verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/:id', getServiceHistoryById, responseSend)
+router.get('/', verifyToken, getServiceHistory, responseSend)
 
-router.post('/addServiceHistory', addServiceHistory, responseSend)
+router.get('/:id', verifyToken, getServiceHistoryById, responseSend)
 
-router.put('/updateServiceHistory/:id', updateServiceHistory, responseSend)
+router.post('/addServiceHistory', verifyToken, addServiceHistory, responseSend)
 
-router.delete('/deleteServiceHistory/:id', deleteServiceHistory, responseSend)
+router.put('/updateServiceHistory/:id', verifyToken, updateServiceHistory, responseSend)
+
+router.delete('/deleteServiceHistory/:id', verifyToken, deleteServiceHistory, responseSend)
 
 module.exports = router

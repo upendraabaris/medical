@@ -4,14 +4,16 @@ const {getServiceProductCategory, getServiceProductCategoryById, addServiceProdu
 
 const {responseSend} = require("../../utils/response")
 
-router.get('/', getServiceProductCategory, responseSend)
+const {verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getServiceProductCategoryById, responseSend)
+router.get('/', verifyToken, getServiceProductCategory, responseSend)
 
-router.post('/addServiceProductCategory', addServiceProductCategory, responseSend)
+router.get('/:id', verifyToken, getServiceProductCategoryById, responseSend)
 
-router.put('/updateServiceProductCategory/:id', updateServiceProductCategory, responseSend)
+router.post('/addServiceProductCategory', verifyToken, addServiceProductCategory, responseSend)
 
-router.delete('/deleteServiceProductCategory/:id', deleteServiceProductCategory, responseSend)
+router.put('/updateServiceProductCategory/:id', verifyToken, updateServiceProductCategory, responseSend)
+
+router.delete('/deleteServiceProductCategory/:id', verifyToken, deleteServiceProductCategory, responseSend)
 
 module.exports = router
