@@ -6,6 +6,8 @@ const {verifyToken} = require("../middleware/authMiddleware")
 
 router.get('/', verifyToken, getCity, responseSend)
 
+router.get('/public', verifyToken, getCity, responseSend)
+
 router.get('/getCityMapping', verifyToken, getCityMapping, responseSend)
 
 router.get('/:id', verifyToken, getCityById, responseSend)

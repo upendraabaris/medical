@@ -5,6 +5,8 @@ const {verifyToken} = require("../middleware/authMiddleware")
 
 router.get('/', verifyToken, getCountry, responseSend)
 
+router.get('/public', verifyToken, getCountry, responseSend)
+
 router.get('/:id', verifyToken, getCountryById, responseSend)
 
 router.post('/addCountry', verifyToken, addCountry, responseSend)

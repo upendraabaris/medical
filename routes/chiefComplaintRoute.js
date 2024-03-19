@@ -8,6 +8,8 @@ const {verifyToken} = require("../middleware/authMiddleware")
 
 router.get('/', verifyToken, getChiefComplaint, responseSend)
 
+router.get('/public', verifyToken, getChiefComplaint, responseSend)
+
 router.get('/:id', verifyToken, getChiefComplaintById, responseSend)
 
 router.post('/addChiefComplaint', verifyToken, addChiefComplaint, responseSend)
