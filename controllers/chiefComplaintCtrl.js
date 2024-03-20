@@ -1,9 +1,17 @@
 const ChiefComplaintModel = require("../models/chiefComplaintModel")
-
+const Client = require("../middleware/redis")
 const getChiefComplaint = async(req,res,next)=>{
     try{
-        const ChiefComplaint = await ChiefComplaintModel.find();
-        res.data = ChiefComplaint
+        let client = await Client.get('ChiefComplaint');
+        let ChiefComplaint;
+        if(client == null) {
+            ChiefComplaint = await ChiefComplaintModel.find()
+            await Client.set(`ChiefComplaint`, JSON.stringify(ChiefComplaint));
+        }
+        else {
+            ChiefComplaint = JSON.parse(client);
+        }
+        res.data = CheifComplaint
         res.status_Code = "200"
         next()
     }catch(error){

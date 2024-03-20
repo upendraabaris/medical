@@ -114,6 +114,11 @@ const blogCategoryRoute = require("./routes/ecommerce/blogsCatRoute")
 
 const zoneRoute = require("./routes/zoneRoute")
 
+const regionRoute = require("./routes/regionRoute")
+
+const staffRoute = require("./routes/staff/staffRoute")
+const staffTypeRoute = require("./routes/staff/staffTypeRoute")
+
 const cors = require("cors")
 
 
@@ -222,6 +227,11 @@ app.use('/api/order/blogs', blogRoute)
 app.use('/api/order/blog-category', blogCategoryRoute)
 
 app.use('/api/zone', zoneRoute)
+
+app.use('/api/region', regionRoute)
+
+app.use('/api/staff', staffRoute)
+app.use('/api/stafftype', staffTypeRoute)
 
 app.use(responseSend)
 // const port = 5000

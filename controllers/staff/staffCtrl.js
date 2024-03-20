@@ -1,17 +1,17 @@
-const FinanceModel = require("../models/financeModel")
-const Client = require("../middleware/redis")
-const getFinance = async(req,res,next)=>{
+const StaffModel = require("../../models/staff/staffModel")
+const Client = require("../../middleware/redis")
+const getStaff = async(req,res,next)=>{
     try{
-        let client = await Client.get('Finance');
-        let Finance;
+        let client = await Client.get('Staff');
+        let Staff;
         if(client == null) {
-            Finance = await FinanceModel.find()
-            await Client.set(`Finance`, JSON.stringify(Finance));
+            Staff = await StaffModel.find()
+            await Client.set(`Staff`, JSON.stringify(Staff));
         }
         else {
-            Finance = JSON.parse(client);
+            Staff = JSON.parse(client);
         }
-        res.data = Finance
+        res.data = Staff
         res.status_Code = "200"
         next()
     }catch(error){
@@ -23,10 +23,10 @@ const getFinance = async(req,res,next)=>{
     }
 }
 
-const getFinanceById = async(req,res,next)=>{
+const getStaffById = async(req,res,next)=>{
     try{
-        const Finance = await FinanceModel.findById(req.params.id);
-        res.data = Finance
+        const Staff = await StaffModel.findById(req.params.id);
+        res.data = Staff
         res.status_Code = "200"
         next()
     }catch(error){
@@ -38,10 +38,10 @@ const getFinanceById = async(req,res,next)=>{
     }
 }
 
-const addFinance = async(req,res,next)=>{
+const addStaff = async(req,res,next)=>{
     try{
-        const Finance = await FinanceModel.create(req.body);
-        res.data = Finance
+        const Staff = await StaffModel.create(req.body);
+        res.data = Staff
         res.status_Code = "200"
         next()
     }catch(error){
@@ -53,10 +53,10 @@ const addFinance = async(req,res,next)=>{
     }
 }
 
-const updateFinance = async(req,res,next)=>{
+const updateStaff = async(req,res,next)=>{
     try{
-        const Finance = await FinanceModel.findByIdAndUpdate(req.params.id,req.body,{new:true});
-        res.data = Finance
+        const Staff = await StaffModel.findByIdAndUpdate(req.params.id,req.body,{new:true});
+        res.data = Staff
         res.status_Code = "200"
         next()
     }catch(error){
@@ -68,10 +68,10 @@ const updateFinance = async(req,res,next)=>{
     }
 }
 
-const deleteFinance = async(req,res,next)=>{
+const deleteStaff = async(req,res,next)=>{
     try{
-        const Finance = await FinanceModel.findByIdAndDelete(req.params.id);
-        res.data = Finance
+        const Staff = await StaffModel.findByIdAndDelete(req.params.id);
+        res.data = Staff
         res.status_Code = "200"
         next()
     }catch(error){
@@ -83,4 +83,4 @@ const deleteFinance = async(req,res,next)=>{
     }
 }
 
-module.exports = {getFinance, getFinanceById, addFinance, updateFinance, deleteFinance}
+module.exports = {getStaff, getStaffById, addStaff, updateStaff, deleteStaff}

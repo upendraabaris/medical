@@ -2,7 +2,15 @@ const DepartmentModel = require("../models/departmentModel")
 
 const getDepartment = async(req,res,next)=>{
     try{
-        const Department = await DepartmentModel.find();
+        let client = await Client.get('Department');
+        let Department;
+        if(client == null) {
+            Department = await DepartmentModel.find()
+            await Client.set(`Department`, JSON.stringify(Department));
+        }
+        else {
+            Department = JSON.parse(client);
+        }
         res.data = Department
         res.status_Code = "200"
         next()

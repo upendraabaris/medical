@@ -1,8 +1,16 @@
 const ServiceHistoryModel = require("../models/serviceHistoryModel")
-
+const Client = require("../middleware/redis")
 const getServiceHistory = async(req,res,next)=>{
     try{
-        const ServiceHistory = await ServiceHistoryModel.find();
+        let client = await Client.get('ServiceHistory');
+        let ServiceHistory;
+        if(client == null) {
+            ServiceHistory = await ServiceHistoryModel.find()
+            await Client.set(`ServiceHistory`, JSON.stringify(ServiceHistory));
+        }
+        else {
+            ServiceHistory = JSON.parse(client);
+        }
         res.data = ServiceHistory
         res.status_Code = "200"
         next()

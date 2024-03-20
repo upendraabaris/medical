@@ -12,6 +12,8 @@ router.get('/public', verifyToken, getHospitalClinic, responseSend)
 
 router.get('/:id', verifyToken, getHospitalClinicById, responseSend)
 
+router.get('/public/:id', verifyToken, getHospitalClinicById, responseSend)
+
 router.post('/addHospitalClinic', verifyToken, addHospitalClinic, responseSend)
 
 router.put('/updateHospitalClinic/:id', verifyToken, updateHospitalClinic, responseSend)

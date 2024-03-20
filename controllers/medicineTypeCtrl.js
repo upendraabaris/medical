@@ -1,8 +1,16 @@
 const MedicineModel = require("../models/medicineTypeModel")
-
+const Client = require("../middleware/redis")
 const getMedicine = async(req,res,next)=>{
     try{
-        const Medicine = await MedicineModel.find();
+        let client = await Client.get('MedicineType');
+        let Medicine;
+        if(client == null) {
+            Medicine = await MedicineModel.find()
+            await Client.set(`MedicineType`, JSON.stringify(Medicine));
+        }
+        else {
+            Medicine = JSON.parse(client);
+        }
         res.data = Medicine
         res.status_Code = "200"
         next()

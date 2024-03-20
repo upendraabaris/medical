@@ -1,9 +1,21 @@
 const AwardModel = require("../models/awardModel")
-
+const Client = require("../middleware/redis")
 const getAward = async(req,res,next)=>{
     try{
-        const Award = await AwardModel.find().populate('user_id').populate('hos_clinic_id');
-        res.data = Award
+        let client = await Client.get('Award');
+        let award;
+        if(client == null) {
+            award = await AwardModel.find().populate('user_id').populate('hos_clinic_id')
+            await Client.set('Award', JSON.stringify(award));
+        }
+        else {
+            award = JSON.parse(client);
+        }
+
+
+        // const Award = await AwardModel.find().populate('user_id').populate('hos_clinic_id');
+        // res.data = Award
+        res.data = award
         res.status_Code = "200"
         next()
     }catch(error){

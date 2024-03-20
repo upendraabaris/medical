@@ -1,5 +1,5 @@
 const ZoneModel = require("../models/zoneModel")
-
+const Client = require("../middleware/redis")
 const getZone = async(req,res,next)=>{
     try{
         const Zone = await ZoneModel.find().populate('cities').exec();

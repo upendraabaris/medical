@@ -13,7 +13,7 @@ const getCountry = async(req,res,next)=>{
         }
 
         // const Country = await CountryModel.find();
-        res.data = Country
+        res.data = country
         res.status_Code = "200"
         next()
     }catch(error){
