@@ -122,14 +122,7 @@ const staffTypeRoute = require("./routes/staff/staffTypeRoute")
 const cors = require("cors")
 
 
-app.use(
-    cors({
-      origin: [
-        "http://localhost:5000",
-      ],
-      credentials: true,
-    })
-);
+app.use(cors());
 
 app.use('/api/user', userRoute)
 app.use('/api/usertype', userTypeRoute)
