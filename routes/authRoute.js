@@ -17,7 +17,7 @@ router.post('/mb/login', login, responseSend)
 
 // router.post("/register-step2", register2)
 
-router.post("/mb/register", register3)
+router.post("/mb/register", register)
 
 router.post("/mb/forgotPassword", forgotPasswordChange)
 

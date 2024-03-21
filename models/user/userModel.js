@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs")
 
 const userSchema = new mongoose.Schema({
   user_type_id: { type: mongoose.Schema.Types.ObjectId, ref: "UserType"},
-  user_id: { type: Number, unique: true},
   parent_user_id: { type: Number },
   referring_user_id: { type: Number },
   reporting_user_id: { type: Number },

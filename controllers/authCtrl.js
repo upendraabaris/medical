@@ -167,7 +167,7 @@ const login = async(req,res,next)=>{
         const isMatch = await bcrypt.compare(password,user.password)
 
         if(isMatch){
-            const token = jwt.sign({user:user._id}, "upendrajain", {expiresIn: 3600 })
+            const token = jwt.sign({user:user._id}, "upendrajain", {expiresIn: 24*60*60 })
             console.log(token)
             res.status(201).send({"token":token, first_name: user.first_name, last_name: user.last_name, profile_pic: user.profile_pic})
             console.log(token)
@@ -180,7 +180,7 @@ const login = async(req,res,next)=>{
     }
 }
 
-const register3 = async (req, res)=>{
+const register = async (req, res)=>{
     try{
         const token = req.body.email
 
@@ -190,7 +190,20 @@ const register3 = async (req, res)=>{
 
         if(jwt.verify(email.emailVerified, "dbhvjfdhvbnfd")){
             email.emailId
-            res.json(email)
+            const userData = await userModel.create(
+                {
+                  first_name: req.body.first_name,
+                  last_name: req.body.last_name,
+                  mobile: req.body.mobile,
+                  mobileVerified: true,
+                  email: req.body.email,
+                  emailVerified: true,
+                //   refer_id: generateRandomString(10),
+                //   user_type_id: req.body.user_type_id,
+                  password: req.body.password,
+                }
+              )
+            res.json(userData)
         }else{
             throw new Error("email must be verified")
         }
@@ -328,4 +341,4 @@ const forgotPasswordChange = async (req, res, next) => {
 
 
 
-module.exports = { login, /* verifyToken, */ isEmailExist, isMobileNoExist, verifyEmail, verifyEmailOtp, /* register, register2, */ register3, forgotPasswordChange }
+module.exports = { login, /* verifyToken, */ isEmailExist, isMobileNoExist, verifyEmail, verifyEmailOtp, /* register, register2, */ register, forgotPasswordChange }
