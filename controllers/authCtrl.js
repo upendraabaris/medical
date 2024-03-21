@@ -167,7 +167,7 @@ const login = async(req,res,next)=>{
         const isMatch = await bcrypt.compare(password,user.password)
 
         if(isMatch){
-            const token = jwt.sign({user:user._id}, "upendrajain", {expiresIn: 24*60*60 })
+            const token = jwt.sign({user:user._id}, "shicsdfhaljkvfjckds", {expiresIn: 24*60*60 })
             console.log(token)
             res.status(201).send({"token":token, first_name: user.first_name, last_name: user.last_name, profile_pic: user.profile_pic})
             console.log(token)
@@ -188,15 +188,16 @@ const register = async (req, res)=>{
 
         const email = await verifyIdentity.findById(verifytoken)
 
+            
         if(jwt.verify(email.emailVerified, "dbhvjfdhvbnfd")){
-            email.emailId
+            // email.emailId
             const userData = await userModel.create(
                 {
                   first_name: req.body.first_name,
                   last_name: req.body.last_name,
                   mobile: req.body.mobile,
                   mobileVerified: true,
-                  email: req.body.email,
+                  email: email.emailId,
                   emailVerified: true,
                 //   refer_id: generateRandomString(10),
                 //   user_type_id: req.body.user_type_id,
@@ -216,7 +217,7 @@ const register = async (req, res)=>{
 const forgotPasswordChange = async (req, res, next) => {
     try {
         const token = req.body.email
-
+        
         const verifytoken = jwt.verify(token, "knjehavbfhskvj")?.user
 
         const email = await verifyIdentity.findById(verifytoken)

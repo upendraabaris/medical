@@ -5,7 +5,7 @@ const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToF
 const {responseSend} = require("../../utils/response")
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
-const {staffMiddleware} = require("../../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getUser, responseSend)
 
@@ -23,6 +23,7 @@ router.delete('/deleteuser/:id', staffMiddleware, deleteUser, responseSend)
 
 router.get('/page/:page&:count', pagination, responseSend)
 
-router.post('/addToFavorites', staffMiddleware, addToFavorites, responseSend)
+// router.post('/addToFavorites', staffMiddleware, addToFavorites, responseSend)
+router.post('/addToFavorites', verifyToken, addToFavorites, responseSend)
 
 module.exports = router

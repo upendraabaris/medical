@@ -25,9 +25,8 @@ const verifyToken = async(req,res,next)=>{
         if (!token) {
             return res.status(401).json({ message: 'Token not provided' });
         }
-        console.log(token)
-        if(token){
-            let user = jwt.verify(token.replace('Bearer ', ''), "shicsdfhaljkvfjckds")
+        let user = jwt.verify(token.replace('Bearer ', ''), "shicsdfhaljkvfjckds")
+        if(user != undefined){
             console.log(user);
             const user1 = await userModel.findOne({_id:user.user})
             if(user1 == null)
@@ -43,6 +42,7 @@ const verifyToken = async(req,res,next)=>{
             res.send("Invalid login details")
         }
     }catch(error){
+        console.log("errpr",error)
         res.status(400).send("Invalid token")
     }
 }
