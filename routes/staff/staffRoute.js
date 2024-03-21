@@ -1,19 +1,21 @@
 const router = require("express").Router()
 
-const {getStaff, getStaffById, addStaff, updateStaff, deleteStaff} = require("../../controllers/staff/staffCtrl")
+const {getStaff, getStaffById, addStaff, updateStaff, deleteStaff, loginStaff} = require("../../controllers/staff/staffCtrl")
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getStaff, responseSend)
+router.get('/', staffMiddleware, getStaff, responseSend)
 
-router.get('/:id', verifyToken, getStaffById, responseSend)
+router.get('/:id', staffMiddleware, getStaffById, responseSend)
 
-router.post('/addStaff', verifyToken, addStaff, responseSend)
+router.post('/addStaff', staffMiddleware, addStaff, responseSend)
 
-router.put('/updateStaff/:id', verifyToken, updateStaff, responseSend)
+router.put('/updateStaff/:id', staffMiddleware, updateStaff, responseSend)
 
-router.delete('/deleteStaff/:id', verifyToken, deleteStaff, responseSend)
+router.delete('/deleteStaff/:id', staffMiddleware, deleteStaff, responseSend)
+
+router.post('/login', loginStaff, responseSend)
 
 module.exports = router

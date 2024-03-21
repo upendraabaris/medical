@@ -2,19 +2,20 @@ const router = require("express").Router()
 const {getState, getStateById, addState, updateState, deleteState, addData } = require("../controllers/stateCtrl")
 const {responseSend} = require("../utils/response")
 
-const {verifyToken} = require("../middleware/authMiddleware")
+// const {verifyToken} = require("../middleware/authMiddleware")
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', verifyToken, getState, responseSend)
+router.get('/', staffMiddleware, getState, responseSend)
 
-router.get('/public', verifyToken, getState, responseSend)
+router.get('/public', getState, responseSend)
 
-router.get('/:id', verifyToken, getStateById, responseSend)
+router.get('/:id', staffMiddleware, getStateById, responseSend)
 
-router.post('/addState', verifyToken, addState, responseSend)
+router.post('/addState', staffMiddleware, addState, responseSend)
 
-router.put('/updatState/:id', verifyToken, updateState, responseSend)
+router.put('/updatState/:id', staffMiddleware, updateState, responseSend)
 
-router.delete('/deleteState/:id', verifyToken, deleteState, responseSend)
+router.delete('/deleteState/:id', staffMiddleware, deleteState, responseSend)
 
 // router.post('/addData', addData)
 

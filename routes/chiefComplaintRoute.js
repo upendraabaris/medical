@@ -4,18 +4,19 @@ const {getChiefComplaint, getChiefComplaintById, addChiefComplaint, updateChiefC
 
 const {responseSend} = require("../utils/response")
 
-const {verifyToken} = require("../middleware/authMiddleware")
+// const {verifyToken} = require("../middleware/authMiddleware")
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', verifyToken, getChiefComplaint, responseSend)
+router.get('/', staffMiddleware, getChiefComplaint, responseSend)
 
-router.get('/public', verifyToken, getChiefComplaint, responseSend)
+router.get('/public', staffMiddleware, getChiefComplaint, responseSend)
 
-router.get('/:id', verifyToken, getChiefComplaintById, responseSend)
+router.get('/:id', staffMiddleware, getChiefComplaintById, responseSend)
 
-router.post('/addChiefComplaint', verifyToken, addChiefComplaint, responseSend)
+router.post('/addChiefComplaint', staffMiddleware, addChiefComplaint, responseSend)
 
-router.put('/updateChiefComplaint/:id', verifyToken, updateChiefComplaint, responseSend)
+router.put('/updateChiefComplaint/:id', staffMiddleware, updateChiefComplaint, responseSend)
 
-router.delete('/deleteChiefComplaint/:id', verifyToken, deleteChiefComplaint, responseSend)
+router.delete('/deleteChiefComplaint/:id', staffMiddleware, deleteChiefComplaint, responseSend)
 
 module.exports = router

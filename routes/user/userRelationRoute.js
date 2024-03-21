@@ -4,16 +4,17 @@ const {getUserRelation, getUserRelationById, addUserRelation, updateUserRelation
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getUserRelation, responseSend)
+router.get('/', staffMiddleware, getUserRelation, responseSend)
 
-router.get('/:id', verifyToken, getUserRelationById, responseSend)
+router.get('/:id', staffMiddleware, getUserRelationById, responseSend)
 
-router.post('/addUserRelation', verifyToken, addUserRelation, responseSend)
+router.post('/addUserRelation', staffMiddleware, addUserRelation, responseSend)
 
-router.put('/updateUserRelation/:id', verifyToken, updateUserRelation, responseSend)
+router.put('/updateUserRelation/:id', staffMiddleware, updateUserRelation, responseSend)
 
-router.delete('/deleteUserRelation/:id', verifyToken, deleteUserRelation, responseSend)
+router.delete('/deleteUserRelation/:id', staffMiddleware, deleteUserRelation, responseSend)
 
 module.exports = router

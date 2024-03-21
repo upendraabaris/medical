@@ -5,21 +5,22 @@ const {getHospitalClinic, getHospitalClinicById, addHospitalClinic, updateHospit
 const {responseSend} = require("../../utils/response")
 
 const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getHospitalClinic, responseSend)
+router.get('/', staffMiddleware, getHospitalClinic, responseSend)
 
-router.get('/public', verifyToken, getHospitalClinic, responseSend)
+router.get('/public', verifyToken , getHospitalClinic, responseSend)
 
-router.get('/:id', verifyToken, getHospitalClinicById, responseSend)
+router.get('/:id', staffMiddleware, getHospitalClinicById, responseSend)
 
 router.get('/public/:id', verifyToken, getHospitalClinicById, responseSend)
 
-router.post('/addHospitalClinic', verifyToken, addHospitalClinic, responseSend)
+router.post('/addHospitalClinic', staffMiddleware, addHospitalClinic, responseSend)
 
-router.put('/updateHospitalClinic/:id', verifyToken, updateHospitalClinic, responseSend)
+router.put('/updateHospitalClinic/:id', staffMiddleware, updateHospitalClinic, responseSend)
 
-router.delete('/deleteHospitalClinic/:id', verifyToken, deleteHospitalClinic, responseSend)
+router.delete('/deleteHospitalClinic/:id', staffMiddleware, deleteHospitalClinic, responseSend)
 
-router.get('/getfavorite/:id', verifyToken, getFavorite, responseSend)
+router.get('/getfavorite/:id', staffMiddleware, getFavorite, responseSend)
 
 module.exports = router

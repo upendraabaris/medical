@@ -4,16 +4,17 @@ const {getQrCodeRegister, getQrCodeRegisterById, addQrCodeRegister, updateQrCode
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getQrCodeRegister, responseSend)
+router.get('/', staffMiddleware, getQrCodeRegister, responseSend)
 
-router.get('/:id', verifyToken, getQrCodeRegisterById, responseSend)
+router.get('/:id', staffMiddleware, getQrCodeRegisterById, responseSend)
 
-router.post('/addQrCodeRegister', verifyToken, addQrCodeRegister, responseSend)
+router.post('/addQrCodeRegister', staffMiddleware, addQrCodeRegister, responseSend)
 
-router.put('/updateQrCodeRegister/:id', verifyToken, updateQrCodeRegister, responseSend)
+router.put('/updateQrCodeRegister/:id', staffMiddleware, updateQrCodeRegister, responseSend)
 
-router.delete('/deleteQrCodeRegister/:id', verifyToken, deleteQrCodeRegister, responseSend)
+router.delete('/deleteQrCodeRegister/:id', staffMiddleware, deleteQrCodeRegister, responseSend)
 
 module.exports = router

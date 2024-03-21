@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
-
+const bcrypt = require("bcryptjs")
 const staffSchema = new mongoose.Schema({
-  user_id: { type: Number, unique: true },
   first_name: { type: String },
   last_name: { type: String },
   email: { type: String, unique: true },
   password: { type: String },
-  role: { type: String, default: 'staff' },
+  staff_type_id: { type: mongoose.Schema.Types.ObjectId , ref: "stafftype"},
+  // role: { type: String, default: 'staff' },
   is_active: { type: Boolean, default: true },
   // Add more staff-specific fields as needed
 }, { timestamps: true });

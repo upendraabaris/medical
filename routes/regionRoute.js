@@ -2,16 +2,17 @@ const router = require("express").Router()
 const {getRegion, getRegionById, addRegion, updateRegion, deleteRegion} = require("../controllers/regionCtrl")
 const {responseSend} = require("../utils/response")
 
-const {verifyToken} = require("../middleware/authMiddleware")
+// const {verifyToken} = require("../middleware/authMiddleware")
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', verifyToken, getRegion, responseSend)
+router.get('/', staffMiddleware, getRegion, responseSend)
 
-router.get('/:id', verifyToken, getRegionById, responseSend)
+router.get('/:id', staffMiddleware, getRegionById, responseSend)
 
-router.post('/addRegion', verifyToken, addRegion, responseSend)
+router.post('/addRegion', staffMiddleware, addRegion, responseSend)
 
-router.put('/updateRegion/:id', verifyToken, updateRegion, responseSend)
+router.put('/updateRegion/:id', staffMiddleware, updateRegion, responseSend)
 
-router.delete('/deleteRegion/:id', verifyToken, deleteRegion, responseSend)
+router.delete('/deleteRegion/:id', staffMiddleware, deleteRegion, responseSend)
 
 module.exports = router

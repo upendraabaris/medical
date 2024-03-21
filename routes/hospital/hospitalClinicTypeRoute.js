@@ -4,16 +4,17 @@ const {getHospitalClinicType, getHospitalClinicTypeById, addHospitalClinicType, 
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getHospitalClinicType, responseSend)
+router.get('/', staffMiddleware, getHospitalClinicType, responseSend)
 
-router.get('/:id', verifyToken, getHospitalClinicTypeById, responseSend)
+router.get('/:id', staffMiddleware, getHospitalClinicTypeById, responseSend)
 
-router.post('/addHospitalClinicType', verifyToken, addHospitalClinicType, responseSend)
+router.post('/addHospitalClinicType', staffMiddleware, addHospitalClinicType, responseSend)
 
-router.put('/updateHospitalClinicType/:id', verifyToken, updateHospitalClinicType, responseSend)
+router.put('/updateHospitalClinicType/:id', staffMiddleware, updateHospitalClinicType, responseSend)
 
-router.delete('/deleteHospitalClinicType/:id', verifyToken, deleteHospitalClinicType, responseSend)
+router.delete('/deleteHospitalClinicType/:id', staffMiddleware, deleteHospitalClinicType, responseSend)
 
 module.exports = router

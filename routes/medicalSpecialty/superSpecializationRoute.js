@@ -4,16 +4,17 @@ const {getSuperSpecialization, getSuperSpecializationById, addSuperSpecializatio
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getSuperSpecialization, responseSend)
+router.get('/', staffMiddleware, getSuperSpecialization, responseSend)
 
-router.get('/:id', verifyToken, getSuperSpecializationById, responseSend)
+router.get('/:id', staffMiddleware, getSuperSpecializationById, responseSend)
 
-router.post('/addSuperSpecialization', verifyToken, addSuperSpecialization, responseSend)
+router.post('/addSuperSpecialization', staffMiddleware, addSuperSpecialization, responseSend)
 
-router.put('/updateSuperSpecialization/:id', verifyToken, updateSuperSpecialization, responseSend)
+router.put('/updateSuperSpecialization/:id', staffMiddleware, updateSuperSpecialization, responseSend)
 
-router.delete('/deleteSuperSpecialization/:id', verifyToken, deleteSuperSpecialization, responseSend)
+router.delete('/deleteSuperSpecialization/:id', staffMiddleware, deleteSuperSpecialization, responseSend)
 
 module.exports = router

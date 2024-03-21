@@ -2,21 +2,22 @@ const router = require("express").Router()
 const {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping} = require("../controllers/cityCtrl")
 const {responseSend} = require("../utils/response")
 
-const {verifyToken} = require("../middleware/authMiddleware")
+// const {verifyToken} = require("../middleware/authMiddleware")
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', verifyToken, getCity, responseSend)
+router.get('/', staffMiddleware, getCity, responseSend)
 
-router.get('/public', verifyToken, getCity, responseSend)
+router.get('/public', getCity, responseSend)
 
-router.get('/getCityMapping', verifyToken, getCityMapping, responseSend)
+router.get('/getCityMapping', staffMiddleware, getCityMapping, responseSend)
 
-router.get('/:id', verifyToken, getCityById, responseSend)
+router.get('/:id', staffMiddleware, getCityById, responseSend)
 
-router.post('/addCity', verifyToken, addCity, responseSend)
+router.post('/addCity', staffMiddleware, addCity, responseSend)
 
-router.put('/updatCity/:id', verifyToken, updateCity, responseSend)
+router.put('/updatCity/:id', staffMiddleware, updateCity, responseSend)
 
-router.delete('/deleteCity/:id', verifyToken, deleteCity, responseSend)
+router.delete('/deleteCity/:id', staffMiddleware, deleteCity, responseSend)
 
 
 module.exports = router

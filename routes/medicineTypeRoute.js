@@ -2,16 +2,17 @@ const router = require("express").Router()
 const {getMedicine, getMedicineById, addMedicine, updateMedicine, deleteMedicine} = require("../controllers/medicineTypeCtrl")
 const {responseSend} = require("../utils/response")
 
-const {verifyToken} = require("../middleware/authMiddleware")
+// const {verifyToken} = require("../middleware/authMiddleware")
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', verifyToken, getMedicine, responseSend)
+router.get('/', staffMiddleware, getMedicine, responseSend)
 
-router.get('/:id', verifyToken, getMedicineById, responseSend)
+router.get('/:id', staffMiddleware, getMedicineById, responseSend)
 
-router.post('/addMedicine', verifyToken, addMedicine, responseSend)
+router.post('/addMedicine', staffMiddleware, addMedicine, responseSend)
 
-router.put('/updateMedicine/:id', verifyToken, updateMedicine, responseSend)
+router.put('/updateMedicine/:id', staffMiddleware, updateMedicine, responseSend)
 
-router.delete('/deleteMedicine/:id', verifyToken, deleteMedicine, responseSend)
+router.delete('/deleteMedicine/:id', staffMiddleware, deleteMedicine, responseSend)
 
 module.exports = router

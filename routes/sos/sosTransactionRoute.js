@@ -4,16 +4,17 @@ const {getSosTransaction, getSosTransactionById, addSosTransaction, updateSosTra
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getSosTransaction, responseSend)
+router.get('/', staffMiddleware, getSosTransaction, responseSend)
 
-router.get('/:id', verifyToken, getSosTransactionById, responseSend)
+router.get('/:id', staffMiddleware, getSosTransactionById, responseSend)
 
-router.post('/addSosTransaction', verifyToken, addSosTransaction, responseSend)
+router.post('/addSosTransaction', staffMiddleware, addSosTransaction, responseSend)
 
-router.put('/updateSosTransaction/:id', verifyToken, updateSosTransaction, responseSend)
+router.put('/updateSosTransaction/:id', staffMiddleware, updateSosTransaction, responseSend)
 
-router.delete('/deleteSosTransaction/:id', verifyToken, deleteSosTransaction, responseSend)
+router.delete('/deleteSosTransaction/:id', staffMiddleware, deleteSosTransaction, responseSend)
 
 module.exports = router

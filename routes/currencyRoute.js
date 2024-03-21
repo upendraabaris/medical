@@ -3,16 +3,17 @@ const {getCurrency, getCurrencyById, addCurrency, updateCurrency, deleteCurrency
 
 const {responseSend} = require("../utils/response")
 
-const {verifyToken} = require("../middleware/authMiddleware")
+// const {verifyToken} = require("../middleware/authMiddleware")
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', verifyToken,  getCurrency, responseSend)
+router.get('/', staffMiddleware,  getCurrency, responseSend)
 
-router.get('/:id', verifyToken, getCurrencyById, responseSend)
+router.get('/:id', staffMiddleware, getCurrencyById, responseSend)
 
-router.post('/addcurrency', verifyToken, addCurrency, responseSend)
+router.post('/addcurrency', staffMiddleware, addCurrency, responseSend)
 
-router.put('/updatcurrency/:id', verifyToken, updateCurrency, responseSend)
+router.put('/updatcurrency/:id', staffMiddleware, updateCurrency, responseSend)
 
-router.delete('/deletecurrency/:id', verifyToken, deleteCurrency, responseSend)
+router.delete('/deletecurrency/:id', staffMiddleware, deleteCurrency, responseSend)
 
 module.exports = router

@@ -326,4 +326,6 @@ const forgotPasswordChange = async (req, res, next) => {
 // }
 
 
+
+
 module.exports = { login, /* verifyToken, */ isEmailExist, isMobileNoExist, verifyEmail, verifyEmailOtp, /* register, register2, */ register3, forgotPasswordChange }

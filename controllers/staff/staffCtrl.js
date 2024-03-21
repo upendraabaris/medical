@@ -1,4 +1,6 @@
 const StaffModel = require("../../models/staff/staffModel")
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 const Client = require("../../middleware/redis")
 const getStaff = async(req,res,next)=>{
     try{
@@ -41,6 +43,7 @@ const getStaffById = async(req,res,next)=>{
 const addStaff = async(req,res,next)=>{
     try{
         const Staff = await StaffModel.create(req.body);
+        console.log(Staff)
         res.data = Staff
         res.status_Code = "200"
         next()
@@ -83,4 +86,46 @@ const deleteStaff = async(req,res,next)=>{
     }
 }
 
-module.exports = {getStaff, getStaffById, addStaff, updateStaff, deleteStaff}
+const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+const validateMobile = (input) => {
+    let test = input; /* .slice(3) */
+    var validRegex = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
+    if (test.match(validRegex)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const loginStaff = async(req,res,next)=>{
+    try{
+        let email = req.body.email
+        let password = req.body.password
+        
+
+        if (!validateEmail(email)) {
+            return res.status(400).send("Invalid email format");
+        }
+
+        const staff = await StaffModel.findOne({email: new RegExp(email,'i')})
+        const isMatch = await bcrypt.compare(password,staff.password)
+        console.log(isMatch)
+        if(isMatch){
+            const token = jwt.sign({staff:staff._id}, "shicsdfhaljkvfjckds", {expiresIn: 3600 })
+            res.status(201).send({"token":token})
+        }else
+        {
+            res.send("Invalid login details")
+        }
+    }catch(error){
+        console.log(error)
+        res.status(400).send("Invalid login details")
+    }
+}
+
+
+module.exports = {getStaff, getStaffById, addStaff, updateStaff, deleteStaff, loginStaff}

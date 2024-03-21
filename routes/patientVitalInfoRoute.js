@@ -2,18 +2,19 @@ const router = require("express").Router()
 const {getPatientVitalInformation, getPatientVitalInformationById, addPatientVitalInformation, updatePatientVitalInformation, deletePatientVitalInformation} = require("../controllers/patientVitalInfoCtrl")
 const {responseSend} = require("../utils/response")
 
-const {verifyToken} = require("../middleware/authMiddleware")
+// const {verifyToken} = require("../middleware/authMiddleware")
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', verifyToken, getPatientVitalInformation, responseSend)
+router.get('/', staffMiddleware, getPatientVitalInformation, responseSend)
 
-router.get('/:id', verifyToken, getPatientVitalInformationById, responseSend)
+router.get('/:id', staffMiddleware, getPatientVitalInformationById, responseSend)
 
-router.post('/addPatientVitalInfo', verifyToken, addPatientVitalInformation, responseSend)
+router.post('/addPatientVitalInfo', staffMiddleware, addPatientVitalInformation, responseSend)
 
-router.post('/public/addPatientVitalInfo', verifyToken, addPatientVitalInformation, responseSend)
+router.post('/public/addPatientVitalInfo', staffMiddleware, addPatientVitalInformation, responseSend)
 
-router.put('/updatePatientVitalInfo/:id', verifyToken, updatePatientVitalInformation, responseSend)
+router.put('/updatePatientVitalInfo/:id', staffMiddleware, updatePatientVitalInformation, responseSend)
 
-router.delete('/deletePatientVitalInfo/:id', verifyToken, deletePatientVitalInformation, responseSend)
+router.delete('/deletePatientVitalInfo/:id', staffMiddleware, deletePatientVitalInformation, responseSend)
 
 module.exports = router

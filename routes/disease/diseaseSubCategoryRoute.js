@@ -2,16 +2,17 @@ const router = require("express").Router()
 
 const {getDiseaseSubCategory, getDiseaseSubCategoryById, addDiseaseSubCategory, updateDiseaseSubCategory, deleteDiseaseSubCategory} = require("../../controllers/disease/diseaseSubCategoryCtrl")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getDiseaseSubCategory)
+router.get('/', staffMiddleware, getDiseaseSubCategory)
 
-router.get('/:id', verifyToken, getDiseaseSubCategoryById)
+router.get('/:id', staffMiddleware, getDiseaseSubCategoryById)
 
-router.post('/addDiseaseSubCategory', verifyToken, addDiseaseSubCategory)
+router.post('/addDiseaseSubCategory', staffMiddleware, addDiseaseSubCategory)
 
-router.put('/updateDiseaseSubCategory/:id', verifyToken, updateDiseaseSubCategory)
+router.put('/updateDiseaseSubCategory/:id', staffMiddleware, updateDiseaseSubCategory)
 
-router.delete('/deleteDiseaseSubCategory/:id', verifyToken, deleteDiseaseSubCategory)
+router.delete('/deleteDiseaseSubCategory/:id', staffMiddleware, deleteDiseaseSubCategory)
 
 module.exports = router

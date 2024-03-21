@@ -4,16 +4,17 @@ const {getUserInsurance, getUserInsuranceById, addUserInsurance, updateUserInsur
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getUserInsurance, responseSend)
+router.get('/', staffMiddleware, getUserInsurance, responseSend)
 
-router.get('/:id', verifyToken, getUserInsuranceById, responseSend)
+router.get('/:id', staffMiddleware, getUserInsuranceById, responseSend)
 
-router.post('/addUserInsurance', verifyToken, addUserInsurance, responseSend)
+router.post('/addUserInsurance', staffMiddleware, addUserInsurance, responseSend)
 
-router.put('/updateUserInsurance/:id', verifyToken, updateUserInsurance, responseSend)
+router.put('/updateUserInsurance/:id', staffMiddleware, updateUserInsurance, responseSend)
 
-router.delete('/deleteUserInsurance/:id', verifyToken, deleteUserInsurance, responseSend)
+router.delete('/deleteUserInsurance/:id', staffMiddleware, deleteUserInsurance, responseSend)
 
 module.exports = router

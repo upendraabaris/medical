@@ -4,16 +4,17 @@ const {getAward, getAwardById, addAward, updateAward, deleteAward} = require("..
 
 const {responseSend} = require("../utils/response")
 
-const {verifyToken} = require("../middleware/authMiddleware")
+// const {verifyToken} = require("../middleware/authMiddleware")
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', verifyToken, getAward, responseSend)
+router.get('/', staffMiddleware, getAward, responseSend)
 
-router.get('/:id', verifyToken,  getAwardById, responseSend)
+router.get('/:id', staffMiddleware,  getAwardById, responseSend)
 
-router.post('/addAward', verifyToken, addAward, responseSend)
+router.post('/addAward', staffMiddleware, addAward, responseSend)
 
-router.put('/updateAward/:id', verifyToken, updateAward, responseSend)
+router.put('/updateAward/:id', staffMiddleware, updateAward, responseSend)
 
-router.delete('/deleteAward/:id', verifyToken, deleteAward, responseSend)
+router.delete('/deleteAward/:id', staffMiddleware, deleteAward, responseSend)
 
 module.exports = router

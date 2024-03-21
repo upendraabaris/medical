@@ -4,16 +4,17 @@ const {getSupplierType, getSupplierTypeById, addSupplierType, updateSupplierType
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getSupplierType, responseSend)
+router.get('/', staffMiddleware, getSupplierType, responseSend)
 
-router.get('/:id', verifyToken, getSupplierTypeById, responseSend)
+router.get('/:id', staffMiddleware, getSupplierTypeById, responseSend)
 
-router.post('/addSupplierType', verifyToken, addSupplierType, responseSend)
+router.post('/addSupplierType', staffMiddleware, addSupplierType, responseSend)
 
-router.put('/updateSupplierType/:id', verifyToken, updateSupplierType, responseSend)
+router.put('/updateSupplierType/:id', staffMiddleware, updateSupplierType, responseSend)
 
-router.delete('/deleteSupplierType/:id', verifyToken, deleteSupplierType, responseSend)
+router.delete('/deleteSupplierType/:id', staffMiddleware, deleteSupplierType, responseSend)
 
 module.exports = router

@@ -4,20 +4,21 @@ const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToF
 
 const {responseSend} = require("../../utils/response")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getUser, responseSend)
+router.get('/', staffMiddleware, getUser, responseSend)
 
-router.get('/:id',verifyToken, getUserById, responseSend)
+router.get('/:id',staffMiddleware, getUserById, responseSend)
 
-router.post('/adduser', verifyToken, addUser, responseSend)
+router.post('/adduser', staffMiddleware, addUser, responseSend)
 
-router.put('/updateuser/:id', verifyToken, updateUser, responseSend)
+router.put('/updateuser/:id', staffMiddleware, updateUser, responseSend)
 
-router.delete('/deleteuser/:id', verifyToken, deleteUser, responseSend)
+router.delete('/deleteuser/:id', staffMiddleware, deleteUser, responseSend)
 
 router.get('/page/:page&:count', pagination, responseSend)
 
-router.post('/addToFavorites', verifyToken, addToFavorites, responseSend)
+router.post('/addToFavorites', staffMiddleware, addToFavorites, responseSend)
 
 module.exports = router

@@ -4,14 +4,16 @@ const {getBusinessPartner, getBusinessPartnerById, addBusinessPartner, updateBus
 
 const {responseSend} = require("../utils/response")
 
-router.get('/', getBusinessPartner, responseSend)
+const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/:id', getBusinessPartnerById, responseSend)
+router.get('/', staffMiddleware, getBusinessPartner, responseSend)
 
-router.post('/addBusinessPartner', addBusinessPartner, responseSend)
+router.get('/:id', staffMiddleware, getBusinessPartnerById, responseSend)
 
-router.put('/updateBusinessPartner/:id', updateBusinessPartner, responseSend)
+router.post('/addBusinessPartner', staffMiddleware, addBusinessPartner, responseSend)
 
-router.delete('/deleteBusinessPartner/:id', deleteBusinessPartner, responseSend)
+router.put('/updateBusinessPartner/:id', staffMiddleware, updateBusinessPartner, responseSend)
+
+router.delete('/deleteBusinessPartner/:id', staffMiddleware, deleteBusinessPartner, responseSend)
 
 module.exports = router

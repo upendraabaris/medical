@@ -2,16 +2,17 @@ const router = require("express").Router()
 
 const {getPreExistingDisease, getPreExistingDiseaseById, addPreExistingDisease, updatePreExistingDisease, deletePreExistingDisease} = require("../../controllers/disease/preExistingDiseaseCtrl")
 
-const {verifyToken} = require("../../middleware/authMiddleware")
+// const {verifyToken} = require("../../middleware/authMiddleware")
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', verifyToken, getPreExistingDisease)
+router.get('/', staffMiddleware, getPreExistingDisease)
 
-router.get('/:id', verifyToken, getPreExistingDiseaseById)
+router.get('/:id', staffMiddleware, getPreExistingDiseaseById)
 
-router.post('/addPreExistingDisease', verifyToken, addPreExistingDisease)
+router.post('/addPreExistingDisease', staffMiddleware, addPreExistingDisease)
 
-router.put('/updatePreExistingDisease/:id', verifyToken, updatePreExistingDisease)
+router.put('/updatePreExistingDisease/:id', staffMiddleware, updatePreExistingDisease)
 
-router.delete('/deletePreExistingDisease/:id', verifyToken, deletePreExistingDisease)
+router.delete('/deletePreExistingDisease/:id', staffMiddleware, deletePreExistingDisease)
 
 module.exports = router
