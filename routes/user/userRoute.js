@@ -13,6 +13,10 @@ router.get('/:id',staffMiddleware, getUserById, responseSend)
 
 router.post('/adduser', staffMiddleware, addUser, responseSend)
 
+router.post('/adduser', staffMiddleware, addUser, responseSend)
+
+router.post('/adduser/public', addUser, responseSend)
+
 router.put('/updateuser/:id', staffMiddleware, updateUser, responseSend)
 
 router.delete('/deleteuser/:id', staffMiddleware, deleteUser, responseSend)
