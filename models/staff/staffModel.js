@@ -6,6 +6,7 @@ const staffSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: { type: String },
   staff_type_id: { type: mongoose.Schema.Types.ObjectId , ref: "stafftype"},
+  profile_pic: { type: String },
   // role: { type: String, default: 'staff' },
   is_active: { type: Boolean, default: true },
   // Add more staff-specific fields as needed

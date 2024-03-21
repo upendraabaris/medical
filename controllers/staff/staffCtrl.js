@@ -116,7 +116,16 @@ const loginStaff = async(req,res,next)=>{
         console.log(isMatch)
         if(isMatch){
             const token = jwt.sign({staff:staff._id}, "shicsdfhaljkvfjckds", {expiresIn: 3600 })
-            res.status(201).send({"token":token})
+            res.status(201).send(
+                {
+                    user: {
+                      "token": token,
+                      "first_name": staff.first_name,
+                      "last_name": staff.last_name,
+                      "profile_pic": staff.profile_pic
+                    }
+                  }
+            )
         }else
         {
             res.send("Invalid login details")

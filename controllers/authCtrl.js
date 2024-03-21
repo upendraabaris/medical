@@ -169,7 +169,7 @@ const login = async(req,res,next)=>{
         if(isMatch){
             const token = jwt.sign({user:user._id}, "upendrajain", {expiresIn: 3600 })
             console.log(token)
-            res.status(201).send({"token":token})
+            res.status(201).send({"token":token, first_name: user.first_name, last_name: user.last_name, profile_pic: user.profile_pic})
             console.log(token)
         }else
         {
