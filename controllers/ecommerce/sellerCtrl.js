@@ -122,7 +122,7 @@ const updatedSeller = asyncHandler(async (req, res) => {
 
 const getDoctorSellerList = async(req,res)=>{
   try{
-    const seller = await Seller.find({sellerType: "65fd7f1bca55fe86cf326849"})
+    const seller = await Seller.find({sellerType: "65fd7f1bca55fe86cf326849"}).populate(["medicine_type_id", "medical_specialty_id","superSpecializationIds", "hos_clinic_type_id"])
     res.json(seller)
   }catch(error){
     throw new Error(error)
@@ -131,7 +131,7 @@ const getDoctorSellerList = async(req,res)=>{
 
 const getHospitalSellerList = async(req,res)=>{
   try{
-    const seller = await Seller.find({sellerType: "65fd7f30ca55fe86cf3268a5"})
+    const seller = await Seller.find({sellerType: "65fd7f30ca55fe86cf3268a5"}).populate(["medicine_type_id", "medical_specialty_id","superSpecializationIds", "hos_clinic_type_id"])
     res.json(seller)
   }catch(error){
     throw new Error(error)
