@@ -5,9 +5,11 @@ const {getHospitalClinicType, getHospitalClinicTypeById, addHospitalClinicType, 
 const {responseSend} = require("../../utils/response")
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
-const {staffMiddleware} = require("../../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getHospitalClinicType, responseSend)
+
+router.get('/public', verifyToken, getHospitalClinicType, responseSend)
 
 router.get('/:id', staffMiddleware, getHospitalClinicTypeById, responseSend)
 
