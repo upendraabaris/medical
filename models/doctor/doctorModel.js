@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose")
 
 const doctorMasterSchema = new mongoose.Schema({
-    doc_id: { type: Number, required: true, unique: true },
     isfavorite: { type: Boolean, default: false },
     referring_user_id: { type: Number, ref: 'User' },
     user_id: { type: Number, ref: 'User' },
@@ -18,6 +17,6 @@ const doctorMasterSchema = new mongoose.Schema({
     doctor_fee_IND: { type: Number },
     doctor_fee_INT: { type: Number },
     superSpecializationIds: [{ type: Number, ref: 'SuperSpecialization' }]
-});
+})
 
 module.exports = mongoose.model('DoctorMaster', doctorMasterSchema)

@@ -119,16 +119,36 @@ const updatedSeller = asyncHandler(async (req, res) => {
   }
 });
 
+
+const getDoctorSellerList = async(req,res)=>{
+  try{
+    const seller = await Seller.find({sellerType: "65fd7f1bca55fe86cf326849"})
+    res.json(seller)
+  }catch(error){
+    throw new Error(error)
+  }
+}
+
+const getHospitalSellerList = async(req,res)=>{
+  try{
+    const seller = await Seller.find({sellerType: "65fd7f30ca55fe86cf3268a5"})
+    res.json(seller)
+  }catch(error){
+    throw new Error(error)
+  }
+}
+
 const getSellerList = asyncHandler(async (req, res) => {
   try {
     const allSellers = await Seller.find({ accCompany_id: req.companyId })
-      .populate("user_id")
-      .sort({ createdAt: -1 });
+      // .populate("user_id")
+      .sort({ createdAt: 1 });
     res.json(allSellers);
   } catch (error) {
     throw new Error(error);
   }
 });
+
 
 const getSellerPaginationList = asyncHandler(async (req, res) => {
   try {
@@ -375,6 +395,8 @@ module.exports = {
   sellerApprovalStatus,
   publicSellerList,
   sortSeller,
-  updateSellerProfile
+  updateSellerProfile,
+  getDoctorSellerList,
+  getHospitalSellerList
 };
 

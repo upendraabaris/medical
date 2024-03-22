@@ -30,7 +30,7 @@ const sellerSchema = new mongoose.Schema(
     adhaar_card: { type: String },
     pan_card: { type: String },
 
-    role: { type: String, default: "Seller", enum: ["Seller"] },
+    role: { type: String, default: "Seller", enum: ["Seller","seller"] },
     approve: { type: Boolean, default: true },
 
     accGroup_id: {
@@ -40,22 +40,12 @@ const sellerSchema = new mongoose.Schema(
 
     instaId: { type: String },
     fbId: { type: String },
-    category: [{ type: String }],
-    industry: [{ type: String }],
-    brand: [{ type: String }],
     twitterId: { type: String },
     youtubeId: { type: String },
-    city: { type: String },
-
-    accCompany_id: { type: mongoose.Schema.Types.ObjectId, ref: "accCompany" },
-
+    city: { type: mongoose.Schema.Types.ObjectId, ref: "City" },
 
     language_id: { type: mongoose.Schema.Types.ObjectId, ref: 'languages' },
     currency_id: { type: mongoose.Schema.Types.ObjectId, ref: 'currency' },
-    openBalAmt: { type: Number },
-
-    openBalDate: { type: Date },
-    openBalType: { type: String, enum: ["Cr", "Dr"] },
 
     long: { type: String },
     lat: { type: String },
@@ -84,7 +74,7 @@ const sellerSchema = new mongoose.Schema(
     bank_routing_no: String,
     bank_payment_status: Number,
     tax_number: String,
-    sellerType: {type: mongoose.Schema.Types.ObjectId, ref: "sellerMaster"},
+    sellerType: {type: mongoose.Schema.Types.ObjectId, ref: "usertype"},
     informations: [
       {
         type: { type: String },
@@ -93,6 +83,31 @@ const sellerSchema = new mongoose.Schema(
         value: { type: String },
       },
     ],
+
+    
+    parent_hos_clinic_id: { type: Number, required: false },
+    hos_clinic_name: { type: String, required: true },
+    hos_clinic_type_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "HospitalClinicType", index: true},
+    accreditations: { type: String },
+    brief_description: { type: String },
+    // profile: { type: String, required: true },
+    special_note: { type: String },
+    isfavorite: { type: Boolean, default: false },
+    referring_user_id: { type: Number, ref: 'User', index: true },
+    // user_id: { type: Number, ref: 'User', index: true },
+    is_surgeon: { type: Boolean, default: false },
+    zone_id: { type: Number, ref: 'Zone', index: true },
+    is_super30: { type: Boolean, default: false },
+    // name: { type: String, required: true, ref: 'User', index: true }, // firstname+secondname+lastname from user master
+    medicine_type_id: { type: mongoose.Schema.Types.ObjectId, ref: 'MedicineType', index: true },
+    medical_specialty_id: { type: mongoose.Schema.Types.ObjectId, ref: 'MedicalSpecialty', index: true },
+    qualifications: { type: String },
+    // profilepic: { type: String, /* validate: /^https?:\/\//i  */},
+    briefbio: { type: String },
+    doctorbio: { type: String },
+    doctor_fee_IND: { type: Number },
+    doctor_fee_INT: { type: Number },
+    superSpecializationIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SuperSpecialization', index: true }]
   },
   {
     timestamps: true,

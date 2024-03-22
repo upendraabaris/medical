@@ -1,5 +1,4 @@
 const router = require("express").Router();
-
 const {
   getSellerList,
   createSeller,
@@ -14,9 +13,12 @@ const {
   sellerApprovalStatus,
   publicSellerList,
   sortSeller,
-  updateSellerProfile
+  updateSellerProfile,
+  getDoctorSellerList,
+  getHospitalSellerList
 } = require("../../controllers/ecommerce/sellerCtrl");
 
+const {responseSend} = require("../../utils/response")
 const path = require("path");
 const multer = require("multer");
 
@@ -36,7 +38,7 @@ var upload = multer({
   storage: storage,
 });
 
-const { checkDomain, isAdmin, /* isSeller */ } = require("../../middleware/authMiddleware");
+const { checkDomain, isAdmin, /* isSeller */ verifyToken } = require("../../middleware/authMiddleware");
 
 router.get("/", checkDomain, getSellerList);
 router.get("/admin", isAdmin, getSellerList);
@@ -65,8 +67,15 @@ router.put(
 );
 router.delete("/delete_Sellers/:id", isAdmin, deleteSeller);
 router.get("/admin/:id", isAdmin, getSearchById);
+router.get('/getDoctorSellerList', getDoctorSellerList, responseSend)
+router.get('/getHospitalSellerList', getHospitalSellerList, responseSend)
+router.get('/getDoctorSellerList/public', verifyToken, getDoctorSellerList, responseSend)
+router.get('/getHospitalSellerList/public', verifyToken, getHospitalSellerList, responseSend)
 router.get("/:id", checkDomain, getSearchById);
 router.get("/search/:search", checkDomain, getSearchSeller);
 router.post("/filter", checkDomain, sortSeller);
+
+
+
 
 module.exports = router;
