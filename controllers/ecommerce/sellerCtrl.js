@@ -138,6 +138,54 @@ const getHospitalSellerList = async(req,res)=>{
   }
 }
 
+const getFavoriteHospitalSellerList = async(req,res)=>{
+  try{
+    const seller = await Seller.find({sellerType: "65fd7f30ca55fe86cf3268a5", isfavorite:true}).populate(["medicine_type_id", "medical_specialty_id","superSpecializationIds", "hos_clinic_type_id"])
+    if (seller.length === 0) {
+      res.json({ message: "Favorite hospital list is empty!" });
+    } else {
+        res.json(seller);
+    }
+  }catch(error){
+    throw new Error(error)
+  }
+}
+
+const getFavoriteDoctorSellerList = async(req,res)=>{
+  try{
+    const seller = await Seller.find({sellerType: "65fd7f1bca55fe86cf326849", isfavorite: true}).populate(["medicine_type_id", "medical_specialty_id","superSpecializationIds", "hos_clinic_type_id"])
+    if (seller.length === 0) {
+      res.json({ message: "Favorite doctor list is empty!" });
+    } else {
+        res.json(seller);
+    }
+  }catch(error){
+    throw new Error(error)
+  }
+}
+
+
+const toggleFavoriteStatus = async (req, res) => {
+  try {
+      const { sellerId, isFavorite } = req.body;
+      
+      // Find the seller by ID
+      const seller = await Seller.findById(sellerId);
+      if (!seller) {
+          return res.status(404).json({ message: "Seller not found" });
+      }
+      
+      // Update the isfavorite field based on the provided value
+      seller.isfavorite = isFavorite;
+      await seller.save();
+
+      res.json({ message: "Favorite status updated successfully" });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+
 const getSellerList = asyncHandler(async (req, res) => {
   try {
     const allSellers = await Seller.find({ accCompany_id: req.companyId })
@@ -397,6 +445,9 @@ module.exports = {
   sortSeller,
   updateSellerProfile,
   getDoctorSellerList,
-  getHospitalSellerList
+  getHospitalSellerList,
+  getFavoriteHospitalSellerList,
+  getFavoriteDoctorSellerList,
+  toggleFavoriteStatus
 };
 

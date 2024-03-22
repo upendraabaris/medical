@@ -15,7 +15,10 @@ const {
   sortSeller,
   updateSellerProfile,
   getDoctorSellerList,
-  getHospitalSellerList
+  getHospitalSellerList,
+  getFavoriteHospitalSellerList,
+  getFavoriteDoctorSellerList,
+  toggleFavoriteStatus
 } = require("../../controllers/ecommerce/sellerCtrl");
 
 const {responseSend} = require("../../utils/response")
@@ -69,8 +72,14 @@ router.delete("/delete_Sellers/:id", isAdmin, deleteSeller);
 router.get("/admin/:id", isAdmin, getSearchById);
 router.get('/getDoctorSellerList', getDoctorSellerList, responseSend)
 router.get('/getHospitalSellerList', getHospitalSellerList, responseSend)
-router.get('/getDoctorSellerList/public', verifyToken, getDoctorSellerList, responseSend)
-router.get('/getHospitalSellerList/public', verifyToken, getHospitalSellerList, responseSend)
+router.get('/getDoctorSellerList/public', /* verifyToken, */ getDoctorSellerList, responseSend)
+router.get('/getHospitalSellerList/public', /* verifyToken, */ getHospitalSellerList, responseSend)
+router.get('/getFavoriteHospitalSellerList', getFavoriteHospitalSellerList)
+router.get('/getFavoriteDoctorSellerList', getFavoriteDoctorSellerList)
+router.get('/getFavoriteHospitalSellerList/public', getFavoriteHospitalSellerList)
+router.get('/getFavoriteDoctorSellerList/public', getFavoriteDoctorSellerList)
+router.post('/toggleFavoriteStatus', toggleFavoriteStatus)
+router.post('/toggleFavoriteStatus/public', toggleFavoriteStatus)
 router.get("/:id", checkDomain, getSearchById);
 router.get("/search/:search", checkDomain, getSearchSeller);
 router.post("/filter", checkDomain, sortSeller);
