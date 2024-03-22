@@ -5,9 +5,11 @@ const {getMedicalSpecialty, getMedicalSpecialtyById, addMedicalSpecialty, update
 const {responseSend} = require("../../utils/response")
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
-const {staffMiddleware} = require("../../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getMedicalSpecialty, responseSend)
+
+router.get('/public', verifyToken , getMedicalSpecialty, responseSend)
 
 router.get('/:id', staffMiddleware, getMedicalSpecialtyById, responseSend)
 

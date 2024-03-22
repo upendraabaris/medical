@@ -5,9 +5,11 @@ const {getSuperSpecialization, getSuperSpecializationById, addSuperSpecializatio
 const {responseSend} = require("../../utils/response")
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
-const {staffMiddleware} = require("../../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getSuperSpecialization, responseSend)
+
+router.get('/public', /* verifyToken, */ getSuperSpecialization, responseSend)
 
 router.get('/:id', staffMiddleware, getSuperSpecializationById, responseSend)
 

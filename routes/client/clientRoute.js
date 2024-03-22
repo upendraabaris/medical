@@ -2,14 +2,16 @@ const router = require("express").Router()
 
 const {getClient, getClientById, addClient, updateClient, deleteClient} = require("../../controllers/client/clientCtrl")
 
-router.get('/', getClient)
+const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/:id', getClientById)
+router.get('/', staffMiddleware, getClient)
 
-router.post('/addClient', addClient)
+router.get('/:id', staffMiddleware, getClientById)
 
-router.put('/updateClient/:id', updateClient)
+router.post('/addClient', staffMiddleware, addClient)
 
-router.delete('/deleteClient/:id', deleteClient)
+router.put('/updateClient/:id', staffMiddleware, updateClient)
+
+router.delete('/deleteClient/:id', staffMiddleware, deleteClient)
 
 module.exports = router

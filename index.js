@@ -119,6 +119,8 @@ const regionRoute = require("./routes/regionRoute")
 const staffRoute = require("./routes/staff/staffRoute")
 const staffTypeRoute = require("./routes/staff/staffTypeRoute")
 
+const sellerRoute = require("./routes/ecommerce/SellerRoute")
+
 const cors = require("cors")
 
 
@@ -225,6 +227,8 @@ app.use('/api/region', regionRoute)
 
 app.use('/api/staff', staffRoute)
 app.use('/api/stafftype', staffTypeRoute)
+
+app.use('/api/seller', sellerRoute)
 
 app.use(responseSend)
 // const port = 5000

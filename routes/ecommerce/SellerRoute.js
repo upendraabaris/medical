@@ -15,7 +15,7 @@ const {
   publicSellerList,
   sortSeller,
   updateSellerProfile
-} = require("../controller/sellerCtrl");
+} = require("../../controllers/ecommerce/sellerCtrl");
 
 const path = require("path");
 const multer = require("multer");
@@ -36,7 +36,7 @@ var upload = multer({
   storage: storage,
 });
 
-const { checkDomain, isAdmin, isSeller } = require("../middlewares/authMiddleware");
+const { checkDomain, isAdmin, /* isSeller */ } = require("../../middleware/authMiddleware");
 
 router.get("/", checkDomain, getSellerList);
 router.get("/admin", isAdmin, getSellerList);
@@ -55,7 +55,7 @@ router.put(
   updateSeller
 );
 
-router.put('/profile', isSeller, updateSellerProfile);
+router.put('/profile', /* isSeller, */ updateSellerProfile);
 
 router.put(
   "/update_profile_seller",

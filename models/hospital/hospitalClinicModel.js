@@ -8,6 +8,8 @@ const hospitalClinicSchema = new mongoose.Schema({
     accreditations: { type: String },
     brief_description: { type: String },
     profile: { type: String, required: true },
+    contact_primary: { type: String, index:true },
+    contacts: [{ type: String, index:true }],
     special_note: { type: String },
 },
 {
