@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-// const asyncHandler = require("express-async-handler");
-// const Order = require("../models/pickupPoint_OrderModel");
+const asyncHandler = require("express-async-handler");
+const Order = require("../../models/ecommerce/pickupPoint_OrderModel");
 const ReasonOrder = require("../../models/ecommerce/cancelOrderModel");
 // const OrderStatusTransaction = require("../models/orderStatusTransactionModel");
 
-const createReasonOrder = (async (req, res) => {
+const createReasonOrder = asyncHandler(async (req, res) => {
   try {
     let order = await Order.findOne({ _id: req.body.orderId, user: req.user._id});
     if (order == null) {
@@ -25,7 +25,7 @@ const createReasonOrder = (async (req, res) => {
   }
 });
 
-const listReasonOrder = (async (req, res) => {
+const listReasonOrder = asyncHandler(async (req, res) => {
   try {
     let reasonOrder = await ReasonOrder.find({ accCompany_id: req.companyId })
       .populate({
@@ -44,7 +44,7 @@ const listReasonOrder = (async (req, res) => {
   }
 });
 
-const listReasonOrderByUser = (async (req, res) => {
+const listReasonOrderByUser = asyncHandler(async (req, res) => {
   try {
     let reasonOrder = await ReasonOrder.find({ accCompany_id: req.companyId, user: req.user._id })
       .populate({
@@ -64,7 +64,7 @@ const listReasonOrderByUser = (async (req, res) => {
   }
 });
 
-const getReasonOrderById = (async (req, res) => {
+const getReasonOrderById = asyncHandler(async (req, res) => {
   try {
     let reasonOrder = await ReasonOrder.findById(req.params.id);
     res.json(reasonOrder);
@@ -73,7 +73,7 @@ const getReasonOrderById = (async (req, res) => {
   }
 });
 
-const deleteReasonOrder = (async (req, res) => {
+const deleteReasonOrder = asyncHandler(async (req, res) => {
   try {
     if(req.type == "User") {
       let reasonOrder = await ReasonOrder.findOneAndDelete({ user: req.user._id, _id: req.params.id, accCompany_id: req.companyId});
@@ -91,7 +91,7 @@ const deleteReasonOrder = (async (req, res) => {
   }
 });
 
-const updateStatus = (async (req, res) => {
+const updateStatus = asyncHandler(async (req, res) => {
   try {
     if(req.type == "User") {
       let reasonOrder = await ReasonOrder.findOneAndUpdate({ user: req.user._id, _id: req.params.id, accCompany_id: req.companyId},       { status: req.body.status },
@@ -114,7 +114,7 @@ const updateStatus = (async (req, res) => {
   }
 });
 
-const updateReasonOrder = (async (req, res) => {
+const updateReasonOrder = asyncHandler(async (req, res) => {
   try {
     let reasonOrder = await ReasonOrder.findByIdAndUpdate(
       req.params.id,

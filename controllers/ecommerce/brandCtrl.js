@@ -1,14 +1,15 @@
 const Brand = require("../../models/ecommerce/brandModel");
-// const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 // const validateMongoDbId = require("../utils/validateMongodbId");
 // const cloudinary = require("../utils/cloudinary");
-// const path = require("path");
-// __dirname = path.resolve(path.dirname(__filename), "../");
+const path = require("path");
+__dirname = path.resolve(path.dirname(__filename), "../");
 // const Sequence = require("../models/SequenceUidMaster/brandSequenceModel");
+const Sequence = require("../../models/ecommerce/SequenceUidMaster/bannerSequenceModel");
 
-// const Client = require("../middlewares/redis");
+const Client = require("../../middleware/redis");
 
-const createBrand = (async (req, res) => {
+const createBrand = asyncHandler(async (req, res) => {
   try {
     req.body.accCompany_id = req.companyId;
     let sequence = await Sequence.findOne({
@@ -50,7 +51,7 @@ const createBrand = (async (req, res) => {
   }
 });
 
-const updateBrand = (async (req, res) => {
+const updateBrand = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     let brandAuth = [];
@@ -94,7 +95,7 @@ const updateBrand = (async (req, res) => {
   }
 });
 
-const deleteBrand = (async (req, res) => {
+const deleteBrand = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -118,7 +119,7 @@ const deleteBrand = (async (req, res) => {
   }
 });
 
-const getBrand = (async (req, res) => {
+const getBrand = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -132,7 +133,7 @@ const getBrand = (async (req, res) => {
   }
 });
 
-const getBrandPublicList = (async (req, res) => {
+const getBrandPublicList = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -154,7 +155,7 @@ const getBrandPublicList = (async (req, res) => {
   }
 });
 
-const getallBrand = (async (req, res) => {
+const getallBrand = asyncHandler(async (req, res) => {
   try {
     if(req.type == "Staff" || req.type == "Seller") {
     const getallBrand = await Brand.find({
@@ -172,7 +173,7 @@ const getallBrand = (async (req, res) => {
   }
 });
 
-const getallBrandByLang = (async (req, res) => {
+const getallBrandByLang = asyncHandler(async (req, res) => {
   try {
     const getallBrand = await Brand.find({
       accCompany_id: req.companyId,
@@ -184,7 +185,7 @@ const getallBrandByLang = (async (req, res) => {
   }
 });
 
-const getSearchBrand = (async (req, res) => {
+const getSearchBrand = asyncHandler(async (req, res) => {
   try {
     const getSearchedBrand = await Brand.find({
       $text: { $search: req.params.search, $diacriticSensitive: true },
@@ -196,7 +197,7 @@ const getSearchBrand = (async (req, res) => {
   }
 });
 
-const brandCount = (async (req, res) => {
+const brandCount = asyncHandler(async (req, res) => {
   try {
     const count = await Brand.find({ accCompany_id: req.companyId, language_id: req.user.language_id }).count();
     res.json({ count: count });
@@ -205,7 +206,7 @@ const brandCount = (async (req, res) => {
   }
 });
 
-const brandUpdateStatus = (async (req, res) => {
+const brandUpdateStatus = asyncHandler(async (req, res) => {
   try {
     const brand = await Brand.findByIdAndUpdate({ uid: req.params.id, accCompany_id: req.companyId}, {
       active: req.body.active,

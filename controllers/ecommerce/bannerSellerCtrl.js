@@ -1,5 +1,5 @@
 const Banner = require("../../models/ecommerce/bannerSellerModel");
-// const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 // const slugify = require("slugify");
 
 // const cloudinary = require("../utils/cloudinary");
@@ -8,7 +8,7 @@ __dirname = path.resolve(path.dirname(__filename), "../");
 
 // const validateMongoDbId = require("../utils/validateMongodbId");
 
-const createBanner = (async (req, res) => {
+const createBanner = asyncHandler(async (req, res) => {
   try {
     let image;
     if (req.file != undefined) {
@@ -24,7 +24,7 @@ const createBanner = (async (req, res) => {
   }
 });
 
-const updateBanner = (async (req, res) => {
+const updateBanner = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -52,7 +52,7 @@ const updateBanner = (async (req, res) => {
     throw new Error(error);
   }
 });
-const deleteBanner = (async (req, res) => {
+const deleteBanner = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -63,7 +63,7 @@ const deleteBanner = (async (req, res) => {
   }
 });
 
-const getBanner = (async (req, res) => {
+const getBanner = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -74,7 +74,7 @@ const getBanner = (async (req, res) => {
   }
 });
 
-const getaFeaturedBanner = (async (res) => {
+const getaFeaturedBanner = asyncHandler(async (res) => {
   try {
     const getFeaturedBanner = await Banner.find({ featured: 1 });
     res.json(getFeaturedBanner);
@@ -83,7 +83,7 @@ const getaFeaturedBanner = (async (res) => {
   }
 });
 
-const getAllBanner = (async (req, res) => {
+const getAllBanner = asyncHandler(async (req, res) => {
   try {
     const getallBanner = await Banner.find();
     res.json(getallBanner);
@@ -92,7 +92,7 @@ const getAllBanner = (async (req, res) => {
   }
 });
 
-const updateBannerStatus = (async (req, res) => {
+const updateBannerStatus = asyncHandler(async (req, res) => {
   try {
     const banner = await Banner.findByIdAndUpdate(
       req.params.id,
@@ -105,7 +105,7 @@ const updateBannerStatus = (async (req, res) => {
   }
 });
 
-const publicBannerList = (async (req, res) => {
+const publicBannerList = asyncHandler(async (req, res) => {
   try {
     const allBanners = await Banner.find({ approval: true });
     res.json(allBanners);

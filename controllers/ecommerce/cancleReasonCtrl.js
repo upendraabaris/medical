@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-// const asyncHandler = require("express-async-handler");
-// const Order = require("../models/pickupPoint_OrderModel");
+const asyncHandler = require("express-async-handler");
+const Order = require("../../models/ecommerce/pickupPoint_OrderModel");
 const ReasonCancel = require("../../models/ecommerce/cancelReasonModel");
 
-const createReasonCancel = (async (req, res) => {
+const createReasonCancel = asyncHandler(async (req, res) => {
   try {
     
     let reasonCancel = await ReasonCancel.create(req.body);
@@ -13,7 +13,7 @@ const createReasonCancel = (async (req, res) => {
   }
 });
 
-const listReasonCancel = (async (req, res) => {
+const listReasonCancel = asyncHandler(async (req, res) => {
   try {
     let reasonCancel = await ReasonCancel.find();
     res.json(reasonCancel);
@@ -22,7 +22,7 @@ const listReasonCancel = (async (req, res) => {
   }
 });
 
-const getReasonCancelById = (async (req, res) => {
+const getReasonCancelById = asyncHandler(async (req, res) => {
   try {
     let reasonCancel = await ReasonCancel.findById(req.params.id);
     res.json(reasonCancel);
@@ -31,7 +31,7 @@ const getReasonCancelById = (async (req, res) => {
   }
 });
 
-const deleteReasonCancel = (async (req, res) => {
+const deleteReasonCancel = asyncHandler(async (req, res) => {
   try {
     let reasonCancel = await ReasonCancel.findByIdAndDelete(req.params.id);
     res.json(reasonCancel);
@@ -40,7 +40,7 @@ const deleteReasonCancel = (async (req, res) => {
   }
 });
 
-const updateStatus = (async (req, res) => {
+const updateStatus = asyncHandler(async (req, res) => {
   try {
     let reasonCancel = await ReasonCancel.findByIdAndUpdate(
       req.params.id,
@@ -52,7 +52,7 @@ const updateStatus = (async (req, res) => {
   }
 });
 
-const updateReasonCancel = (async (req, res) => {
+const updateReasonCancel = asyncHandler(async (req, res) => {
   try {
     let reasonCancel = await ReasonCancel.findByIdAndUpdate(
       req.params.id,

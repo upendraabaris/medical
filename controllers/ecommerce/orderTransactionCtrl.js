@@ -1,10 +1,10 @@
 const OrderTransaction = require("../../models/ecommerce/orderTransactionModel");
-// const Order = require("../models/pickupPoint_OrderModel");
-// const asyncHandler = require("express-async-handler");
-// const Purchase = require("../models/purchaseModel");
+const Order = require("../../models/ecommerce/pickupPoint_OrderModel");
+const asyncHandler = require("express-async-handler");
+// const Purchase = require("../../models/ecommerce/purchaseModel");
 //const Invoice = require("../models/serviceInvoiceModel");
 
-const createOrderTransaction = (async (req, res) => {
+const createOrderTransaction = asyncHandler(async (req, res) => {
   try {
     let transaction;
     if (req.body.paymentMethod == "credit") {
@@ -59,7 +59,7 @@ const createOrderTransaction = (async (req, res) => {
   }
 });
 
-const createPurchaseTransaction = (async (req, res) => {
+const createPurchaseTransaction = asyncHandler(async (req, res) => {
   try {
     let transaction;
     if (req.body.paymentMethod == "credit") {
@@ -107,7 +107,7 @@ const createPurchaseTransaction = (async (req, res) => {
   }
 });
 
-const createInvoicePurchaseTransaction = (async (req, res) => {
+const createInvoicePurchaseTransaction = asyncHandler(async (req, res) => {
   try {
     let transaction;
     if (req.body.paymentMethod == "credit") {
@@ -156,7 +156,7 @@ const createInvoicePurchaseTransaction = (async (req, res) => {
   }
 });
 
-const orderTransactionList = (async (req, res) => {
+const orderTransactionList = asyncHandler(async (req, res) => {
   try {
     let transactions = await OrderTransaction.find({
       orderId: req.params.id,
@@ -167,7 +167,7 @@ const orderTransactionList = (async (req, res) => {
   }
 });
 
-const orderTransactionDelete = (async (req, res) => {
+const orderTransactionDelete = asyncHandler(async (req, res) => {
   try {
     let orderTransaction = await OrderTransaction.findByIdAndDelete(
       req.params.id
@@ -200,7 +200,7 @@ const orderTransactionDelete = (async (req, res) => {
   }
 });
 
-const orderTransactionUpdate = (async (req, res) => {
+const orderTransactionUpdate = asyncHandler(async (req, res) => {
   try {
     const updateTrans = await OrderTransaction.findById(
       req.params.id,
@@ -242,7 +242,7 @@ const orderTransactionUpdate = (async (req, res) => {
   }
 });
 
-const getOrderTransactionById = (async (req, res) => {
+const getOrderTransactionById = asyncHandler(async (req, res) => {
   try {
     const order = await OrderTransaction.findById(req.params.id);
     res.json(order);

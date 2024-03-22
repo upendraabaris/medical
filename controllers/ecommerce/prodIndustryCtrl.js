@@ -1,17 +1,17 @@
 const Industry = require("../../models/ecommerce/prodIndustryModel");
-// const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 // const slugify = require("slugify");
 // const validateMongoDbId = require("../utils/validateMongodbId");
 // const cloudinary = require("../utils/cloudinary");
-// const path = require("path");
-// __dirname = path.resolve(path.dirname(__filename), "../");
-// const Sequence = require("../models/SequenceUidMaster/industrySequencyModel");
-// const mongoose = require("mongoose");
-// const ProductCostVariation = require("../models/productCostVariationModel");
+const path = require("path");
+__dirname = path.resolve(path.dirname(__filename), "../");
+const Sequence = require("../../models/ecommerce/SequenceUidMaster/industrySequencyModel");
+const mongoose = require("mongoose");
+const ProductCostVariation = require("../../models/ecommerce/productCostVariationModel");
 // const Language = require("../models/languageModel");
-// const Client = require("../middlewares/redis");
+const Client = require("../../middleware/redis");
 
-const createIndustry = (async (req, res) => {
+const createIndustry = asyncHandler(async (req, res) => {
   try {
     req.body.accCompany_id = req.companyId;
 
@@ -91,7 +91,7 @@ const createIndustry = (async (req, res) => {
   }
 });
 
-const updateIndustry = (async (req, res) => {
+const updateIndustry = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -159,7 +159,7 @@ const updateIndustry = (async (req, res) => {
     throw new Error(error);
   }
 });
-const deleteIndustry = (async (req, res) => {
+const deleteIndustry = asyncHandler(async (req, res) => {
   try {
     let categories = await Industry.find({
       accCompany_id: req.companyId,
@@ -181,7 +181,7 @@ const deleteIndustry = (async (req, res) => {
   }
 });
 
-const getIndustry = (async (req, res) => {
+const getIndustry = asyncHandler(async (req, res) => {
   const { id } = req.params;
   //   validateMongoDbId(id);
   try {
@@ -200,7 +200,7 @@ const getIndustry = (async (req, res) => {
   }
 });
 
-const getallIndustry = (async (req, res) => {
+const getallIndustry = asyncHandler(async (req, res) => {
   try {
     if(req.type == 'Staff' || req.type == 'Seller') {    
       const industry = await Industry.find({
@@ -217,7 +217,7 @@ const getallIndustry = (async (req, res) => {
   }
 });
 
-const getSearchIndustry = (async (req, res) => {
+const getSearchIndustry = asyncHandler(async (req, res) => {
   try {
     const getSearchedIndustry = await Industry.find({
       $text: { $search: req.params.search, $diacriticSensitive: true },
@@ -231,7 +231,7 @@ const getSearchIndustry = (async (req, res) => {
   }
 });
 
-const parentIndustryList = (async (req, res) => {
+const parentIndustryList = asyncHandler(async (req, res) => {
   try {
     let categ = await Client.get(`parentIndustryList:industry:${req.companyId}:${req.user.language_id}`);
     if(categ==null) {
@@ -253,7 +253,7 @@ const parentIndustryList = (async (req, res) => {
   }
 });
 
-const childIndustryList = (async (req, res) => {
+const childIndustryList = asyncHandler(async (req, res) => {
   try {
     const catChild = await Client.get(`childIndustryList:industry:${req.companyId}:${req.user.language_id}:${req.params.id}`)
     if(catChild == null) {
@@ -281,7 +281,7 @@ const childIndustryList = (async (req, res) => {
   }
 });
 
-const singleFilterIndustryList = (async (req, res) => {
+const singleFilterIndustryList = asyncHandler(async (req, res) => {
   try {
     const  categ = await Client.get(`singleFilterIndustryList:industry:${req.companyId}:${req.user.language_id}`);
     if(categ == null) {
@@ -352,7 +352,7 @@ const singleFilterIndustryList = (async (req, res) => {
   }
 });
 
-const industryCount = (async (req, res) => {
+const industryCount = asyncHandler(async (req, res) => {
   try {
     let count = await Industry.find({ accCompany_id: req.companyId }).count();
     res.json({ count: count });
@@ -361,7 +361,7 @@ const industryCount = (async (req, res) => {
   }
 });
 
-const updateIndustryStatus = (async (req, res) => {
+const updateIndustryStatus = asyncHandler(async (req, res) => {
   try {
     let categ = await Industry.findByIdAndUpdate(
       req.params.id,
@@ -378,7 +378,7 @@ const updateIndustryStatus = (async (req, res) => {
   }
 });
 
-const publicCategories = (async (req, res) => {
+const publicCategories = asyncHandler(async (req, res) => {
   try {
     console.log(req.user.language_id);
     let categ = await Client.get(`PublicCateg:industry:${req.companyId}:${req.user.language_id}`);
@@ -400,7 +400,7 @@ const publicCategories = (async (req, res) => {
   }
 });
 
-const getIndustryListByLangCateg = (async (req, res) => {
+const getIndustryListByLangCateg = asyncHandler(async (req, res) => {
   try {
     let ids = [];
     req.body.ids.forEach((id) => {
@@ -421,7 +421,7 @@ const getIndustryListByLangCateg = (async (req, res) => {
   }
 });
 
-const filterIndustryWithProduct = (async (req, res) => {
+const filterIndustryWithProduct = asyncHandler(async (req, res) => {
   try {
     let generalSetting = await GeneralSetting.findOne({
       parent_id: "64882bf65ec65f7ca4cf04bf",
@@ -528,7 +528,7 @@ const filterIndustryWithProduct = (async (req, res) => {
   }
 });
 
-const featuredOnlyCat = (async (req, res) => {
+const featuredOnlyCat = asyncHandler(async (req, res) => {
   try {
     const  cate = await Client.get(`featuredOnlyCat:industry:${req.companyId}:${req.user.language_id}`);
     if(cate == null){
@@ -546,7 +546,7 @@ const featuredOnlyCat = (async (req, res) => {
   }
 });
 
-const industryDetailPublic = (async (req, res) => {
+const industryDetailPublic = asyncHandler(async (req, res) => {
   try {
     const  categCache = await Client.get(`industryDetailPage:industry:${req.companyId}:${req.user.language_id}:${req.params.id}`);
     if(categCache == null) {

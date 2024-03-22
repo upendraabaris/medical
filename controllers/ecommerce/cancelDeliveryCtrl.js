@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-// const asyncHandler = require("express-async-handler");
-// const Order = require("../models/pickupPoint_OrderModel");
+const asyncHandler = require("express-async-handler");
+const Order = require("../../models/ecommerce/pickupPoint_OrderModel");
 const ReasonDeliveryBoyOrder = require("../../models/ecommerce/cancelDeliveryModel");
 
-const createReasonDeliveryBoyOrder = (async (req, res) => {
+const createReasonDeliveryBoyOrder = asyncHandler(async (req, res) => {
   try {
     let reasonDeliveryBoyOrder = await ReasonDeliveryBoyOrder.create(req.body);
     res.json(reasonDeliveryBoyOrder);
@@ -12,7 +12,7 @@ const createReasonDeliveryBoyOrder = (async (req, res) => {
   }
 });
 
-const listReasonDeliveryBoyOrder = (async (req, res) => {
+const listReasonDeliveryBoyOrder = asyncHandler(async (req, res) => {
   try {
     let reasonDeliveryBoyOrder = await ReasonDeliveryBoyOrder.find()
       .populate({
@@ -31,7 +31,7 @@ const listReasonDeliveryBoyOrder = (async (req, res) => {
   }
 });
 
-const listReasonDeliveryBoyOrderByUser = (async (req, res) => {
+const listReasonDeliveryBoyOrderByUser = asyncHandler(async (req, res) => {
   try {
     let reasonDeliveryBoyOrder = await ReasonDeliveryBoyOrder.find({
       user: req.params.id,
@@ -53,7 +53,7 @@ const listReasonDeliveryBoyOrderByUser = (async (req, res) => {
   }
 });
 
-const getReasonDeliveryBoyOrderById = (async (req, res) => {
+const getReasonDeliveryBoyOrderById = asyncHandler(async (req, res) => {
   try {
     let reasonDeliveryBoyOrder = await ReasonDeliveryBoyOrder.findById(
       req.params.id
@@ -64,7 +64,7 @@ const getReasonDeliveryBoyOrderById = (async (req, res) => {
   }
 });
 
-const deleteReasonDeliveryBoyOrder = (async (req, res) => {
+const deleteReasonDeliveryBoyOrder = asyncHandler(async (req, res) => {
   try {
     let reasonDeliveryBoyOrder = await ReasonDeliveryBoyOrder.findByIdAndDelete(
       req.params.id
@@ -75,7 +75,7 @@ const deleteReasonDeliveryBoyOrder = (async (req, res) => {
   }
 });
 
-const updateStatus = (async (req, res) => {
+const updateStatus = asyncHandler(async (req, res) => {
   try {
     let reasonDeliveryBoyOrder = await ReasonDeliveryBoyOrder.findByIdAndUpdate(
       req.params.id,
@@ -87,7 +87,7 @@ const updateStatus = (async (req, res) => {
   }
 });
 
-const updateReasonDeliveryBoyOrder = (async (req, res) => {
+const updateReasonDeliveryBoyOrder = asyncHandler(async (req, res) => {
   try {
     let reasonDeliveryBoyOrder = await ReasonDeliveryBoyOrder.findByIdAndUpdate(
       req.params.id,

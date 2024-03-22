@@ -1,34 +1,35 @@
 const Product = require("../../models/ecommerce/productModel");
-// const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 // const slugify = require("slugify");
 // const Search = require("../models/searchModel");
-// const mongoose = require("mongoose");
-// const ProductCostVariation = require("../models/productCostVariationModel");
-// const Seller = require("../models/sellersModel");
+const mongoose = require("mongoose");
+const ProductCostVariation = require("../../models/ecommerce/productCostVariationModel");
+const Seller = require("../../models/ecommerce/sellersModel");
 // const Recent = require("../models/recentModel");
 
 // const cloudinary = require("../utils/cloudinary");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
-// const User = require("../models/userModel");
-// const Category = require("../models/prodcategoryModel");
-// const Brand = require("../models/brandModel");
+const User = require("../../models/user/userModel");
+const Category = require("../../models/ecommerce/prodcategoryModel");
+const Brand = require("../../models/ecommerce/brandModel");
 // const ComboDeals = require("../models/comboDealModel");
 // const Settings = require("../models/settingApproveStatusModel");
 // const Wholesale = require("../models/wholesaleModel");
 // const GeneralSetting = require("../models/generalSettingsModel");
 
 // const Sequence = require("../models/SequenceUidMaster/productSequnceModel");
-// const Currency = require("../models/currencyModel");
-// const Country = require("../models/crm/countryModel");
+const Sequence = require("../../models/ecommerce/SequenceUidMaster/productSequnceModel");
+const Currency = require("../../models/currencyModel");
+const Country = require("../../models/countryModel");
 // const CategoryType = require("../models/categoryMaster/categoryTypeModel");
 
-// const Industry = require("../models/prodIndustryModel");
+const Industry = require("../../models/ecommerce/prodIndustryModel");
 
-// const Client = require("../middlewares/redis");
+const Client = require("../../middleware/redis");
 // const Variations = require("../models/variationsModel");
-// const ProductDiamond = require("../models/productDiamonModel");
+//const ProductDiamond = require("../models/productDiamonModel");
 
 __dirname = path.resolve(path.dirname(__filename), "../");
 
@@ -117,7 +118,7 @@ function randomValue(uidList) {
   }
 }
 
-const addProductVariationForm = (async (req, res) => {
+const addProductVariationForm = asyncHandler(async (req, res) => {
   try {
     let variations = [];
     if (
@@ -201,7 +202,7 @@ const addProductVariationForm = (async (req, res) => {
   }
 });
 
-const variationPriceUpdate = (async (req, res) => {
+const variationPriceUpdate = asyncHandler(async (req, res) => {
   try {
     if (req.body.variations == undefined) {
       throw new Error("Must have variations field");
@@ -224,7 +225,7 @@ const variationPriceUpdate = (async (req, res) => {
 __dirname = path.resolve(path.dirname(__filename), "../");
 // const Language = require("../models/languageModel");
 
-const createProduct = (async (req, res) => {
+const createProduct = asyncHandler(async (req, res) => {
   try {
     let found = await Sequence.findOne({ accCompany_id: req.companyId });
     if (found == null) {
@@ -353,7 +354,7 @@ const createProduct = (async (req, res) => {
   }
 });
 
-const createProductDiamond = (async (req, res) => {
+const createProductDiamond = asyncHandler(async (req, res) => {
   try {
     let found = await Sequence.findOne({ accCompany_id: req.companyId });
     if (found == null) {
@@ -405,7 +406,7 @@ const createProductDiamond = (async (req, res) => {
   }
 });
 
-const updateProduct = (async (req, res) => {
+const updateProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -523,7 +524,7 @@ const updateProduct = (async (req, res) => {
   }
 });
 
-const updateProductDiamond = (async (req, res) => {
+const updateProductDiamond = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -564,7 +565,7 @@ const updateProductDiamond = (async (req, res) => {
   }
 });
 
-const deleteProduct = (async (req, res) => {
+const deleteProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -588,7 +589,7 @@ const deleteProduct = (async (req, res) => {
   }
 });
 
-const getProduct = (async (req, res) => {
+const getProduct = asyncHandler(async (req, res) => {
   const id = req.params.id;
   // validateMongoDbId(id);
   try {
@@ -735,7 +736,7 @@ const getProduct = (async (req, res) => {
   }
 });
 
-const getProductPrice = (async (req, res) => {
+const getProductPrice = asyncHandler(async (req, res) => {
   try {
     let productId = new mongoose.Types.ObjectId(req.params.id);
     let variant = req.params.variant;
@@ -784,7 +785,7 @@ const getProductPrice = (async (req, res) => {
   }
 });
 
-const getProductAdmin = (async (req, res) => {
+const getProductAdmin = asyncHandler(async (req, res) => {
   const id = req.params.id;
   // validateMongoDbId(id);
   try {
@@ -1012,7 +1013,7 @@ const getProductAdmin = (async (req, res) => {
   }
 });
 
-const getaFeaturedProduct = (async (req, res) => {
+const getaFeaturedProduct = asyncHandler(async (req, res) => {
   try {
     let generalSetting = await GeneralSetting.findOne({
       parent_id: "64882bf65ec65f7ca4cf04bf",
@@ -1092,7 +1093,7 @@ const getaFeaturedProduct = (async (req, res) => {
   }
 });
 
-const getAllProduct = (async (req, res) => {
+const getAllProduct = asyncHandler(async (req, res) => {
   try {
     const getallProduct = await Product.find({
       accCompany_id: req.companyId,
@@ -1140,7 +1141,7 @@ const getAllProduct = (async (req, res) => {
   }
 });
 
-const getAllProductPagination = (async (req, res) => {
+const getAllProductPagination = asyncHandler(async (req, res) => {
   try {
     const products = await Client.get(
       `getAllProductPagination:product:${req.companyId}:${req.user.language_id}:${req.user.country_id}:${req.params.id}:${req.params.count}`
@@ -1242,7 +1243,7 @@ const getAllProductPagination = (async (req, res) => {
   }
 });
 
-const getAllProductAdmin = (async (req, res) => {
+const getAllProductAdmin = asyncHandler(async (req, res) => {
   try {
     var filter = { accCompany_id: new mongoose.Types.ObjectId(req.companyId) };
     if(req.type == "Seller") {
@@ -1398,7 +1399,7 @@ function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
-const searchProduct = (async (req, res) => {
+const searchProduct = asyncHandler(async (req, res) => {
   try {
     let searchProductItem = await Client.get(
       `searchProduct:product:${req.companyId}:${req.user.language_id}:${req.user.country_id}:${req.params.search}`
@@ -1526,7 +1527,7 @@ const searchProduct = (async (req, res) => {
   }
 });
 
-const trendingSearches = (async (req, res) => {
+const trendingSearches = asyncHandler(async (req, res) => {
   try {
     const trending = await Client.get(
       `TrendingSearchProduct:${req.companyId}:${req.user.language_id}`
@@ -1556,7 +1557,7 @@ const trendingSearches = (async (req, res) => {
   }
 });
 
-const getFilterProduct = (async (req, res) => {
+const getFilterProduct = asyncHandler(async (req, res) => {
   try {
     let filterCache = await Client.get(
       `getFilterProduct:product:${req.companyId}:${req.user.language_id}:${req.user.country_id}:categ:${req.body.categories}:brand:${req.body.brands}:sort:${req.body.sort}:minPrice:${req.body.minPrice}:maxPrice:${req.body.maxPrice}:search:${req.body.search}:industry:${req.body.industries}`
@@ -1840,7 +1841,7 @@ const getFilterProduct = (async (req, res) => {
 
 
 
-const getFilterProductByCat = (async (req, res) => {
+const getFilterProductByCat = asyncHandler(async (req, res) => {
   try {
     let category = await Category.find({
       accCompany_id: req.companyId,
@@ -1933,7 +1934,7 @@ const getFilterProductByCat = (async (req, res) => {
   }
 });
 
-const getFilterProductByBrand = (async (req, res) => {
+const getFilterProductByBrand = asyncHandler(async (req, res) => {
   try {
     let category = await Category.find({
       accCompany_id: req.companyId,
@@ -1974,7 +1975,7 @@ const getFilterProductByBrand = (async (req, res) => {
   }
 });
 
-const getSellerProductList = (async (req, res) => {
+const getSellerProductList = asyncHandler(async (req, res) => {
   try {
     let products = await ProductCostVariation.find({
       accCompany_id: req.companyId,
@@ -1990,7 +1991,7 @@ const getSellerProductList = (async (req, res) => {
   }
 });
 
-const getAllSellerProductList = (async (req, res) => {
+const getAllSellerProductList = asyncHandler(async (req, res) => {
   try {
     let products = await ProductCostVariation.find({
       accCompany_id: req.companyId,
@@ -2005,7 +2006,7 @@ const getAllSellerProductList = (async (req, res) => {
   }
 });
 
-const updateProductFeature = (async (req, res) => {
+const updateProductFeature = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const feature = await Product.findByIdAndUpdate(
@@ -2019,7 +2020,7 @@ const updateProductFeature = (async (req, res) => {
   }
 });
 
-const updateSellerProductFeature = (async (req, res) => {
+const updateSellerProductFeature = asyncHandler(async (req, res) => {
   try {
     const { id } = req.params;
     const feature = await Product.findByIdAndUpdate(
@@ -2033,7 +2034,7 @@ const updateSellerProductFeature = (async (req, res) => {
   }
 });
 
-const flashDealsList = (async (req, res) => {
+const flashDealsList = asyncHandler(async (req, res) => {
   try {
     let category = await Category.find({
       accCompany_id: req.companyId,
@@ -2070,7 +2071,7 @@ const flashDealsList = (async (req, res) => {
   }
 });
 
-const productCount = (async (req, res) => {
+const productCount = asyncHandler(async (req, res) => {
   try {
     let count = await Product.find({
       accCompany_id: req.companyId,
@@ -2083,7 +2084,7 @@ const productCount = (async (req, res) => {
   }
 });
 
-const updateActiveStatus = (async (req, res) => {
+const updateActiveStatus = asyncHandler(async (req, res) => {
   try {
     let products = await Product.find({
       accCompany_id: req.companyId,
@@ -2113,7 +2114,7 @@ const updateActiveStatus = (async (req, res) => {
   }
 });
 
-const sortProducts = (async (req, res) => {
+const sortProducts = asyncHandler(async (req, res) => {
   try {
     if (req.params.id == null) {
       throw new Error("Please choose correct option");
@@ -2150,7 +2151,7 @@ const sortProducts = (async (req, res) => {
   }
 });
 
-const sortProductsByCategory = (async (req, res) => {
+const sortProductsByCategory = asyncHandler(async (req, res) => {
   try {
     if (req.params.id == null) {
       throw new Error("Please choose correct option");
@@ -2188,7 +2189,7 @@ const sortProductsByCategory = (async (req, res) => {
   }
 });
 
-const productUnderPrice = (async (req, res) => {
+const productUnderPrice = asyncHandler(async (req, res) => {
   try {
     const productList = await ProductCostVariation.aggregate([
       {
@@ -2252,7 +2253,7 @@ const productUnderPrice = (async (req, res) => {
   }
 });
 
-const jewelProduct = (async (req, res) => {
+const jewelProduct = asyncHandler(async (req, res) => {
   try {
     const product = await ProductDiamond.aggregate([
       {
@@ -2355,7 +2356,7 @@ const jewelProduct = (async (req, res) => {
   }
 });
 
-const jewelProductGetById = (async (req, res) => {
+const jewelProductGetById = asyncHandler(async (req, res) => {
   try {
     const product = await ProductDiamond.aggregate([
       {
@@ -2774,7 +2775,7 @@ const jewelProductGetById = (async (req, res) => {
   }
 });
 
-const productDiamonFilter = (async (req, res) => {
+const productDiamonFilter = asyncHandler(async (req, res) => {
   try {
     let skip = req.body.page * req.body.count;
     let filter = {
@@ -2853,7 +2854,7 @@ const productDiamonFilter = (async (req, res) => {
   }
 });
 
-const isProductNameExist = (async (req, res) => {
+const isProductNameExist = asyncHandler(async (req, res) => {
   try {
     const product = await ProductDiamond.findOne({
       accCompany_id: req.companyId,
@@ -2869,7 +2870,7 @@ const isProductNameExist = (async (req, res) => {
   }
 });
 
-const isProductSlugExist = (async (req, res) => {
+const isProductSlugExist = asyncHandler(async (req, res) => {
   try {
     const product = await ProductDiamond.findOne({
       accCompany_id: req.companyId,
@@ -2885,7 +2886,7 @@ const isProductSlugExist = (async (req, res) => {
   }
 });
 
-const isProductSKUExist = (async (req, res) => {
+const isProductSKUExist = asyncHandler(async (req, res) => {
   try {
     const product = await ProductDiamond.findOne({
       accCompany_id: req.companyId,
@@ -2902,7 +2903,7 @@ const isProductSKUExist = (async (req, res) => {
 });
 
 
-const diamondProductDelete = (async (req, res) => {
+const diamondProductDelete = asyncHandler(async (req, res) => {
   try {
     const products = await ProductDiamond.find({ accCompany_id: req.companyId, uid: req.params.id });
     const productsDelete = await ProductDiamond.deleteMany({ accCompany_id: req.companyId, uid: req.params.id });
@@ -2919,7 +2920,7 @@ const diamondProductDelete = (async (req, res) => {
 })
 
 
-const jewelProductFilterAdmin = (async (req, res) => {
+const jewelProductFilterAdmin = asyncHandler(async (req, res) => {
   try {
     let filter = {
       accCompany_id: new mongoose.Types.ObjectId(req.companyId),

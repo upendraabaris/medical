@@ -1,11 +1,11 @@
 const Blogs = require("../../models/ecommerce/blogModel");
-// const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 // const validateMongoDbId = require("../utils/validateMongodbId");
-// const Sequence = require("../models/blogSequenceModel");
+const Sequence = require("../../models/ecommerce/blogSequenceModel");
 // const Language = require("../models/languageModel");
-// const Client = require("../middlewares/redis");
+const Client = require("../../middleware/redis");
 
-const createBlogs = (async (req, res) => {
+const createBlogs = asyncHandler(async (req, res) => {
   try {
     req.body.accCompany_id = req.companyId;
     
@@ -71,7 +71,7 @@ const createBlogs = (async (req, res) => {
   }
 });
 
-const updateBlogs = (async (req, res) => {
+const updateBlogs = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     let BlogsAuth = [];
@@ -133,7 +133,7 @@ const updateBlogs = (async (req, res) => {
   }
 });
 
-const deleteBlogs = (async (req, res) => {
+const deleteBlogs = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -158,7 +158,7 @@ const deleteBlogs = (async (req, res) => {
   }
 });
 
-const getBlogs = (async (req, res) => {
+const getBlogs = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -172,7 +172,7 @@ const getBlogs = (async (req, res) => {
   }
 });
 
-const getBlogsPublicList = (async (req, res) => {
+const getBlogsPublicList = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -197,7 +197,7 @@ const getBlogsPublicList = (async (req, res) => {
   }
 });
 
-const getallBlogs = (async (req, res) => {
+const getallBlogs = asyncHandler(async (req, res) => {
   try {
     const getallBlogs = await Blogs.find({
       accCompany_id: req.companyId,
@@ -209,7 +209,7 @@ const getallBlogs = (async (req, res) => {
   }
 });
 
-const getBlogPublic = (async (req, res) => {
+const getBlogPublic = asyncHandler(async (req, res) => {
   try {
     const blog = await Client.get(`getBlogPublic:blogs:${req.companyId}:${req.user.language_id}:${req.params.id}`)
     if(blog == null) {
@@ -231,7 +231,7 @@ const getBlogPublic = (async (req, res) => {
   }
 });
 
-const getallBlogsByLang = (async (req, res) => {
+const getallBlogsByLang = asyncHandler(async (req, res) => {
   try {
     const getallBlogs = await Blogs.find({
       accCompany_id: req.companyId,
@@ -243,7 +243,7 @@ const getallBlogsByLang = (async (req, res) => {
   }
 });
 
-const getSearchBlogs = (async (req, res) => {
+const getSearchBlogs = asyncHandler(async (req, res) => {
   try {
     const getSearchedBlogs = await Blogs.find({
       $text: { $search: req.params.search, $diacriticSensitive: true },
@@ -255,7 +255,7 @@ const getSearchBlogs = (async (req, res) => {
   }
 });
 
-const BlogsCount = (async (req, res) => {
+const BlogsCount = asyncHandler(async (req, res) => {
   try {
     const count = await Blogs.find({ accCompany_id: req.companyId }).count();
     res.json({ count: count });
@@ -264,7 +264,7 @@ const BlogsCount = (async (req, res) => {
   }
 });
 
-const BlogsUpdateStatus = (async (req, res) => {
+const BlogsUpdateStatus = asyncHandler(async (req, res) => {
   try {
     const Blogs = await Blogs.findByIdAndUpdate(req.params.id, {
       active: req.body.active,
@@ -276,7 +276,7 @@ const BlogsUpdateStatus = (async (req, res) => {
   }
 });
 
-const getBlogsByCateg = (async (req, res) => {
+const getBlogsByCateg = asyncHandler(async (req, res) => {
   try {
     const blogs = await Client.get(`getBlogsByCateg:blogs:${req.companyId}:${req.user.language_id}:${req.params.id}`);
     if(blogs == null) {

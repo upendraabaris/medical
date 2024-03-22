@@ -1,11 +1,11 @@
 const attributeSetMaster = require("../../models/ecommerce/attributeSetMasterModel");
-// const asyncHandler = require("express-async-handler");
-// const Category = require("../models/prodcategoryModel");
+const asyncHandler = require("express-async-handler");
+const Category = require("../../models/ecommerce/prodcategoryModel");
 const mongoose = require("mongoose");
 
-// const Sequence = require("../models/SequenceUidMaster/attributeSetSequenceModel");
+const Sequence = require("../../models/ecommerce/SequenceUidMaster/attributeSetSequenceModel");
 
-const getattributeSetMasterList = (async (req, res) => {
+const getattributeSetMasterList = asyncHandler(async (req, res) => {
   try {
     if(req.type == "Staff" || req.type == "Seller") {
       const allattributeSetMasters = await attributeSetMaster
@@ -21,7 +21,7 @@ const getattributeSetMasterList = (async (req, res) => {
   }
 });
 
-const getattributeSetMasterListByLang = (async (req, res) => {
+const getattributeSetMasterListByLang = asyncHandler(async (req, res) => {
   try {
     const allattributeSetMasters = await attributeSetMaster
       .find({ accCompany_id: req.companyId, language_id: req.params.id })
@@ -32,7 +32,7 @@ const getattributeSetMasterListByLang = (async (req, res) => {
   }
 });
 
-const createattributeSetMaster = (async (req, res) => {
+const createattributeSetMaster = asyncHandler(async (req, res) => {
   try {
     let sequence = await Sequence.findOne({
       accCompany_id: req.companyId,
@@ -69,7 +69,7 @@ const createattributeSetMaster = (async (req, res) => {
     throw new Error(error);
   }
 });
-const updateattributeSetMaster = (async (req, res) => {
+const updateattributeSetMaster = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     let attributeAuth = [];
@@ -110,7 +110,7 @@ const updateattributeSetMaster = (async (req, res) => {
 });
 
 
-const deleteattributeSetMaster = (async (req, res) => {
+const deleteattributeSetMaster = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     let attributes = await attributeSetMaster.find({
@@ -129,7 +129,7 @@ const deleteattributeSetMaster = (async (req, res) => {
   }
 });
 
-const getSearchattributeSetMaster = (async (req, res) => {
+const getSearchattributeSetMaster = asyncHandler(async (req, res) => {
   try {
     const getSearchedattributeSetMaster = await attributeSetMaster.find({
       $text: { $search: req.params.search, $diacriticSensitive: true },
@@ -141,7 +141,7 @@ const getSearchattributeSetMaster = (async (req, res) => {
   }
 });
 
-const getattributeSetMasterById = (async (req, res) => {
+const getattributeSetMasterById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     const getaSearch = await attributeSetMaster.find({
@@ -154,7 +154,7 @@ const getattributeSetMasterById = (async (req, res) => {
   }
 });
 
-const attributeSetMasterCount = (async (req, res) => {
+const attributeSetMasterCount = asyncHandler(async (req, res) => {
   try {
     const count = await attributeSetMaster
       .find({ accCompany_id: req.companyId })
@@ -165,7 +165,7 @@ const attributeSetMasterCount = (async (req, res) => {
   }
 });
 
-const attributeSetMasterSelectByCateg = (async (req, res) => {
+const attributeSetMasterSelectByCateg = asyncHandler(async (req, res) => {
   try {
     let categ = [];
     req.body.id?.forEach((id) => {

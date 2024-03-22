@@ -1,10 +1,10 @@
 const blogsCat = require("../../models/ecommerce/blogCatModel");
-// const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 // const validateMongoDbId = require("../utils/validateMongodbId");
-// const Sequence = require("../models/blogsCatSquenceModel");
+const Sequence = require("../../models/ecommerce/blogsCatSquenceModel");
 // const Language = require("../models/languageModel");
 
-const createblogsCat = (async (req, res) => {
+const createblogsCat = asyncHandler(async (req, res) => {
   try {
     req.body.accCompany_id = req.companyId;
     
@@ -69,7 +69,7 @@ const createblogsCat = (async (req, res) => {
   }
 });
 
-const updateblogsCat = (async (req, res) => {
+const updateblogsCat = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     let blogsCatAuth = [];
@@ -129,7 +129,7 @@ const updateblogsCat = (async (req, res) => {
   }
 });
 
-const deleteblogsCat = (async (req, res) => {
+const deleteblogsCat = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -154,7 +154,7 @@ const deleteblogsCat = (async (req, res) => {
   }
 });
 
-const getblogsCat = (async (req, res) => {
+const getblogsCat = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -168,7 +168,7 @@ const getblogsCat = (async (req, res) => {
   }
 });
 
-const getblogsCatPublicList = (async (req, res) => {
+const getblogsCatPublicList = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -182,7 +182,7 @@ const getblogsCatPublicList = (async (req, res) => {
   }
 });
 
-const getallblogsCat = (async (req, res) => {
+const getallblogsCat = asyncHandler(async (req, res) => {
   try {
     const blogs = await Client.get(`blogCats:${req.companyId}:${req.user.language_id}`);
     if(blogs == null) {
@@ -201,7 +201,7 @@ const getallblogsCat = (async (req, res) => {
   }
 });
 
-const getallblogsCatByLang = (async (req, res) => {
+const getallblogsCatByLang = asyncHandler(async (req, res) => {
   try {
     const getallblogsCat = await blogsCat.find({
       accCompany_id: req.companyId,
@@ -213,7 +213,7 @@ const getallblogsCatByLang = (async (req, res) => {
   }
 });
 
-const getSearchblogsCat = (async (req, res) => {
+const getSearchblogsCat = asyncHandler(async (req, res) => {
   try {
     const getSearchedblogsCat = await blogsCat.find({
       $text: { $search: req.params.search, $diacriticSensitive: true },
@@ -225,7 +225,7 @@ const getSearchblogsCat = (async (req, res) => {
   }
 });
 
-const blogsCatCount = (async (req, res) => {
+const blogsCatCount = asyncHandler(async (req, res) => {
   try {
     const count = await blogsCat.find({ accCompany_id: req.companyId }).count();
     res.json({ count: count });
@@ -234,7 +234,7 @@ const blogsCatCount = (async (req, res) => {
   }
 });
 
-const blogsCatUpdateStatus = (async (req, res) => {
+const blogsCatUpdateStatus = asyncHandler(async (req, res) => {
   try {
     const blogsCat = await blogsCat.findByIdAndUpdate(req.params.id, {
       active: req.body.active,

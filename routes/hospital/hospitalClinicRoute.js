@@ -13,8 +13,8 @@ router.get('/public', verifyToken , getHospitalClinic, responseSend)
 
 router.get('/:id', staffMiddleware, getHospitalClinicById, responseSend)
 
-
 router.get('/public/pageList', verifyToken, getHospitalClinicPublic, responseSend)
+
 router.get('/public/:id', verifyToken, getHospitalClinicById, responseSend)
 
 router.post('/addHospitalClinic', staffMiddleware, addHospitalClinic, responseSend)

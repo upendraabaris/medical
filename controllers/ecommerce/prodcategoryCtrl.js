@@ -1,17 +1,18 @@
-const Category = require("../../models/ecommerce/prodcategoryModel")
-// const asyncHandler = require("express-async-handler");
+const Category = require("../../models/ecommerce/prodcategoryModel");
+const asyncHandler = require("express-async-handler");
 // const slugify = require("slugify");
 // const validateMongoDbId = require("../utils/validateMongodbId");
 // const cloudinary = require("../utils/cloudinary");
-// const path = require("path");
-// __dirname = path.resolve(path.dirname(__filename), "../");
+const path = require("path");
+__dirname = path.resolve(path.dirname(__filename), "../");
 // const Sequence = require("../models/SequenceUidMaster/categorySequenceModel");
+const Sequence = require("../../models/ecommerce/SequenceUidMaster/categorySequenceModel");
 const mongoose = require("mongoose");
 //const ProductCostVariation = require("../models/productCostVariationModel");
 // const Language = require("../models/languageModel");
-// const Client = require("../middlewares/redis");
+const Client = require("../../middleware/redis");
 
-const createCategory = (async (req, res) => {
+const createCategory = asyncHandler(async (req, res) => {
   try {
     req.body.accCompany_id = req.companyId;
 
@@ -91,7 +92,7 @@ const createCategory = (async (req, res) => {
   }
 });
 
-const updateCategory = (async (req, res) => {
+const updateCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -155,7 +156,7 @@ const updateCategory = (async (req, res) => {
     throw new Error(error);
   }
 });
-const deleteCategory = (async (req, res) => {
+const deleteCategory = asyncHandler(async (req, res) => {
   try {
     let categories = await Category.find({
       accCompany_id: req.companyId,
@@ -177,7 +178,7 @@ const deleteCategory = (async (req, res) => {
   }
 });
 
-const getCategory = (async (req, res) => {
+const getCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
   //   validateMongoDbId(id);
   try {
@@ -196,7 +197,7 @@ const getCategory = (async (req, res) => {
   }
 });
 
-const getallCategory = (async (req, res) => {
+const getallCategory = asyncHandler(async (req, res) => {
   try {
     if(req.type == 'Staff' || req.type == 'Seller') {    
       const category = await Category.find({
@@ -213,7 +214,7 @@ const getallCategory = (async (req, res) => {
   }
 });
 
-const getSearchCategory = (async (req, res) => {
+const getSearchCategory = asyncHandler(async (req, res) => {
   try {
     const getSearchedCategory = await Category.find({
       $text: { $search: req.params.search, $diacriticSensitive: true },
@@ -227,7 +228,7 @@ const getSearchCategory = (async (req, res) => {
   }
 });
 
-const parentCategoryList = (async (req, res) => {
+const parentCategoryList = asyncHandler(async (req, res) => {
   try {
     let categ = await Client.get(`parentCategoryList:categ:${req.companyId}:${req.user.language_id}`);
     if(categ==null) {
@@ -249,7 +250,7 @@ const parentCategoryList = (async (req, res) => {
   }
 });
 
-const childCategoryList = (async (req, res) => {
+const childCategoryList = asyncHandler(async (req, res) => {
   try {
     const catChild = await Client.get(`childCategoryList:categ:${req.companyId}:${req.user.language_id}:${req.params.id}`)
     if(catChild == null) {
@@ -277,7 +278,7 @@ const childCategoryList = (async (req, res) => {
   }
 });
 
-const singleFilterCategoryList = (async (req, res) => {
+const singleFilterCategoryList = asyncHandler(async (req, res) => {
   try {
     const  categ = await Client.get(`singleFilterCategoryList:categ:${req.companyId}:${req.user.language_id}`);
     if(categ == null) {
@@ -348,7 +349,7 @@ const singleFilterCategoryList = (async (req, res) => {
   }
 });
 
-const categoryCount = (async (req, res) => {
+const categoryCount = asyncHandler(async (req, res) => {
   try {
     let count = await Category.find({ accCompany_id: req.companyId }).count();
     res.json({ count: count });
@@ -357,7 +358,7 @@ const categoryCount = (async (req, res) => {
   }
 });
 
-const updateCategoryStatus = (async (req, res) => {
+const updateCategoryStatus = asyncHandler(async (req, res) => {
   try {
     let categ = await Category.findByIdAndUpdate(
       req.params.id,
@@ -374,7 +375,7 @@ const updateCategoryStatus = (async (req, res) => {
   }
 });
 
-const publicCategories = (async (req, res) => {
+const publicCategories = asyncHandler(async (req, res) => {
   try {
     console.log(req.user.language_id);
     let categ = await Client.get(`PublicCateg:categ:${req.companyId}:${req.user.language_id}`);
@@ -396,7 +397,7 @@ const publicCategories = (async (req, res) => {
   }
 });
 
-const getCategoryListByLangCateg = (async (req, res) => {
+const getCategoryListByLangCateg = asyncHandler(async (req, res) => {
   try {
     let ids = [];
     req.body.ids.forEach((id) => {
@@ -417,7 +418,7 @@ const getCategoryListByLangCateg = (async (req, res) => {
   }
 });
 
-const filterCategoryWithProduct = (async (req, res) => {
+const filterCategoryWithProduct = asyncHandler(async (req, res) => {
   try {
     let generalSetting = await GeneralSetting.findOne({
       parent_id: "64882bf65ec65f7ca4cf04bf",
@@ -524,7 +525,7 @@ const filterCategoryWithProduct = (async (req, res) => {
   }
 });
 
-const featuredOnlyCat = (async (req, res) => {
+const featuredOnlyCat = asyncHandler(async (req, res) => {
   try {
     const  cate = await Client.get(`featuredOnlyCat:categ:${req.companyId}:${req.user.language_id}`);
     if(cate == null){
@@ -542,7 +543,7 @@ const featuredOnlyCat = (async (req, res) => {
   }
 });
 
-const categoryDetailPublic = (async (req, res) => {
+const categoryDetailPublic = asyncHandler(async (req, res) => {
   try {
     const  categCache = await Client.get(`categoryDetailPage:categ:${req.companyId}:${req.user.language_id}:${req.params.id}`);
     if(categCache == null) {

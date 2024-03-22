@@ -1,9 +1,10 @@
 const attribute = require("../../models/ecommerce/attributeModel");
-// const asyncHandler = require("express-async-handler");
-// const Sequence = require("../models/SequenceUidMaster/attributeSequneceModel");
-// const Client = require("../middlewares/redis");
+const asyncHandler = require("express-async-handler");
+const Sequence = require("../../models/ecommerce/SequenceUidMaster/attributeSequneceModel");
+const Client = require("../../middleware/redis");
 
-const getattributeList = (async (req, res) => {
+
+const getattributeList = asyncHandler(async (req, res) => {
   try {
     if(req.type == "Staff" || req.type == "Seller") {
       const attributeCache = await Client.get(`getattributeList:attribute:${req.companyId}:${req.user.language_id}`);
@@ -27,7 +28,7 @@ const getattributeList = (async (req, res) => {
   }
 });
 
-const getattributeListByLang = (async (req, res) => {
+const getattributeListByLang = asyncHandler(async (req, res) => {
   try {
     const attributeCache = await Client.get(`getattributeList:attribute:${req.companyId}:${req.user.language_id}`);
     if(attributeCache == null) {
@@ -46,7 +47,7 @@ const getattributeListByLang = (async (req, res) => {
   }
 });
 
-const createattribute = (async (req, res) => {
+const createattribute = asyncHandler(async (req, res) => {
   try {
     req.body.accCompany_id = req.companyId;
 
@@ -89,7 +90,7 @@ const createattribute = (async (req, res) => {
     throw new Error(error);
   }
 });
-const updateattribute = (async (req, res) => {
+const updateattribute = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     let attributeAuth = [];
@@ -133,7 +134,7 @@ const updateattribute = (async (req, res) => {
   }
 });
 
-const deleteattribute = (async (req, res) => {
+const deleteattribute = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     let attributes = await attribute.find({
@@ -157,7 +158,7 @@ const deleteattribute = (async (req, res) => {
   }
 });
 
-const getSearchattribute = (async (req, res) => {
+const getSearchattribute = asyncHandler(async (req, res) => {
   try {
     const getSearchedattribute = await attribute.find({
       $text: { $search: req.params.search, $diacriticSensitive: true },
@@ -169,7 +170,7 @@ const getSearchattribute = (async (req, res) => {
   }
 });
 
-const getattributeById = (async (req, res) => {
+const getattributeById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   try {
     const getaSearch = await attribute.find({
@@ -182,7 +183,7 @@ const getattributeById = (async (req, res) => {
   }
 });
 
-const attributeCount = (async (req, res) => {
+const attributeCount = asyncHandler(async (req, res) => {
   try {
     const count = await attribute
       .find({ accCompany_id: req.companyId })

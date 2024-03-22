@@ -1,18 +1,18 @@
 const Banner = require("../../models/ecommerce/bannerModel");
-// const asyncHandler = require("express-async-handler");
+const asyncHandler = require("express-async-handler");
 // const slugify = require("slugify");
 
 // const cloudinary = require("../utils/cloudinary");
-// const path = require("path");
-// __dirname = path.resolve(path.dirname(__filename), "../");
+const path = require("path");
+__dirname = path.resolve(path.dirname(__filename), "../");
 
-// const Sequence = require("../models/SequenceUidMaster/bannerSequenceModel");
+const Sequence = require("../../models/ecommerce/SequenceUidMaster/bannerSequenceModel");
 
-// const Client = require("../middlewares/redis");
+const Client = require("../../middleware/redis");
 
 // const validateMongoDbId = require("../utils/validateMongodbId");
 
-const createBanner = (async (req, res) => {
+const createBanner = asyncHandler(async (req, res) => {
   try {
     req.body.accCompanyId = req.user.accCompany_id;
 
@@ -56,7 +56,7 @@ const createBanner = (async (req, res) => {
   }
 });
 
-const updateBanner = (async (req, res) => {
+const updateBanner = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -93,7 +93,7 @@ const updateBanner = (async (req, res) => {
     throw new Error(error);
   }
 });
-const deleteBanner = (async (req, res) => {
+const deleteBanner = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -117,7 +117,7 @@ const deleteBanner = (async (req, res) => {
   }
 });
 
-const getBanner = (async (req, res) => {
+const getBanner = asyncHandler(async (req, res) => {
   const { id } = req.params;
   // validateMongoDbId(id);
   try {
@@ -131,7 +131,7 @@ const getBanner = (async (req, res) => {
   }
 });
 
-const getaFeaturedBanner = (async (res) => {
+const getaFeaturedBanner = asyncHandler(async (res) => {
   try {
     const getFeaturedBanner = await Banner.find({
       featured: 1,
@@ -143,7 +143,7 @@ const getaFeaturedBanner = (async (res) => {
   }
 });
 
-const getAllBanner = (async (req, res) => {
+const getAllBanner = asyncHandler(async (req, res) => {
   try {
     const getallBanner = await Banner.find({
       accCompany_id: req.companyId,
@@ -155,7 +155,7 @@ const getAllBanner = (async (req, res) => {
   }
 });
 
-const updateBannerStatus = (async (req, res) => {
+const updateBannerStatus = asyncHandler(async (req, res) => {
   try {
     const banner = await Banner.updateMany(
       {accCompany_id: req.companyId, uid: req.params.id },
@@ -172,7 +172,7 @@ const updateBannerStatus = (async (req, res) => {
   }
 });
 
-const publicBannerList = (async (req, res) => {
+const publicBannerList = asyncHandler(async (req, res) => {
   try {
     const banner = await Client.get(`banner:${req.companyId}:${req.user.language_id}`);
     if(banner == null) {
