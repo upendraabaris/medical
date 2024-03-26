@@ -2,15 +2,16 @@ const FavoriteContactModel = require("../models/favoriteContactModel")
 const Client = require("../middleware/redis")
 const getFavoriteContact = async(req,res,next)=>{
     try{
-        let client = await Client.get('FavoriteContact');
-        let FavoriteContact;
-        if(client == null) {
-            FavoriteContact = await FavoriteContactModel.find()
-            await Client.set(`FavoriteContact`, JSON.stringify(FavoriteContact));
-        }
-        else {
-            FavoriteContact = JSON.parse(client);
-        }
+        // let client = await Client.get('FavoriteContact');
+        // let FavoriteContact;
+        // if(client == null) {
+        //     FavoriteContact = await FavoriteContactModel.find()
+        //     await Client.set(`FavoriteContact`, JSON.stringify(FavoriteContact));
+        // }
+        // else {
+        //     FavoriteContact = JSON.parse(client);
+        // }
+        const FavoriteContact = await FavoriteContactModel.find()
         res.data = FavoriteContact
         res.status_Code = "200"
         next()

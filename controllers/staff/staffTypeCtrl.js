@@ -2,15 +2,16 @@ const StaffTypeModel = require("../../models/staff/staffTypeModel")
 const Client = require("../../middleware/redis")
 const getStaffType = async(req,res,next)=>{
     try{
-        let client = await Client.get('StaffType');
-        let StaffType;
-        if(client == null) {
-            StaffType = await StaffTypeModel.find()
-            await Client.set(`StaffType`, JSON.stringify(StaffType));
-        }
-        else {
-            StaffType = JSON.parse(client);
-        }
+        // let client = await Client.get('StaffType');
+        // let StaffType;
+        // if(client == null) {
+        //     StaffType = await StaffTypeModel.find()
+        //     await Client.set(`StaffType`, JSON.stringify(StaffType));
+        // }
+        // else {
+        //     StaffType = JSON.parse(client);
+        // }
+        const StaffType = await StaffTypeModel.find()
         res.data = StaffType
         res.status_Code = "200"
         next()

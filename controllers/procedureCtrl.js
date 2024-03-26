@@ -2,15 +2,16 @@ const ProcedureModel = require("../models/procedureModel")
 const Client = require("../middleware/redis")
 const getProcedure = async(req,res,next)=>{
     try{
-        let client = await Client.get('Procedure');
-        let Procedure;
-        if(client == null) {
-            Procedure = await ProcedureModel.find()
-            await Client.set(`Procedure`, JSON.stringify(Procedure));
-        }
-        else {
-            Procedure = JSON.parse(client);
-        }
+        // let client = await Client.get('Procedure');
+        // let Procedure;
+        // if(client == null) {
+        //     Procedure = await ProcedureModel.find()
+        //     await Client.set(`Procedure`, JSON.stringify(Procedure));
+        // }
+        // else {
+        //     Procedure = JSON.parse(client);
+        // }
+        const Procedure = await ProcedureModel.find()
         res.data = Procedure
         res.status_Code = "200"
         next()

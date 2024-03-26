@@ -4,15 +4,16 @@ const jwt = require("jsonwebtoken")
 const Client = require("../../middleware/redis")
 const getStaff = async(req,res,next)=>{
     try{
-        let client = await Client.get('Staff');
-        let Staff;
-        if(client == null) {
-            Staff = await StaffModel.find()
-            await Client.set(`Staff`, JSON.stringify(Staff));
-        }
-        else {
-            Staff = JSON.parse(client);
-        }
+        // let client = await Client.get('Staff');
+        // let Staff;
+        // if(client == null) {
+        //     Staff = await StaffModel.find()
+        //     await Client.set(`Staff`, JSON.stringify(Staff));
+        // }
+        // else {
+        //     Staff = JSON.parse(client);
+        // }
+        const Staff = await StaffModel.find()
         res.data = Staff
         res.status_Code = "200"
         next()

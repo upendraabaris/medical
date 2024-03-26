@@ -2,17 +2,18 @@ const Currency = require("../models/currencyModel")
 const Client = require("../middleware/redis")
 const getCurrency = async(req,res,next)=>{
     try{
-        let client = await Client.get('currency');
-        let currency;
-        if(client == null) {
-            currency = await Currency.find()
-            await Client.set(`currency`, JSON.stringify(currency));
-        }
-        else {
-            currency = JSON.parse(client);
-        }
-        res.status_Code = "200"
+        // let client = await Client.get('currency');
+        // let currency;
+        // if(client == null) {
+        //     currency = await Currency.find()
+        //     await Client.set(`currency`, JSON.stringify(currency));
+        // }
+        // else {
+        //     currency = JSON.parse(client);
+        // }
+        const currency = await Currency.find()
         res.data = currency
+        res.status_Code = "200"
         next()
     }catch(error){
         res.error = true;

@@ -2,15 +2,16 @@ const ApiModel = require("../models/apiModel")
 const Client = require("../middleware/redis")
 const getApi = async(req,res,next)=>{
     try{
-        let client = await Client.get('Api');
-        let Api;
-        if(client == null) {
-            Api = await ApiModel.find()
-            await Client.set(`Api`, JSON.stringify(Api));
-        }
-        else {
-            Api = JSON.parse(client);
-        }
+        // let client = await Client.get('Api');
+        // let Api;
+        // if(client == null) {
+        //     Api = await ApiModel.find()
+        //     await Client.set(`Api`, JSON.stringify(Api));
+        // }
+        // else {
+        //     Api = JSON.parse(client);
+        // }
+        const Api = await ApiModel.find()
         res.data = Api
         res.status_Code = "200"
         next()

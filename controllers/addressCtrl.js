@@ -2,15 +2,16 @@ const AddressModel = require("../models/addressModel")
 const Client = require("../middleware/redis")
 const getAddress = async(req,res,next)=>{
     try{
-        let client = await Client.get('Address');
-        let Address;
-        if(client == null) {
-            Address = await AddressModel.find()
-            await Client.set(`Address`, JSON.stringify(Address));
-        }
-        else {
-            Address = JSON.parse(client);
-        }
+        // let client = await Client.get('Address');
+        // let Address;
+        // if(client == null) {
+        //     Address = await AddressModel.find()
+        //     await Client.set(`Address`, JSON.stringify(Address));
+        // }
+        // else {
+        //     Address = JSON.parse(client);
+        // }
+        const Address = await AddressModel.find()
         res.data = Address
         res.status_Code = "200"
         next()

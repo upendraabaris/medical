@@ -2,15 +2,16 @@ const HealthTipModel = require("../models/healthTipModel")
 const Client = require("../middleware/redis")
 const getHealthTip = async(req,res,next)=>{
     try{
-        let client = await Client.get('HealthTip');
-        let HealthTip;
-        if(client == null) {
-            HealthTip = await HealthTipModel.find()
-            await Client.set(`HealthTip`, JSON.stringify(HealthTip));
-        }
-        else {
-            HealthTip = JSON.parse(client);
-        }
+        // let client = await Client.get('HealthTip');
+        // let HealthTip;
+        // if(client == null) {
+        //     HealthTip = await HealthTipModel.find()
+        //     await Client.set(`HealthTip`, JSON.stringify(HealthTip));
+        // }
+        // else {
+        //     HealthTip = JSON.parse(client);
+        // }
+        const HealthTip = await HealthTipModel.find()
         res.data = HealthTip
         res.status_Code = "200"
         next()

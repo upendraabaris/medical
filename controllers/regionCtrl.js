@@ -2,15 +2,16 @@ const RegionModel = require("../models/regionModel")
 const Client = require("../middleware/redis")
 const getRegion = async(req,res,next)=>{
     try{
-        let client = await Client.get('Region');
-        let Region;
-        if(client == null) {
-            Region = await RegionModel.find();
-            await Client.set(`Region`, JSON.stringify(Region));
-        }
-        else {
-            Region = JSON.parse(client);
-        }
+        // let client = await Client.get('Region');
+        // let Region;
+        // if(client == null) {
+        //     Region = await RegionModel.find();
+        //     await Client.set(`Region`, JSON.stringify(Region));
+        // }
+        // else {
+        //     Region = JSON.parse(client);
+        // }
+        const Region = await RegionModel.find()
         res.data = Region
         res.status_Code = "200"
         next()

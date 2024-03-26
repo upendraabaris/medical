@@ -2,15 +2,16 @@ const PatientVitalInformationModel = require("../models/patientVitalInfoModel")
 const Client = require("../middleware/redis")
 const getPatientVitalInformation = async(req,res,next)=>{
     try{
-        let client = await Client.get('PatientVitalInformation');
-        let PatientVitalInformation;
-        if(client == null) {
-            PatientVitalInformation = await PatientVitalInformationModel.find()
-            await Client.set(`PatientVitalInformation`, JSON.stringify(PatientVitalInformation));
-        }
-        else {
-            PatientVitalInformation = JSON.parse(client);
-        }
+        // let client = await Client.get('PatientVitalInformation');
+        // let PatientVitalInformation;
+        // if(client == null) {
+        //     PatientVitalInformation = await PatientVitalInformationModel.find()
+        //     await Client.set(`PatientVitalInformation`, JSON.stringify(PatientVitalInformation));
+        // }
+        // else {
+        //     PatientVitalInformation = JSON.parse(client);
+        // }
+        PatientVitalInformation = await PatientVitalInformationModel.find()
         res.data = PatientVitalInformation
         res.status_Code = "200"
         next()

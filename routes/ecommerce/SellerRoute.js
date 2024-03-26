@@ -18,7 +18,8 @@ const {
   getHospitalSellerList,
   getFavoriteHospitalSellerList,
   getFavoriteDoctorSellerList,
-  toggleFavoriteStatus
+  toggleFavoriteStatus,
+  getSingleSellerDetails
 } = require("../../controllers/ecommerce/sellerCtrl");
 
 const {responseSend} = require("../../utils/response")
@@ -80,6 +81,8 @@ router.get('/getFavoriteHospitalSellerList/public', getFavoriteHospitalSellerLis
 router.get('/getFavoriteDoctorSellerList/public', getFavoriteDoctorSellerList)
 router.post('/toggleFavoriteStatus', toggleFavoriteStatus)
 router.post('/toggleFavoriteStatus/public', toggleFavoriteStatus)
+router.get('/getSingleSellerDetails/public/:usertypeid/:sellerId', getSingleSellerDetails)
+router.get('/getSingleSellerDetails/:usertypeid/:sellerId', getSingleSellerDetails)
 router.get("/:id", checkDomain, getSearchById);
 router.get("/search/:search", checkDomain, getSearchSeller);
 router.post("/filter", checkDomain, sortSeller);

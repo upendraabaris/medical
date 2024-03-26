@@ -1,6 +1,7 @@
 const ProductCostVariation = require("../../models/ecommerce/productCostVariationModel");
 const Seller = require("../../models/ecommerce/sellersModel");
 const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose")
 // const { generateToken } = require("../config/jwtToken");
 
 // const cloudinary = require("../utils/cloudinary");
@@ -185,6 +186,94 @@ const toggleFavoriteStatus = async (req, res) => {
   }
 };
 
+const getSingleSellerDetails = async(req,res)=>{
+  const seller = await Seller.aggregate([
+    {
+      $match: {
+        // role: "Seller", // Filter sellers with role 'Seller'
+        // approve: true, // Filter approved sellers
+        
+        sellerType: new mongoose.Types.ObjectId(req.params.usertypeid),
+        _id: new mongoose.Types.ObjectId(req.params.sellerId)
+      }// Filter sellers by userType
+      },
+      {
+        $lookup: {
+          from: "users", // Assuming the User model is named 'User'
+          localField: "user_id",
+          foreignField: "_id",
+          as: "user_details"
+        }
+    },
+    {
+      $lookup:{
+        from: "hospitalclinictypes",
+        localField: "hos_clinic_type_id",
+        foreignField: "_id",
+        as: "clinic_type"
+      }
+    },
+    {
+      $unwind: {path: "$user_details", preserveNullAndEmptyArrays: true} // Unwind the user_details array
+    },
+    {
+      $unwind: {path: "$clinic_type", preserveNullAndEmptyArrays: true} // Unwind the user_details array
+    },
+    {
+      $unwind: { path: "$superSpecializationIds", preserveNullAndEmptyArrays: true}
+    },
+    {
+      $lookup: {
+          from: "superspecializations",
+          localField: "superSpecializationIds",
+          foreignField: "_id",
+          as: "specializations"
+      }
+  },
+  {
+      $unwind: { path: "$specializations", preserveNullAndEmptyArrays: true }
+  },
+    {
+      $group:{
+        _id: "$_id",
+        // user_id: {firstname: {$first: "$user_details.first_name"},  lastname: {$first: "$user_details.last_name"}},
+        user_id_firstname: { $first: "$user_details.first_name"},
+        user_id_lastname: { $first: "$user_details.last_name"},
+        firstname: {$first: "$firstname"},
+        lastname: {$first: "$lastname"},
+        email: {$first: "$email"},
+        mobile: {$first: "$mobile"},
+        profilePhoto: {$first: "$profilePhoto"},
+        dob: {$first: "$dob" },
+        role: {$first: "$role" },
+        approve: {$first: "$approve" },
+        city: {$first: "$city"},
+        address: {$first:"$address"},
+        state: {$first:"$state"},
+        rating: {$first:"$rating"},
+        sellerType: {$first:"$sellerType"},
+        parent_hos_clinic_id: {$first:"$parent_hos_clinic_id"},
+        hos_clinic_name: {$first:"$hos_clinic_name"},
+        hos_clinic_type_id: {$first:"$clinic_type"},
+        accreditations: {$first:"$accreditations"},
+        special_note: {$first:"$special_note"},
+        isfavorite: {$first:"$isfavorite"},
+        referring_user_id: {$first:"$referring_user_id"},
+        is_surgeon: {$first:"$is_surgeon"},
+        zone_id: {$first:"$zone_id"},
+        is_super30: {$first:"$is_super30"},
+        medical_specialty_id: {$first:"$medical_specialty_id"},
+        qualifications: {$first:"$qualifications"},
+        briefbio: {$first:"$briefbio"},
+        doctorbio: {$first:"$doctorbio"},
+        doctor_fee_IND: {$first:"$doctor_fee_IND"},
+        doctor_fee_INT: {$first:"$doctor_fee_INT"},
+        superSpecializationIds: {$addToSet: {specialization:"$specializations.super_specialization"}}
+      }
+    }
+  ])
+  res.json(seller)
+}
 
 const getSellerList = asyncHandler(async (req, res) => {
   try {
@@ -448,6 +537,7 @@ module.exports = {
   getHospitalSellerList,
   getFavoriteHospitalSellerList,
   getFavoriteDoctorSellerList,
-  toggleFavoriteStatus
+  toggleFavoriteStatus,
+  getSingleSellerDetails
 };
 

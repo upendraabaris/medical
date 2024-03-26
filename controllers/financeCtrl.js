@@ -2,15 +2,16 @@ const FinanceModel = require("../models/financeModel")
 const Client = require("../middleware/redis")
 const getFinance = async(req,res,next)=>{
     try{
-        let client = await Client.get('Finance');
-        let Finance;
-        if(client == null) {
-            Finance = await FinanceModel.find()
-            await Client.set(`Finance`, JSON.stringify(Finance));
-        }
-        else {
-            Finance = JSON.parse(client);
-        }
+        // let client = await Client.get('Finance');
+        // let Finance;
+        // if(client == null) {
+        //     Finance = await FinanceModel.find()
+        //     await Client.set(`Finance`, JSON.stringify(Finance));
+        // }
+        // else {
+        //     Finance = JSON.parse(client);
+        // }
+        const Finance = await FinanceModel.find()
         res.data = Finance
         res.status_Code = "200"
         next()

@@ -2,15 +2,16 @@ const LanguageModel = require("../models/languageModel")
 const Client = require("../middleware/redis")
 const getLanguage = async(req,res,next)=>{
     try{
-        let client = await Client.get('Language');
-        let Language;
-        if(client == null) {
-            Language = await LanguageModel.find()
-            await Client.set(`Language`, JSON.stringify(Language));
-        }
-        else {
-            Language = JSON.parse(client);
-        }
+        // let client = await Client.get('Language');
+        // let Language;
+        // if(client == null) {
+        //     Language = await LanguageModel.find()
+        //     await Client.set(`Language`, JSON.stringify(Language));
+        // }
+        // else {
+        //     Language = JSON.parse(client);
+        // }
+        const Language = await LanguageModel.find()
         res.data = Language
         res.status_Code = "200"
         next()
