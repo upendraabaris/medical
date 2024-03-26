@@ -7,7 +7,7 @@ const {responseSend} = require("../utils/response")
 // const {verifyToken} = require("../middleware/authMiddleware")
 const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', staffMiddleware, getChiefComplaint, responseSend)
+router.get('/', /* staffMiddleware, */ getChiefComplaint, responseSend)
 
 router.get('/public', staffMiddleware, getChiefComplaint, responseSend)
 

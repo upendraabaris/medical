@@ -12,7 +12,7 @@ const getChiefComplaint = async(req,res,next)=>{
         //     ChiefComplaint = JSON.parse(client);
         // }
         const ChiefComplaint = await ChiefComplaintModel.find()
-        res.data = CheifComplaint
+        res.data = ChiefComplaint
         res.status_Code = "200"
         next()
     }catch(error){
