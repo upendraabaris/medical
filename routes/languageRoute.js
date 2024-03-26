@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getLanguage, getLanguageById, addLanguage, updateLanguage, deleteLanguage} = require("../controllers/languageCtrl")
+const {getLanguage, getLanguageById, addLanguage, updateLanguage, deleteLanguage, deleteAllLanguage} = require("../controllers/languageCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -14,5 +14,7 @@ router.post('/addLanguage',  addLanguage, responseSend)
 router.put('/updateLanguage/:id', staffMiddleware, updateLanguage, responseSend)
 
 router.delete('/deleteLanguage/:id', staffMiddleware, deleteLanguage, responseSend)
+
+router.delete('/deleteAll/:id', staffMiddleware, deleteAllLanguage, responseSend)
 
 module.exports = router

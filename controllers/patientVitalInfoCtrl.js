@@ -84,4 +84,20 @@ const deletePatientVitalInformation = async(req,res,next)=>{
     }
 }
 
-module.exports = {getPatientVitalInformation, getPatientVitalInformationById, addPatientVitalInformation, updatePatientVitalInformation, deletePatientVitalInformation}
+const deleteAllVitalInformation = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteVitalInfo = await PatientVitalInformationModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteVitalInfo;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = {getPatientVitalInformation, getPatientVitalInformationById, addPatientVitalInformation, updatePatientVitalInformation, deletePatientVitalInformation, deleteAllVitalInformation}

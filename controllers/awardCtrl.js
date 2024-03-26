@@ -87,4 +87,20 @@ const deleteAward = async(req,res,next)=>{
     }
 }
 
-module.exports = {getAward, getAwardById, addAward, updateAward, deleteAward}
+const deleteAllAward = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteAward = await AwardModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteAward;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = {getAward, getAwardById, addAward, updateAward, deleteAward, deleteAllAward}

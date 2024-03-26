@@ -76,4 +76,20 @@ const deleteHospitalClinicType = async(req,res,next)=>{
     }
 }
 
-module.exports = {getHospitalClinicType, getHospitalClinicTypeById, addHospitalClinicType, updateHospitalClinicType, deleteHospitalClinicType}
+const deleteAllHospitalClinicType = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteHospitalClinicType = await HospitalClinicTypeModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteHospitalClinicType;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = {getHospitalClinicType, getHospitalClinicTypeById, addHospitalClinicType, updateHospitalClinicType, deleteHospitalClinicType, deleteAllHospitalClinicType}

@@ -123,4 +123,21 @@ const getHospitalClinicPublic = async(req,res,next)=>{
 
 // http://localhost:5000/api/hospitalclinic/getfavorite/65e08c411c23952bbb684ca9?page=0&count=1
 
-module.exports = {getHospitalClinic, getHospitalClinicById, addHospitalClinic, updateHospitalClinic, deleteHospitalClinic, getFavorite, getHospitalClinicPublic}
+
+const deleteAllHospital = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteHospital = await HospitalClinicModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteHospital;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = {getHospitalClinic, getHospitalClinicById, addHospitalClinic, updateHospitalClinic, deleteHospitalClinic, getFavorite, getHospitalClinicPublic, deleteAllHospital}

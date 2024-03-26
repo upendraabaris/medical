@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getServiceHistory, getServiceHistoryById, addServiceHistory, updateServiceHistory, deleteServiceHistory} = require("../controllers/serviceHistoryCtrl")
+const {getServiceHistory, getServiceHistoryById, addServiceHistory, updateServiceHistory, deleteServiceHistory, deleteAllServiceHistory} = require("../controllers/serviceHistoryCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -14,5 +14,7 @@ router.post('/addServiceHistory', staffMiddleware, addServiceHistory, responseSe
 router.put('/updateServiceHistory/:id', staffMiddleware, updateServiceHistory, responseSend)
 
 router.delete('/deleteServiceHistory/:id', staffMiddleware, deleteServiceHistory, responseSend)
+
+router.delete('/deleteAll/:id', staffMiddleware, deleteAllServiceHistory, responseSend)
 
 module.exports = router

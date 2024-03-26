@@ -84,4 +84,20 @@ const deleteHealthTip = async(req,res,next)=>{
     }
 }
 
-module.exports = {getHealthTip, getHealthTipById, addHealthTip, updateHealthTip, deleteHealthTip}
+const deleteAllHealthTip = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteHealthTip = await HealthTipModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteHealthTip;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = {getHealthTip, getHealthTipById, addHealthTip, updateHealthTip, deleteHealthTip, deleteAllHealthTip}

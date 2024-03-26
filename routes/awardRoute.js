@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getAward, getAwardById, addAward, updateAward, deleteAward} = require("../controllers/awardCtrl")
+const {getAward, getAwardById, addAward, updateAward, deleteAward, deleteAllAward} = require("../controllers/awardCtrl")
 
 const {responseSend} = require("../utils/response")
 
@@ -16,5 +16,7 @@ router.post('/addAward', staffMiddleware, addAward, responseSend)
 router.put('/updateAward/:id', staffMiddleware, updateAward, responseSend)
 
 router.delete('/deleteAward/:id', staffMiddleware, deleteAward, responseSend)
+
+router.delete('/deleteAll/:id', staffMiddleware, deleteAllAward, responseSend)
 
 module.exports = router

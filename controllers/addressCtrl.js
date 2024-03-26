@@ -84,4 +84,21 @@ const deleteAddress = async(req,res,next)=>{
     }
 }
 
-module.exports = {getAddress, getAddressById, addAddress, updateAddress, deleteAddress}
+const deleteAllAddress = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteAddress = await AddressModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteAddress;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+
+module.exports = {getAddress, getAddressById, addAddress, updateAddress, deleteAddress, deleteAllAddress}

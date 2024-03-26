@@ -75,6 +75,22 @@ const deleteCity = async(req,res,next)=>{
     }
 }
 
+const deleteAllCity = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteCity = await CityModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteCity;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
 const getCityMapping = async(req,res,next)=>{
     try{
         // const City = await CityModel.find().populate('state_id').exec();
@@ -109,4 +125,4 @@ const getCityMapping = async(req,res,next)=>{
     }
 }
 
-module.exports = {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping}
+module.exports = {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping, deleteAllCity}

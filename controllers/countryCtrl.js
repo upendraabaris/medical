@@ -85,4 +85,20 @@ const deleteCountry = async(req,res,next)=>{
     }
 }
 
-module.exports = {getCountry, getCountryById, addCountry, updateCountry, deleteCountry}
+const deleteAllCountry = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteCountry = await CountryModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteCountry;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = {getCountry, getCountryById, addCountry, updateCountry, deleteCountry, deleteAllCountry}

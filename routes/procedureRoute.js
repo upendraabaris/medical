@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getProcedure, getProcedureById, addProcedure, updateProcedure, deleteProcedure} = require("../controllers/procedureCtrl")
+const {getProcedure, getProcedureById, addProcedure, updateProcedure, deleteProcedure, deleteAllProcedure} = require("../controllers/procedureCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -14,5 +14,7 @@ router.post('/addProcedure', staffMiddleware, addProcedure, responseSend)
 router.put('/updateProcedure/:id', staffMiddleware, updateProcedure, responseSend)
 
 router.delete('/deleteProcedure/:id', staffMiddleware, deleteProcedure, responseSend)
+
+router.delete('/deleteAll/:id', staffMiddleware, deleteAllProcedure, responseSend)
 
 module.exports = router

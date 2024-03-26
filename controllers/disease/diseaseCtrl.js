@@ -75,4 +75,5 @@ const deleteDisease = async(req,res,next)=>{
     }
 }
 
+
 module.exports = {getDisease, getDiseaseById, addDisease, updateDisease, deleteDisease}

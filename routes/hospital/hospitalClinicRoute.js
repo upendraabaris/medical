@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getHospitalClinic, getHospitalClinicById, addHospitalClinic, updateHospitalClinic, deleteHospitalClinic, getFavorite, getHospitalClinicPublic} = require("../../controllers/hospital/hospitalClinicCtrl")
+const {getHospitalClinic, getHospitalClinicById, addHospitalClinic, updateHospitalClinic, deleteHospitalClinic, getFavorite, getHospitalClinicPublic, deleteAllHospital} = require("../../controllers/hospital/hospitalClinicCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -26,5 +26,7 @@ router.delete('/deleteHospitalClinic/:id', staffMiddleware, deleteHospitalClinic
 router.get('/getfavorite/:id', staffMiddleware, getFavorite, responseSend)
 
 router.get('/public/getfavorite/:id', verifyToken, getFavorite, responseSend)
+
+router.delete('/deleteAll/:id', staffMiddleware, deleteAllHospital , responseSend)
 
 module.exports = router

@@ -84,4 +84,20 @@ const deleteLanguage = async(req,res,next)=>{
     }
 }
 
-module.exports = {getLanguage, getLanguageById, addLanguage, updateLanguage, deleteLanguage}
+const deleteAllLanguage = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteLanguage = await LanguageModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteLanguage;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = {getLanguage, getLanguageById, addLanguage, updateLanguage, deleteLanguage, deleteAllLanguage}

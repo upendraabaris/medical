@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getCountry, getCountryById, addCountry, updateCountry, deleteCountry} = require("../controllers/countryCtrl")
+const {getCountry, getCountryById, addCountry, updateCountry, deleteCountry, deleteAllCountry} = require("../controllers/countryCtrl")
 const {responseSend} = require("../utils/response")
 const {staffMiddleware} = require("../middleware/authMiddleware")
 
@@ -14,5 +14,7 @@ router.post('/addCountry', staffMiddleware, addCountry, responseSend)
 router.put('/updatCountry/:id', staffMiddleware, updateCountry, responseSend)
 
 router.delete('/deleteCountry/:id', staffMiddleware, deleteCountry, responseSend)
+
+router.delete('/deleteAll/:id', staffMiddleware, deleteAllCountry, responseSend)
 
 module.exports = router

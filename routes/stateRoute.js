@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getState, getStateById, addState, updateState, deleteState, addData } = require("../controllers/stateCtrl")
+const {getState, getStateById, addState, updateState, deleteState, addData, deleteAllState } = require("../controllers/stateCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -16,6 +16,8 @@ router.post('/addState', staffMiddleware, addState, responseSend)
 router.put('/updatState/:id', staffMiddleware, updateState, responseSend)
 
 router.delete('/deleteState/:id', staffMiddleware, deleteState, responseSend)
+
+router.delete('/deleteAll/:id', staffMiddleware, deleteAllState, responseSend)
 
 // router.post('/addData', addData)
 

@@ -123,4 +123,20 @@ const addData = async (req, res, next) => {
     }
 }
 
-module.exports = { getState, getStateById, addState, updateState, deleteState, addData }
+const deleteAllState = async (req, res, next) => {
+    try {
+        const idToDelete = req.body.id
+        const deleteState = await StateModel.deleteMany({_id: { $in: idToDelete}});
+        res.data = deleteState;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = { getState, getStateById, addState, updateState, deleteState, addData, deleteAllState }

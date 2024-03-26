@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping} = require("../controllers/cityCtrl")
+const {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping, deleteAllCity} = require("../controllers/cityCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -19,5 +19,6 @@ router.put('/updatCity/:id', staffMiddleware, updateCity, responseSend)
 
 router.delete('/deleteCity/:id', staffMiddleware, deleteCity, responseSend)
 
+router.delete('/deleteAll/:id', staffMiddleware, deleteAllCity, responseSend)
 
 module.exports = router

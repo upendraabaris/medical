@@ -116,7 +116,7 @@ const loginStaff = async(req,res,next)=>{
         const isMatch = await bcrypt.compare(password,staff.password)
         console.log(isMatch)
         if(isMatch){
-            const token = jwt.sign({staff:staff._id}, "shicsdfhaljkvfjckds", {expiresIn: 3600 })
+            const token = jwt.sign({staff:staff._id}, "shicsdfhaljkvfjckds", {expiresIn: 24*60*60 })
             res.status(201).send(
                 {
                     user: {
