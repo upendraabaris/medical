@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs")
 
 const userSchema = new mongoose.Schema({
   user_type_id: { type: mongoose.Schema.Types.ObjectId, ref: "UserType"},
-  parent_user_id: { type: Number },
+  parent_user_id: { type: String },
   referring_user_id: { type: Number },
   reporting_user_id: { type: Number },
   is_emergency_contact: { type: Boolean },

@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites} = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember} = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -25,5 +25,8 @@ router.get('/page/:page&:count', pagination, responseSend)
 
 // router.post('/addToFavorites', staffMiddleware, addToFavorites, responseSend)
 router.post('/addToFavorites', verifyToken, addToFavorites, responseSend)
+
+router.post('/addfamily/public', verifyToken, addFamilyMember)
+
 
 module.exports = router

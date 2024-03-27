@@ -122,6 +122,8 @@ const staffTypeRoute = require("./routes/staff/staffTypeRoute")
 const sellerRoute = require("./routes/ecommerce/SellerRoute")
 const languageRoute = require("./routes/languageRoute")
 
+const cloudinaryRoute = require("./routes/cloudinaryRoute")
+
 const cors = require("cors")
 
 
@@ -231,6 +233,8 @@ app.use('/api/stafftype', staffTypeRoute)
 
 app.use('/api/seller', sellerRoute)
 app.use('/api/language', languageRoute)
+
+app.use('/api/cloudinary', cloudinaryRoute)
 
 app.use(responseSend)
 // const port = 5000

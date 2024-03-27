@@ -41,8 +41,13 @@ const getRegionById = async(req,res,next)=>{
 
 const addRegion = async(req,res,next)=>{
     try{
-        console.log(req.body);
+        // console.log(req.body);
         const Region = await RegionModel.create(req.body);
+        // const Region = await RegionModel.create(req.body);
+        // let allKeys = await Client.keys("Region:*");
+        // if (allKeys.length !== 0) {
+        //     const del = await Client.del(allKeys);
+        // }
         res.data = Region
         res.status_Code = "200"
         next()
