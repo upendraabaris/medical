@@ -251,13 +251,58 @@ const getFamilyMembers = async (req, res, next) => {
 
 
     // Find the parent user
-    const parentUser = await UserModel.findById(parentId);
+    // const parentUser = await UserModel.findById(parentId);
+    const parentUser = await UserModel.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(parentId) // Convert parentId to ObjectId
+        }
+      },
+      {
+        $project: {
+          user_type_id: 1,
+          name: { $concat: ["$first_name", " ", "$second_name", " ", "$last_name"] },
+          dob: "$dob",
+          blood_group: "$blood_group",
+          gender: "$gender",
+          nationality: "$nationality",
+          date_of_issue: "$createdAt"
+        }
+      }
+    ])
     if (!parentUser) {
       return res.status(404).json({ message: 'Parent user not found' });
     }
 
     // Find all family members belonging to the parent user
-    const familyMembers = await UserModel.find({ parent_user_id: parentId });
+    // const familyMembers = await UserModel.find({ parent_user_id: parentId });
+
+    const familyMembers = await UserModel.aggregate([
+      // Match documents with the given parent user ID
+      { $match: { parent_user_id: new mongoose.Types.ObjectId(parentId) } },
+      // Lookup to get family member details
+      {
+        $lookup: {
+          from: 'users', // Collection name
+          localField: 'parent_user_id',
+          foreignField: '_id',
+          as: 'parentUser'
+        }
+      },
+      // Project to reshape the output
+      {
+        $project: {
+          user_type_id: 1,
+          name: { $concat: ["$first_name", " ", "$second_name", " ", "$last_name"] },
+          dob: "$dob",
+          blood_group: "$blood_group",
+          gender: "$gender",
+          nationality: "$nationality",
+          date_of_issue: "$createdAt"
+        }
+      }
+    ]);
+
 
     // Construct the response object containing parent user data and family member data
     const responseData = {
