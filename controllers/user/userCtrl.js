@@ -240,8 +240,8 @@ const addFamilyMember = async (req, res, next) => {
 const getFamilyMembers = async (req, res, next) => {
   try {
     // Extract the parent user's ID from the request parameters
-    const parentId = req.params.parentId;
-    console.log(parentId)
+    // const parentId = req.params.parentId;
+    // console.log(parentId)
 
     // const token = req.headers.authorization;
     // if (!token) {
@@ -255,7 +255,7 @@ const getFamilyMembers = async (req, res, next) => {
     const parentUser = await UserModel.aggregate([
       {
         $match: {
-          _id: new mongoose.Types.ObjectId(parentId) // Convert parentId to ObjectId
+          _id: new mongoose.Types.ObjectId(req.user) // Convert parentId to ObjectId
         }
       },
       {
@@ -279,7 +279,7 @@ const getFamilyMembers = async (req, res, next) => {
 
     const familyMembers = await UserModel.aggregate([
       // Match documents with the given parent user ID
-      { $match: { parent_user_id: new mongoose.Types.ObjectId(parentId) } },
+      { $match: { parent_user_id: new mongoose.Types.ObjectId(req.user) } },
       // Lookup to get family member details
       {
         $lookup: {

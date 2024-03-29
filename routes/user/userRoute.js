@@ -10,6 +10,7 @@ const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware"
 router.get('/', /* staffMiddleware, */ getUser, responseSend)
 
 // router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
+router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
 
 router.get('/:id',staffMiddleware, getUserById, responseSend)
 
@@ -30,7 +31,7 @@ router.post('/addToFavorites', verifyToken, addToFavorites, responseSend)
 
 router.post('/addfamily/public', verifyToken, addFamilyMember)
 
-router.get('/getFamilyMembers/:parentId', verifyToken, getFamilyMembers)
+// router.get('/getFamilyMembers/:parentId', verifyToken, getFamilyMembers)
 
 router.delete('/deleteFamilyMember/:memberId', verifyToken, deleteFamilyMember)
 
