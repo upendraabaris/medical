@@ -5,9 +5,11 @@ const {getUserRelation, getUserRelationById, addUserRelation, updateUserRelation
 const {responseSend} = require("../../utils/response")
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
-const {staffMiddleware} = require("../../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getUserRelation, responseSend)
+
+router.get('/public', verifyToken, getUserRelation, responseSend)
 
 router.get('/:id', staffMiddleware, getUserRelationById, responseSend)
 
