@@ -1,9 +1,18 @@
 const StateModel = require("../models/stateModel")
 const CityModel = require("../models/cityModel")
-
+const Client = require("../middleware/redis")
 const getState = async (req, res, next) => {
     try {
-        const State = await StateModel.find().populate({path: 'country_id', select: "country_name -_id"}).exec();
+        // const State = await StateModel.find().populate({path: 'country_id', select: "country_name -_id"}).exec();
+        let client = await Client.get('region:getState');
+        let State;
+        if(client == null) {
+            State = await StateModel.find().populate({path: 'country_id', select: "country_name -_id"}).exec()
+            await Client.set('state:getState', JSON.stringify(State));
+        }
+        else {
+            State = JSON.parse(client);
+        }
         res.data = State
         res.status_Code = "200"
         next()
@@ -34,6 +43,10 @@ const getStateById = async (req, res, next) => {
 const addState = async (req, res, next) => {
     try {
         const State = await StateModel.create(req.body);
+        let allKeys = await Client.keys("state:*");
+        if (allKeys.length != 0) {
+            const del = await Client.del(allKeys);
+        }
         res.data = State
         res.status_Code = "200"
         next()
@@ -49,6 +62,10 @@ const addState = async (req, res, next) => {
 const updateState = async (req, res, next) => {
     try {
         const State = await StateModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        let allKeys = await Client.keys("state:*");
+        if (allKeys.length != 0) {
+            const del = await Client.del(allKeys);
+        }
         res.data = State
         res.status_Code = "200"
         next()
@@ -64,6 +81,10 @@ const updateState = async (req, res, next) => {
 const deleteState = async (req, res, next) => {
     try {
         const State = await StateModel.findByIdAndDelete(req.params.id);
+        let allKeys = await Client.keys("state:*");
+        if (allKeys.length != 0) {
+            const del = await Client.del(allKeys);
+        }
         res.data = State
         res.status_Code = "200"
         next()
@@ -127,6 +148,10 @@ const deleteAllState = async (req, res, next) => {
     try {
         const idToDelete = req.body.id
         const deleteState = await StateModel.deleteMany({_id: { $in: idToDelete}});
+        let allKeys = await Client.keys("state:*");
+        if (allKeys.length != 0) {
+            const del = await Client.del(allKeys);
+        }
         res.data = deleteState;
         res.status_Code = 200;
         next();

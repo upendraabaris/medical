@@ -3,13 +3,13 @@ const {getCountry, getCountryById, addCountry, updateCountry, deleteCountry, del
 const {responseSend} = require("../utils/response")
 const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', staffMiddleware, getCountry, responseSend)
+router.get('/', /* staffMiddleware, */ getCountry, responseSend)
 
 router.get('/public', getCountry, responseSend)
 
 router.get('/:id', staffMiddleware, getCountryById, responseSend)
 
-router.post('/addCountry', staffMiddleware, addCountry, responseSend)
+router.post('/addCountry', /* staffMiddleware, */ addCountry, responseSend)
 
 router.put('/updatCountry/:id', staffMiddleware, updateCountry, responseSend)
 

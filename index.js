@@ -208,7 +208,7 @@ app.use('/api/diseasesub', diseaseSubRoute)
 app.use('/api/pre-existing-disease', preExistingDiseaseRoute)
 
 app.use('/api/qr-code-register', qrCodeRegisterRoute)
-app.use('/api/user/user-relation-type', userRelationRoute)
+app.use('/api/user/user-relation', userRelationRoute)
 app.use('/api/user/user-reference', userReferenceRoute)
 app.use('/api/favorite-contact', favoriteContactRoute)
 

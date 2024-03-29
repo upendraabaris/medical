@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const bcrypt = require("bcryptjs")
 
 const userSchema = new mongoose.Schema({
-  user_type_id: { type: mongoose.Schema.Types.ObjectId, ref: "UserType"},
-  parent_user_id: { type: String },
-  referring_user_id: { type: Number },
-  reporting_user_id: { type: Number },
+  user_type_id: { type: mongoose.Schema.Types.ObjectId, ref: "UserType", index: true},
+  parent_user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
+  referring_user_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "UserType" }],
+  reporting_user_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "UserType" }],
   is_emergency_contact: { type: Boolean },
   pleadge_blood_donation: { type: Boolean, default: false },
   pleadge_organ_donation: { type: Boolean, default: false},
@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
   second_name: { type: String },
   last_name: { type: String },
   dob: { type: Date },
-  gender: { type: String},
+  gender: { type: String },
   blood_group: { type: String, maxlength: 2 },
   nationality: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
   country_of_residence: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
@@ -29,7 +29,11 @@ const userSchema = new mongoose.Schema({
   status: { type: String },
   expiry_date: { type: Date },
   password: { type: String },
-  isFavorite: [ { type: mongoose.Schema.Types.ObjectId }]
+  isFavorite: [ { type: mongoose.Schema.Types.ObjectId }],
+  relation_type_id: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRelation'},
+  // isLoginPermit: { type: Boolean, default: false, required: true },
+  // addBy: { type: mongoose.Schema.Types.ObjectId, ref: 'user'}
+  // sos_user_id: { type: mongoose.Schema.Types.ObjectId }
   // emailVerified: {type: Boolean, default: false, index: true},
   // mobileVerified: {type: Boolean, default: false, index: true},
 },

@@ -26,9 +26,11 @@ const verifyToken = async(req,res,next)=>{
             return res.status(401).json({ message: 'Token not provided' });
         }
         let user = jwt.verify(token.replace('Bearer ', ''), "shicsdfhaljkvfjckds")
+        console.log(user)
         if(user != undefined){
             console.log(user);
             const user1 = await userModel.findOne({_id:user.user})
+            console.log(user1)
             if(user1 == null)
             {
                 throw new Error("You are not authorized.")
@@ -36,6 +38,7 @@ const verifyToken = async(req,res,next)=>{
             // res.status(201).send(user1)
             console.log(token)
             req.user = user.user
+            console.log("1 step ahead")
             next()
         }else
         {

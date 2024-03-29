@@ -11,7 +11,7 @@ router.get('/', staffMiddleware, getUserRelation, responseSend)
 
 router.get('/:id', staffMiddleware, getUserRelationById, responseSend)
 
-router.post('/addUserRelation', staffMiddleware, addUserRelation, responseSend)
+router.post('/addUserRelation', /* staffMiddleware, */ addUserRelation, responseSend)
 
 router.put('/updateUserRelation/:id', staffMiddleware, updateUserRelation, responseSend)
 
