@@ -259,13 +259,21 @@ const getFamilyMembers = async (req, res, next) => {
         }
       },
       {
+        $lookup: {
+          from: 'countries', // Collection name
+          localField: 'nationality',
+          foreignField: '_id',
+          as: 'nation'
+        }
+      },
+      {
         $project: {
           user_type_id: 1,
           name: { $concat: ["$first_name", " ", "$second_name", " ", "$last_name"] },
           dob: "$dob",
           blood_group: "$blood_group",
           gender: "$gender",
-          nationality: "$nationality",
+          nationality: "$nation.country_name",
           date_of_issue: "$createdAt"
         }
       }
@@ -289,6 +297,14 @@ const getFamilyMembers = async (req, res, next) => {
           as: 'parentUser'
         }
       },
+      {
+        $lookup: {
+          from: 'countries', // Collection name
+          localField: 'nationality',
+          foreignField: '_id',
+          as: 'nation'
+        }
+      },
       // Project to reshape the output
       {
         $project: {
@@ -297,7 +313,7 @@ const getFamilyMembers = async (req, res, next) => {
           dob: "$dob",
           blood_group: "$blood_group",
           gender: "$gender",
-          nationality: "$nationality",
+          nationality: "$nation.country_name",
           date_of_issue: "$createdAt"
         }
       }
