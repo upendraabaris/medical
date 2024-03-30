@@ -5,9 +5,9 @@ const {getChiefComplaint, getChiefComplaintById, addChiefComplaint, updateChiefC
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
-const {staffMiddleware} = require("../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../middleware/authMiddleware")
 
-router.get('/', /* staffMiddleware, */ getChiefComplaint, responseSend)
+router.get('/', staffMiddleware, getChiefComplaint, responseSend)
 
 router.get('/public', verifyToken, getChiefComplaint, responseSend)
 

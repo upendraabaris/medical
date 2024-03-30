@@ -17,6 +17,8 @@ router.post('/addPatientVitalInfo/public', verifyToken, addPatientVitalInformati
 
 router.put('/updatePatientVitalInfo/:id', staffMiddleware, updatePatientVitalInformation, responseSend)
 
+router.put('/updatePatientVitalInfo/public/:id', staffMiddleware, updatePatientVitalInformation, responseSend)
+
 router.delete('/deletePatientVitalInfo/:id', staffMiddleware, deletePatientVitalInformation, responseSend)
 
 router.delete('/deleteAll/:id', staffMiddleware, deleteAllVitalInformation, responseSend)
