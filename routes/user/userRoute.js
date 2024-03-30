@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile} = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile} = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -11,10 +11,6 @@ router.get('/', /* staffMiddleware, */ getUser, responseSend)
 
 // router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
 router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
-
-router.get('/getprofile/public', verifyToken, getProfile, responseSend)
-
-router.get('/:id',staffMiddleware, getUserById, responseSend)
 
 router.post('/adduser', staffMiddleware, addUser, responseSend)
 
@@ -35,7 +31,11 @@ router.post('/addfamily', staffMiddleware, addFamilyMember)
 
 router.post('/addfamily/public', verifyToken, addFamilyMember)
 
-// router.get('/getFamilyMembers/:parentId', verifyToken, getFamilyMembers)
+router.get('/getprofile/public', verifyToken, getProfile, responseSend)
+
+router.put('/editProfile/public', verifyToken, editProfile, responseSend)
+
+router.get('/:id',staffMiddleware, getUserById, responseSend)
 
 router.delete('/deleteFamilyMember/:memberId', verifyToken, deleteFamilyMember)
 

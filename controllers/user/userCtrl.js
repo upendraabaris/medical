@@ -368,9 +368,8 @@ const getProfile = async (req, res, next) => {
       }
     ])
     if (!parentUser) {
-      return res.status(404).json({ message: 'Parent user not found' });
+      return res.status(404).json({ message: 'user not found' });
     }
-
 
     // Construct the response object containing parent user data and family member data
     const responseData = {
@@ -380,6 +379,55 @@ const getProfile = async (req, res, next) => {
     // Send the response
     res.status(200).json(responseData);
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const editProfile = async (req, res, next) => {
+  try {
+    // const userId = req.user; // Get the user ID from the token or wherever it's stored
+
+    // Extract the updated profile data from the request body
+    const { first_name, second_name, last_name, dob, blood_group, gender, nationality, email, mobile } = req.body;
+
+    // Check if the email or mobile exists for any other user
+    const existingUser = await UserModel.findOne({
+      $and: [
+        { _id: { $ne: req.user } }, // Exclude the current user
+        { $or: [{ email }, { mobile }] } // Check if email or mobile matches
+      ]
+    });
+
+    if (existingUser) {
+      // Email or mobile already exists for another user
+      return res.status(400).json({ message: 'Email or mobile is connected with another user' });
+    }
+
+    // Construct the update object with the provided data
+    const updateData = {
+      first_name,
+      second_name,
+      last_name,
+      dob,
+      blood_group,
+      gender,
+      nationality,
+      email,
+      mobile
+    };
+
+    // Update the user's profile information in the database
+    const updatedUser = await UserModel.findByIdAndUpdate(req.user, updateData, { new: true });
+
+    // Check if the user exists and has been updated
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Return the updated profile information in the response
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    // Handle errors
     res.status(500).json({ error: error.message });
   }
 };
@@ -567,4 +615,4 @@ const deleteFamilyMember = async (req, res, next) => {
 
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile }
