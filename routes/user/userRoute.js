@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember} = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile} = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -11,6 +11,8 @@ router.get('/', /* staffMiddleware, */ getUser, responseSend)
 
 // router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
 router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
+
+router.get('/getprofile/public', verifyToken, getProfile, responseSend)
 
 router.get('/:id',staffMiddleware, getUserById, responseSend)
 
@@ -29,10 +31,13 @@ router.get('/page/:page&:count', pagination, responseSend)
 // router.post('/addToFavorites', staffMiddleware, addToFavorites, responseSend)
 router.post('/addToFavorites', verifyToken, addToFavorites, responseSend)
 
+router.post('/addfamily', staffMiddleware, addFamilyMember)
+
 router.post('/addfamily/public', verifyToken, addFamilyMember)
 
 // router.get('/getFamilyMembers/:parentId', verifyToken, getFamilyMembers)
 
 router.delete('/deleteFamilyMember/:memberId', verifyToken, deleteFamilyMember)
+
 
 module.exports = router

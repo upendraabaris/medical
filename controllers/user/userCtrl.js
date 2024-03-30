@@ -334,6 +334,58 @@ const getFamilyMembers = async (req, res, next) => {
 };
 
 
+const getProfile = async (req, res, next) => {
+  try {
+    const parentUser = await UserModel.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(req.user) // Convert parentId to ObjectId
+        }
+      },
+      {
+        $lookup: {
+          from: 'countries', // Collection name
+          localField: 'nationality',
+          foreignField: '_id',
+          as: 'nation'
+        }
+      },
+      {
+        $project: {
+          user_type_id: 1,
+          // name: { $concat: ["$first_name", " ", "$second_name", " ", "$last_name"] },
+          first_name: "$first_name",
+          second_name: "$second_name",
+          last_name: "$last_name",
+          dob: "$dob",
+          blood_group: "$blood_group",
+          gender: "$gender",
+          nationality: "$nation.country_name",
+          email: "$email",
+          mobile: "$mobile",
+          date_of_issue: "$createdAt"
+        }
+      }
+    ])
+    if (!parentUser) {
+      return res.status(404).json({ message: 'Parent user not found' });
+    }
+
+
+    // Construct the response object containing parent user data and family member data
+    const responseData = {
+      userProfile: parentUser,
+    };
+
+    // Send the response
+    res.status(200).json(responseData);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
 // const addFamilyMember = async(req,res,next)=>{
 //   try{
 //     email = req.body.email
@@ -515,4 +567,4 @@ const deleteFamilyMember = async (req, res, next) => {
 
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile }
