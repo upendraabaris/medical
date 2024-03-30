@@ -1,8 +1,43 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile} = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage} = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
+
+
+const multer = require("multer");
+const path = require("path");
+
+const MIME_TYPE_MAP = {
+  "image/png": "png",
+  "image/jpg": "jpg",
+  "image/jpeg": "jpg",
+  "image/gif": "gif"
+};
+
+var storage = multer.diskStorage({
+  destination: (req, file, callBack) => {
+    const isValid = MIME_TYPE_MAP[file.mimetype];
+    var error = new Error("Invalid mime type");
+    if (isValid) {
+      error = null;
+    }
+    callBack(error, "./uploads/");
+  },
+  filename: (req, file, callBack) => {
+    callBack(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+
+var upload = multer({
+  storage: storage,
+});
+
+
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
 const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
@@ -34,6 +69,8 @@ router.post('/addfamily/public', verifyToken, addFamilyMember)
 router.get('/getprofile/public', verifyToken, getProfile, responseSend)
 
 router.put('/editProfile/public', verifyToken, editProfile, responseSend)
+
+router.post('/UpdateProfileImage/public', verifyToken, upload.single('image'), userUpdateProfileImage, responseSend)
 
 router.get('/:id',staffMiddleware, getUserById, responseSend)
 

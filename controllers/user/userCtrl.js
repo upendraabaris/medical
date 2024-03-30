@@ -2,6 +2,9 @@ const UserModel = require("../../models/user/userModel")
 const jwt = require("jsonwebtoken")
 const familyModel = require("../../models/user/familyModel")
 const mongoose = require("mongoose")
+const cloudinary = require("../../utils/cloudinary");
+const {cloudinaryUploadImg, cloudinaryDeleteImg} =  require("../../utils/cloudinary")
+const path = require("path")
 const getUser = async (req, res, next) => {
   try {
     // const user = await UserModel.find().populate('user_type_id').populate('nationality').populate('country_of_residence').exec();
@@ -363,6 +366,7 @@ const getProfile = async (req, res, next) => {
           nationality: "$nation.country_name",
           email: "$email",
           mobile: "$mobile",
+          profile_pic: "$profile_pic",
           date_of_issue: "$createdAt"
         }
       }
@@ -432,7 +436,40 @@ const editProfile = async (req, res, next) => {
   }
 };
 
+const userUpdateProfileImage = (async (req, res) => {
+  try {
+    // let id = req.user._id;
+    if (req.file != undefined) {
+    
+    const imagepath = path.resolve("uploads/"+ req.file.filename);
 
+      const user = await UserModel.findById(req.user);
+      try{
+        await cloudinary
+        .cloudinaryDeleteImg(user?.profile_pic?.public_id)
+        .then((result) => {});
+      }catch(error){
+      }
+
+      const img = await  cloudinary.cloudinaryUploadImg(imagepath)
+      console.log(img)
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        req.user,
+        {
+          profile_pic: img.url,
+        },
+        {
+          new: true,
+        }
+      );
+      res.json({message: "profile picture updated successfully", pfofile_pic:updatedUser.profile_pic});
+    } else {
+      throw new Error("Please Upload the image");
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});
 
 // const addFamilyMember = async(req,res,next)=>{
 //   try{
@@ -615,4 +652,4 @@ const deleteFamilyMember = async (req, res, next) => {
 
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage }
