@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   national_digital_id: { type: String },
   abha_no: { type: String },
   kcc_passport_no: { type: String },
-  profile_pic: { type: String },
+  profile_pic: {  public_id: {type: String} ,url: {type: String} },
   first_name: { type: String },
   second_name: { type: String },
   last_name: { type: String },

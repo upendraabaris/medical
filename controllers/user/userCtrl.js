@@ -5,6 +5,7 @@ const mongoose = require("mongoose")
 const cloudinary = require("../../utils/cloudinary");
 const {cloudinaryUploadImg, cloudinaryDeleteImg} =  require("../../utils/cloudinary")
 const path = require("path")
+const UserType = require("../../models/user/userTypeModel")
 const getUser = async (req, res, next) => {
   try {
     // const user = await UserModel.find().populate('user_type_id').populate('nationality').populate('country_of_residence').exec();
@@ -471,6 +472,41 @@ const userUpdateProfileImage = (async (req, res) => {
   }
 });
 
+
+const userTypeUpgrade = async (req,res) => {
+  try {
+    // Find the user by ID
+    const user = await UserModel.findById(req.params.userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Check if the user is already a primary user
+    if (user.user_type_id === '65df43baaa8e764bd45b51f0') {
+      throw new Error('User is already a primary user');
+    }
+
+    // Find the primary user type
+    const primaryUserType = await UserType.findOne({ user_type: 'Primary User' });
+    if (!primaryUserType) {
+      throw new Error('Primary User type not found');
+    }
+
+    // Update the user's user_type_id to primary_user
+    user.user_type_id = primaryUserType._id;
+    await user.save();
+
+    return user;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+module.exports = userTypeUpgrade;
+
+
+
+
 // const addFamilyMember = async(req,res,next)=>{
 //   try{
 //     email = req.body.email
@@ -652,4 +688,4 @@ const deleteFamilyMember = async (req, res, next) => {
 
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade }
