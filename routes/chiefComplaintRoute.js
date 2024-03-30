@@ -9,7 +9,7 @@ const {staffMiddleware} = require("../middleware/authMiddleware")
 
 router.get('/', /* staffMiddleware, */ getChiefComplaint, responseSend)
 
-router.get('/public', staffMiddleware, getChiefComplaint, responseSend)
+router.get('/public', verifyToken, getChiefComplaint, responseSend)
 
 router.get('/:id', staffMiddleware, getChiefComplaintById, responseSend)
 

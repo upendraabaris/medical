@@ -3,15 +3,17 @@ const {getPatientVitalInformation, getPatientVitalInformationById, addPatientVit
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
-const {staffMiddleware} = require("../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getPatientVitalInformation, responseSend)
+
+router.get('/public', verifyToken, getPatientVitalInformation, responseSend)
 
 router.get('/:id', staffMiddleware, getPatientVitalInformationById, responseSend)
 
 router.post('/addPatientVitalInfo', staffMiddleware, addPatientVitalInformation, responseSend)
 
-router.post('/public/addPatientVitalInfo', staffMiddleware, addPatientVitalInformation, responseSend)
+router.post('/addPatientVitalInfo/public', verifyToken, addPatientVitalInformation, responseSend)
 
 router.put('/updatePatientVitalInfo/:id', staffMiddleware, updatePatientVitalInformation, responseSend)
 

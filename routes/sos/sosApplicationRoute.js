@@ -5,9 +5,11 @@ const {getSosApplicationForm, getSosApplicationFormById, addSosApplicationForm, 
 const {responseSend} = require("../../utils/response")
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
-const {staffMiddleware} = require("../../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getSosApplicationForm, responseSend)
+
+router.get('/public', verifyToken, getSosApplicationForm, responseSend)
 
 router.get('/:id', staffMiddleware, getSosApplicationFormById, responseSend)
 
