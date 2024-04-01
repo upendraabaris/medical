@@ -3,13 +3,13 @@ const bcrypt = require("bcryptjs")
 
 const userSchema = new mongoose.Schema({
   user_type_id: { type: mongoose.Schema.Types.ObjectId, ref: "UserType", index: true},
-  parent_user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
-  referring_user_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "UserType" }],
-  reporting_user_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "UserType" }],
+  parent_user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", index:true},
+  referring_user_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "UserType", index:true }],
+  reporting_user_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "UserType", index:true }],
   is_emergency_contact: { type: Boolean },
   pleadge_blood_donation: { type: Boolean, default: false },
   pleadge_organ_donation: { type: Boolean, default: false},
-  client_id: { type: mongoose.Schema.Types.ObjectId, ref: 'ClientMaster' },
+  client_id: { type: mongoose.Schema.Types.ObjectId, ref: 'ClientMaster'},
   national_digital_id: { type: String },
   abha_no: { type: String },
   kcc_passport_no: { type: String },
@@ -20,8 +20,8 @@ const userSchema = new mongoose.Schema({
   dob: { type: Date },
   gender: { type: String },
   blood_group: { type: String, maxlength: 2 },
-  nationality: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
-  country_of_residence: { type: mongoose.Schema.Types.ObjectId, ref: 'Country' },
+  nationality: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', index:true},
+  country_of_residence: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', index:true},
   mobile: { type: String },
   email: { type: String },
   otp: { type : Number },
@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
   expiry_date: { type: Date },
   password: { type: String },
   isFavorite: [ { type: mongoose.Schema.Types.ObjectId }],
-  relation_type_id: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRelation'},
+  relation_type_id: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRelation', index:true},
   // isLoginPermit: { type: Boolean, default: false, required: true },
   // addBy: { type: mongoose.Schema.Types.ObjectId, ref: 'user'}
   // sos_user_id: { type: mongoose.Schema.Types.ObjectId }

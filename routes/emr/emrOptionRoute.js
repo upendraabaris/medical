@@ -9,7 +9,7 @@ router.get('/', staffMiddleware, getEmrOption)
 
 router.get('/:id', staffMiddleware, getEmrOptionById)
 
-router.post('/addEmrOption', staffMiddleware, addEmrOption)
+router.post('/addEmrOption', /* staffMiddleware, */ addEmrOption)
 
 router.put('/updateEmrOption/:id', staffMiddleware, updateEmrOption)
 
