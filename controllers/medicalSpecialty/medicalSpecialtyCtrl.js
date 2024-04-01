@@ -2,7 +2,25 @@ const MedicalSpecialtyModel = require("../../models/medicalSpecialty/medicalSpec
 
 const getMedicalSpecialty = async(req,res,next)=>{
     try{
-        const MedicalSpecialty = await MedicalSpecialtyModel.find();
+        // const MedicalSpecialty = await MedicalSpecialtyModel.find().populate('superSpecialty');
+        const MedicalSpecialty = await MedicalSpecialtyModel.aggregate([
+            {
+              $lookup: {
+                from: "superspecializations", // Name of the collection to join
+                localField: "superSpecialty",
+                foreignField: "_id",
+                as: "super_specialty_data"
+              }
+            },
+            {
+              $project: {
+                _id: 1,
+                medical_specialty: 1,
+                medical_specialty_icon: 1,
+                superSpecialty: "$super_specialty_data.super_specialization" // Access the name field from the joined collection
+              }
+            }
+          ]);
         res.data = MedicalSpecialty
         res.status_Code = "200"
         next()

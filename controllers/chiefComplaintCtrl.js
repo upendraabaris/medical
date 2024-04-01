@@ -101,4 +101,21 @@ const deleteAllChiefComplaints = async (req, res, next) => {
 }
 
 
-module.exports = {getChiefComplaint, getChiefComplaintById, addChiefComplaint, updateChiefComplaint, deleteChiefComplaint, deleteAllChiefComplaints}
+const addData = async (req, res) => {
+    try {
+      const chiefComplaintsList = req.body.list;
+      console.log(chiefComplaintsList);
+      const chiefComplaintsData = chiefComplaintsList.map((complaint, index) => ({
+        chief_complaint_id: index + 1,
+        chief_complaint: complaint,
+        chief_complaint_banner_image: `https://example.com/${complaint.toLowerCase().replace(/\s/g, '-')}-banner.jpg`,
+        chief_complaint_banner_video: `https://example.com/${complaint.toLowerCase().replace(/\s/g, '-')}-video.mp4`,
+      }));
+      await ChiefComplaintModel.insertMany(chiefComplaintsData);
+      res.status(201).json({ message: 'Chief complaints added successfully.' });
+    } catch (error) {
+      console.error('Error adding chief complaints:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+module.exports = {getChiefComplaint, getChiefComplaintById, addChiefComplaint, updateChiefComplaint, deleteChiefComplaint, deleteAllChiefComplaints, addData}

@@ -16,7 +16,8 @@ const mongoose = require('mongoose');
 
 const medicalSpecialtySchema = new mongoose.Schema({
   superSpecialty: { type: mongoose.Schema.Types.ObjectId, ref: 'SuperSpecialization', required: true },
-  name: { type: String }
+  medical_specialty: { type: String, required: true },
+  medical_specialty_icon: { type: String }
 },
 {
   timestamps: true,
