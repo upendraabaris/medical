@@ -45,7 +45,6 @@ const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware"
 router.get('/', /* staffMiddleware, */ getUser, responseSend)
 
 // router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
-router.get('/getFamilyMembers', verifyToken, getFamilyMembers)
 
 router.post('/adduser', staffMiddleware, addUser, responseSend)
 
@@ -76,9 +75,10 @@ router.post('/UpdateProfileImage/public', verifyToken, upload.single('image'), u
 
 router.put('/userTypeUpgrade/public/:userId', verifyToken, userTypeUpgrade)
 
+router.get('/getFamilyMembers/public', verifyToken, getFamilyMembers)
+router.delete('/deleteFamilyMember/public', /* verifyToken, */ deleteFamilyMember)
 router.get('/:id',staffMiddleware, getUserById, responseSend)
 
-router.delete('/deleteFamilyMember', /* verifyToken, */ deleteFamilyMember)
 
 
 module.exports = router
