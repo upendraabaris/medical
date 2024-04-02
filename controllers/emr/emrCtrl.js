@@ -1,6 +1,7 @@
 const EmrModel = require("../../models/emr/emrModel")
 const emrOptionModel = require("../../models/emr/emrOptionModel")
 const EMRQuestionModel = require("../../routes/emr/emrQuestionTypeRoute")
+const ChiefComplaintModel = require("../../models/chiefComplaintModel")
 const getEmr = async(req,res,next)=>{
     try{
         const Emr = await EmrModel.find();
@@ -106,18 +107,38 @@ const deleteEmr = async(req,res,next)=>{
 
 const addEmrData = async (req, res) => {
     try {
-        const { category, qdata } = req.body;
+        const list  = req.body.list;
+        console.log(list)
+        const matchingComplaints = [];
+
+    // Iterate over each item in the list
+    for (const symptoms of list) {
+        // Search for the symptom in the ChiefComplaintModel
+        const chiefComplaint = await ChiefComplaintModel.findOne({ chief_complaint: symptoms });
+
+        // If chief complaint found, add it to the matchingComplaints array
+        if (chiefComplaint) {
+            // matchingComplaints.push(chiefComplaint);
+            console.log(chiefComplaint)
+        }
+    }
+
+    // Check if any matching chief complaints were found
+    if (matchingComplaints.length === 0) {
+        // Handle case where no chief complaints match any items in the list
+        return res.status(404).json({ message: 'No matching chief complaints found' });
+    }
 
         // Create EMR Master
         const emrMaster = new EmrModel({
-            chief_complaint_id: req.body.chief_complaint_id,
+            chief_complaint_id: chiefComplaint._id,
             medical_specialty_id: req.body.medical_specialty_id,
-            emr_question: category,
-            emr_question_type_id: req.body.emr_question_type_id,
-            emr_question_description: req.body.emr_question_description,
-            emr_question_banner_image: req.body.emr_question_banner_image,
-            emr_question_banner_video: req.body.emr_question_banner_video,
-            emr_question_weitage: req.body.emr_question_weitage
+            emr_question: req.body.question,
+            // emr_question_type_id: req.body.emr_question_type_id,
+            emr_question_description: req.body.question,
+            // emr_question_banner_image: req.body.emr_question_banner_image,
+            // emr_question_banner_video: req.body.emr_question_banner_video,
+            // emr_question_weitage: req.body.emr_question_weitage
         });
         const savedEmrMaster = await emrMaster.save();
 
@@ -132,20 +153,32 @@ const addEmrData = async (req, res) => {
         // const savedEmrQuestionType = await Promise.all(EmrQuestionType);
 
         // Create EMR Options
-        const emrOptions = qdata.map(async (question) => {
-            const emrOption = new emrOptionModel({
-                emr_id: savedEmrMaster._id,
-                emr_option_text: question.question,
-            });
-            return await emrOption.save();
-        });
-        const savedEmrOptions = await Promise.all(emrOptions);
+        // const emrOptions = qdata.map(async (question) => {
+        //     const emrOption = new emrOptionModel({
+        //         emr_id: savedEmrMaster._id,
+        //         emr_option_text: question.question,
+        //     });
+        //     return await emrOption.save();
+        // });
+        // const savedEmrOptions = await Promise.all(emrOptions);
 
-        res.status(201).json({ message: 'Data added successfully', emrMaster: savedEmrMaster, emrOptions: savedEmrOptions});
-    } catch (error) {
+        const savedOptions = [];
+
+        // Iterate over the options array and save each option
+        for (let i = 0; i < options.length; i++) {
+        const optionText = list[i];
+        const emrOption = new emrOptionModel({
+            emr_id: savedEmrMaster._id,
+            emr_option_text: optionText
+        });
+        const savedOption = await emrOption.save();
+        savedOptions.push(savedOption)
+        }
+        res.status(201).json({ message: 'Data added successfully', emrMaster: savedEmrMaster, emrOptions: savedOption});
+    } catch(error) {
         res.status(500).json({ message: 'Failed to add data', error: error.message });
     }
-};
+}
 
 
 const getQuestionaaire = async(req,res,next)=>{
@@ -230,6 +263,31 @@ const getQuestionaaire = async(req,res,next)=>{
         res.data = {}
         next()
     }
+    
 }
+
+// router.post('/addData', async (req, res) => {
+//     try {
+//         const { list, child_list, question } = req.body;
+
+//         // Insert categories
+//         await Category.create([{ name: 'adult' }, { name: 'children' }]);
+
+//         // Insert questions
+//         const questionsData = question.map(q => ({
+//             category: q.category,
+//             symptoms: q.symptoms,
+//             img_banner: q.img_banner,
+//             question: q.question,
+//             options: [q.option1, q.option2, q.option3] // Assuming there are three options
+//         }));
+//         await EmrModel.insertMany(questionsData);
+
+//         res.status(201).json({ message: 'Data added successfully.' });
+//     } catch (error) {
+//         console.error('Error adding data:', error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
 
 module.exports = {getEmr, getEmrById, addEmr, updateEmr, deleteEmr, addEmrData, getQuestionaaire}

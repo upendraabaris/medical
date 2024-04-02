@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   last_name: { type: String },
   dob: { type: Date },
   gender: { type: String },
-  blood_group: { type: String, maxlength: 2 },
+  blood_group: { type: String, maxlength: 3 },
   nationality: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', index:true},
   country_of_residence: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', index:true},
   mobile: { type: String },

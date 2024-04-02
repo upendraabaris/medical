@@ -49,7 +49,7 @@ router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
 
 router.post('/adduser', staffMiddleware, addUser, responseSend)
 
-// router.post('/adduser', staffMiddleware, addUser, responseSend)
+router.post('/adduser', staffMiddleware, addUser, responseSend)
 
 router.post('/adduser/public', addUser, responseSend)
 

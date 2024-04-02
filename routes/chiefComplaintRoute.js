@@ -13,7 +13,7 @@ router.get('/public', verifyToken, getChiefComplaint, responseSend)
 
 router.get('/:id', staffMiddleware, getChiefComplaintById, responseSend)
 
-router.post('/addChiefComplaint', staffMiddleware, addChiefComplaint, responseSend)
+router.post('/addChiefComplaint', /* staffMiddleware, */ addChiefComplaint, responseSend)
 
 router.put('/updateChiefComplaint/:id', staffMiddleware, updateChiefComplaint, responseSend)
 
