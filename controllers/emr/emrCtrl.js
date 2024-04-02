@@ -2,6 +2,7 @@ const EmrModel = require("../../models/emr/emrModel")
 const emrOptionModel = require("../../models/emr/emrOptionModel")
 const EMRQuestionModel = require("../../routes/emr/emrQuestionTypeRoute")
 const ChiefComplaintModel = require("../../models/chiefComplaintModel")
+const mongoose = require("mongoose")
 const getEmr = async(req,res,next)=>{
     try{
         const Emr = await EmrModel.find();
@@ -183,7 +184,9 @@ const addEmrData = async (req, res) => {
 
 const getQuestionaaire = async(req,res,next)=>{
     try{
+        let chief_complaint = req.body.chief_complaint_id
         const emr = await EmrModel.aggregate([
+            { $match: { chief_complaint_id: new mongoose.Types.ObjectId(chief_complaint) } },
             {
                 $lookup: {
                     from: "chiefcomplaints", // Collection name of ChiefComplaint model

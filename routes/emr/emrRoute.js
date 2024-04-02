@@ -5,8 +5,9 @@ const {getEmr, getEmrById, addEmr, updateEmr, deleteEmr, addEmrData, getQuestion
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
 const {staffMiddleware} = require("../../middleware/authMiddleware")
+const { responseSend } = require("../../utils/response")
 
-router.get('/getQuestionaaire/public', getQuestionaaire)
+router.post('/getQuestionaaire/public', getQuestionaaire, responseSend)
 
 router.get('/', staffMiddleware, getEmr)
 
@@ -27,6 +28,7 @@ const emrPictureGalleryModel = require("../../models/emr/emrPictureGalleryModel"
 const emrQuestionTypeModel = require("../../models/emr/emrQuestionTypeModel")
 const emrResponseModel = require("../../models/emr/emrResponseModel")
 const ChiefComplaintModel = require("../../models/chiefComplaintModel")
+
 
 router.post('/adddata', async(req,res,next)=>{
     try{
