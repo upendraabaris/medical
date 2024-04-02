@@ -184,9 +184,15 @@ const addEmrData = async (req, res) => {
 
 const getQuestionaaire = async(req,res,next)=>{
     try{
-        let chief_complaint = req.body.chief_complaint_id
+        let chief_complaint = req.body.list
+        // console.log(chief_complaint)
+        const objectIds = chief_complaint.map(complaint => new mongoose.Types.ObjectId(complaint))
         const emr = await EmrModel.aggregate([
-            { $match: { chief_complaint_id: new mongoose.Types.ObjectId(chief_complaint) } },
+            { 
+                $match: { 
+                    chief_complaint_id: { $in: objectIds }
+                } 
+            },            
             {
                 $lookup: {
                     from: "chiefcomplaints", // Collection name of ChiefComplaint model
