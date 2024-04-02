@@ -11,9 +11,9 @@ router.get('/public', verifyToken, getPatientVitalInformation, responseSend)
 
 router.get('/:id', staffMiddleware, getPatientVitalInformationById, responseSend)
 
-router.post('/addPatientVitalInfo', staffMiddleware, addPatientVitalInformation, responseSend)
-
 router.post('/addPatientVitalInfo/public', verifyToken, addPatientVitalInformation, responseSend)
+
+router.post('/addPatientVitalInfo', staffMiddleware, addPatientVitalInformation, responseSend)
 
 router.put('/updatePatientVitalInfo/:id', staffMiddleware, updatePatientVitalInformation, responseSend)
 

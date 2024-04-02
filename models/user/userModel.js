@@ -31,6 +31,8 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   isFavorite: [ { type: mongoose.Schema.Types.ObjectId }],
   relation_type_id: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRelation', index:true},
+  isDeath: { type: Boolean, default:false},
+  causeOfDeath: { type: String }
   // isLoginPermit: { type: Boolean, default: false, required: true },
   // addBy: { type: mongoose.Schema.Types.ObjectId, ref: 'user'}
   // sos_user_id: { type: mongoose.Schema.Types.ObjectId }

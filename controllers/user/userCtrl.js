@@ -278,7 +278,8 @@ const getFamilyMembers = async (req, res, next) => {
           blood_group: "$blood_group",
           gender: "$gender",
           nationality: "$nation.country_name",
-          date_of_issue: "$createdAt"
+          date_of_issue: "$createdAt",
+          isDeath: 1
         }
       }
     ])
@@ -318,16 +319,17 @@ const getFamilyMembers = async (req, res, next) => {
           blood_group: "$blood_group",
           gender: "$gender",
           nationality: "$nation.country_name",
-          date_of_issue: "$createdAt"
+          date_of_issue: "$createdAt",
+          isDeath: 1
         }
       }
     ]);
-
-
+    const filteredFamilyMembers = familyMembers.filter(member => !member.isDeath)
+    
     // Construct the response object containing parent user data and family member data
     const responseData = {
       parentUser: parentUser,
-      familyMembers: familyMembers
+      familyMembers: filteredFamilyMembers
     };
 
     // Send the response
@@ -661,10 +663,37 @@ module.exports = userTypeUpgrade;
 
 
 
+// const deleteFamilyMember = async (req, res, next) => {
+//   try {
+//     // Extract the family member's ID from the request parameters
+//     const memberId = req.params.memberId;
+
+//     // Find the family member by ID
+//     const familyMember = await UserModel.findById(memberId);
+//     if (!familyMember) {
+//       return res.status(404).json({ message: 'Family member not found' });
+//     }
+
+//     // Delete the family member
+//     await UserModel.findByIdAndDelete(memberId);
+
+//     // Send success response
+//     res.status(200).json({ message: 'Family member deleted successfully' });
+//     next()
+//   } catch (error) {
+//     // Handle errors
+//     res.status(500).json({ error: error.message });
+//     next()
+//   }
+// };
+
+
+
 const deleteFamilyMember = async (req, res, next) => {
   try {
-    // Extract the family member's ID from the request parameters
-    const memberId = req.params.memberId;
+    // Extract the family member's ID and cause of death from the request body
+    // const memberId = req.params.memberId;
+    const { memberId, causeOfDeath } = req.body;
 
     // Find the family member by ID
     const familyMember = await UserModel.findById(memberId);
@@ -672,18 +701,26 @@ const deleteFamilyMember = async (req, res, next) => {
       return res.status(404).json({ message: 'Family member not found' });
     }
 
-    // Delete the family member
-    await UserModel.findByIdAndDelete(memberId);
+    // Check if the user is already marked as deceased
+    if (familyMember.isDeath) {
+      return res.status(400).json({ message: 'Family member is already marked as deceased' });
+    }
+
+    // Mark the family member as deceased and set the cause of death
+    familyMember.isDeath = true;
+    familyMember.causeOfDeath = causeOfDeath;
+    await familyMember.save();
 
     // Send success response
-    res.status(200).json({ message: 'Family member deleted successfully' });
-    next()
+    res.status(200).json({ message: 'Family member marked as deceased successfully' });
+    next();
   } catch (error) {
     // Handle errors
     res.status(500).json({ error: error.message });
-    next()
+    next();
   }
 };
+
 
 
 

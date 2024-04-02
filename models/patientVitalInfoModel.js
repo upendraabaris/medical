@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const patientVitalInfoSchema = new mongoose.Schema({
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
     height: {
         feet: { type: Number, required: true },
         inches: { type: Number, required: true }

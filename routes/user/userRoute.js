@@ -45,7 +45,7 @@ const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware"
 router.get('/', /* staffMiddleware, */ getUser, responseSend)
 
 // router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
-router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
+router.get('/getFamilyMembers', verifyToken, getFamilyMembers)
 
 router.post('/adduser', staffMiddleware, addUser, responseSend)
 
@@ -78,7 +78,7 @@ router.put('/userTypeUpgrade/public/:userId', verifyToken, userTypeUpgrade)
 
 router.get('/:id',staffMiddleware, getUserById, responseSend)
 
-router.delete('/deleteFamilyMember/:memberId', verifyToken, deleteFamilyMember)
+router.delete('/deleteFamilyMember', /* verifyToken, */ deleteFamilyMember)
 
 
 module.exports = router
