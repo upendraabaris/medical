@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 
 const procedureSchema = new mongoose.Schema({
-    procedure_id: { type: Number, required: true, unique: true },
-    medical_specialty_id: { type: Number, required: true, ref: "MedicalSpecialty"},
+    // procedure_id: { type: Number, required: true, unique: true },
+    medical_specialty_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "MedicalSpecialty", index:true},
     procedure_name: { type: String, required: true },
     short_description: { type: String },
     long_description: { type: String },

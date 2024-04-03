@@ -14,7 +14,7 @@ const getshippingAddressList = (async (req, res) => {
 const getshippingAddressListCustomerId = (async (req, res) => {
   try {
     const allShippinAddress = await shippingAddress.find({
-      userid: req.user._id,
+      user_id: req.user || req.params.id,
     });
     res.json(allShippinAddress);
   } catch (error) {
@@ -73,9 +73,20 @@ const getOnlyshippingAddressListCustomerId = (async (req, res) => {
   }
 });
 
-const createshippingAddress = (async (req, res) => {
+const createshippingAddressBySeller = (async (req, res) => {
   try {
-    req.body.accCompany_id = req.companyId;
+    req.body.seller_id = req.user._id;
+    const sellers = await shippingAddress.create(req.body);
+    res.json(sellers);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const createShippingAddressByCustomer = (async (req, res) => {
+  try {
+    req.body.user_id = req.user;
+    console.log(req.user)
     const sellers = await shippingAddress.create(req.body);
     res.json(sellers);
   } catch (error) {
@@ -104,6 +115,26 @@ const deleteshippingAddress = (async (req, res) => {
     const { id } = req.params;
     const deletedshippingAddress = await shippingAddress.findByIdAndDelete(id);
     res.json(deletedshippingAddress);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const deleteShippingAddressByCustomer = (async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedshippingAddress = await shippingAddress.findOneAndDelete({_id: id, user_id:req.user});
+    res.json(deletedshippingAddress);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+const updateShippingAddressByCustomer = (async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateshippingAddress = await shippingAddress.findOneAndUpdate({_id: id, user_id:req.user}, req.body, { new: true });
+    res.json(updateshippingAddress);
   } catch (error) {
     throw new Error(error);
   }
@@ -160,7 +191,7 @@ const getBillingAddBySeller = (async (req, res) => {
 
 module.exports = {
   getshippingAddressList,
-  createshippingAddress,
+  createshippingAddressBySeller,
   updateshippingAddress,
   deleteshippingAddress,
   getSearchshippingAddress,
@@ -172,4 +203,8 @@ module.exports = {
   
   getbillingAddressListByCustomerId,
   getshippingAddressListByCustomerId,
+
+  createShippingAddressByCustomer,
+  updateShippingAddressByCustomer,
+  deleteShippingAddressByCustomer
 };

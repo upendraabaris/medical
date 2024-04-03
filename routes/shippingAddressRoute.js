@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const {
   getshippingAddressList,
-  createshippingAddress,
+  createshippingAddressBySeller,
   updateshippingAddress,
   deleteshippingAddress,
   getSearchshippingAddress,
@@ -13,19 +13,20 @@ const {
   getShippingAddBySeller,
   getbillingAddressListByCustomerId,
   getshippingAddressListByCustomerId,
+  createShippingAddressByCustomer,
+  updateShippingAddressByCustomer,
+  deleteShippingAddressByCustomer
 } = require("../controllers/shippingAddressCtrl");
 
-// const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
+const { authMiddleware, isAdmin, verifyToken, staffMiddleware } = require("../middleware/authMiddleware");
 
-router.get("/", /* isAdmin, */ getshippingAddressList);
-router.post("/add_shippingAddresss", /* isAdmin, */ createshippingAddress);
+router.get("/", staffMiddleware, getshippingAddressList);
+router.post("/add_shippingAddresss", /* isAdmin, */ createshippingAddressBySeller);
 router.put("/update_shippingAddresss/:id", /* isAdmin, */ updateshippingAddress);
 router.put("/delete_shippingAddresss/:id", /* isAdmin, */ deleteshippingAddress);
 router.delete("/delete_shippingAddresss/:id", /* isAdmin, */ deleteshippingAddress);
-router.get("/:id", /* authMiddleware, */ getSearchById);
 router.get("/search_shippingAddress/:search", /* isAdmin, */ getSearchshippingAddress);
 
-router.get("/customer", /* authMiddleware, */ getshippingAddressListCustomerId);
 router.get("/customer/shipping", /* authMiddleware, */ getOnlyshippingAddressListCustomerId);
 
 
@@ -36,5 +37,17 @@ router.get("/shipping/seller/:id", /* isAdmin, */ getShippingAddBySeller);
 router.get("/billing/user/:id", /* isAdmin, */ getbillingAddressListByCustomerId);
 router.get("/shipping/user/:id", /* isAdmin, */ getshippingAddressListByCustomerId);
 
+router.get("/customer/public", verifyToken, getshippingAddressListCustomerId);
+router.post('/addShippingAddressByCustomer/public', verifyToken, createShippingAddressByCustomer)
+router.put('/updateShippingAddressByCustomer/public/:id', verifyToken, updateShippingAddressByCustomer)
+router.delete('/deleteShippingAddressByCustomer/public/:id', verifyToken, deleteShippingAddressByCustomer)
+
+router.get("/customer/:id", staffMiddleware, getshippingAddressListCustomerId);
+router.post('/addShippingAddressByCustomer', staffMiddleware, createShippingAddressByCustomer)
+router.put('/updateShippingAddressByCustomer/:id', staffMiddleware, updateShippingAddressByCustomer)
+router.delete('/deleteShippingAddressByCustomer/:id', staffMiddleware, deleteShippingAddressByCustomer)
+
+
+router.get("/:id", /* authMiddleware, */ getSearchById);
 
 module.exports = router;

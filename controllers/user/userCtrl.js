@@ -340,6 +340,93 @@ const getFamilyMembers = async (req, res, next) => {
 };
 
 
+const getFamilyMembersByStaff = async (req, res, next) => {
+  try {
+    let userId = req.params.userId
+    const parentUser = await UserModel.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(userId) // Convert parentId to ObjectId
+        }
+      },
+      {
+        $lookup: {
+          from: 'countries', // Collection name
+          localField: 'nationality',
+          foreignField: '_id',
+          as: 'nation'
+        }
+      },
+      {
+        $project: {
+          user_type_id: 1,
+          name: { $concat: ["$first_name", " ", "$second_name", " ", "$last_name"] },
+          dob: "$dob",
+          blood_group: "$blood_group",
+          gender: "$gender",
+          nationality: "$nation.country_name",
+          date_of_issue: "$createdAt",
+          isDeath: 1
+        }
+      }
+    ])
+    if (!parentUser) {
+      return res.status(404).json({ message: 'Parent user not found' });
+    }
+
+    // Find all family members belonging to the parent user
+    // const familyMembers = await UserModel.find({ parent_user_id: parentId });
+
+    const familyMembers = await UserModel.aggregate([
+      // Match documents with the given parent user ID
+      { $match: { parent_user_id: new mongoose.Types.ObjectId(req.user) } },
+      // Lookup to get family member details
+      {
+        $lookup: {
+          from: 'users', // Collection name
+          localField: 'parent_user_id',
+          foreignField: '_id',
+          as: 'parentUser'
+        }
+      },
+      {
+        $lookup: {
+          from: 'countries', // Collection name
+          localField: 'nationality',
+          foreignField: '_id',
+          as: 'nation'
+        }
+      },
+      // Project to reshape the output
+      {
+        $project: {
+          user_type_id: 1,
+          name: { $concat: ["$first_name", " ", "$second_name", " ", "$last_name"] },
+          dob: "$dob",
+          blood_group: "$blood_group",
+          gender: "$gender",
+          nationality: "$nation.country_name",
+          date_of_issue: "$createdAt",
+          isDeath: 1
+        }
+      }
+    ]);
+    const filteredFamilyMembers = familyMembers.filter(member => !member.isDeath)
+    
+    // Construct the response object containing parent user data and family member data
+    const responseData = {
+      parentUser: parentUser,
+      familyMembers: filteredFamilyMembers
+    };
+
+    // Send the response
+    res.status(200).json(responseData);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 const getProfile = async (req, res, next) => {
   try {
     const parentUser = await UserModel.aggregate([
@@ -446,7 +533,7 @@ const userUpdateProfileImage = (async (req, res) => {
     
     const imagepath = path.resolve("uploads/"+ req.file.filename);
 
-      const user = await UserModel.findById(req.user);
+      const user = await UserModel.findById(req.user || req.params.userId);
       try{
         await cloudinary
         .cloudinaryDeleteImg(user?.profile_pic?.public_id)
@@ -457,7 +544,7 @@ const userUpdateProfileImage = (async (req, res) => {
       const img = await  cloudinary.cloudinaryUploadImg(imagepath)
       console.log(img)
       const updatedUser = await UserModel.findByIdAndUpdate(
-        req.user,
+        req.user||req.params.userId,
         {
           profile_pic: img.url,
         },
@@ -473,6 +560,7 @@ const userUpdateProfileImage = (async (req, res) => {
     throw new Error(error);
   }
 });
+
 
 
 const userTypeUpgrade = async (req,res) => {
@@ -725,4 +813,4 @@ const deleteFamilyMember = async (req, res, next) => {
 
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff }

@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade} = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff} = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -44,7 +44,7 @@ const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware"
 
 router.get('/', /* staffMiddleware, */ getUser, responseSend)
 
-// router.get('/getFamilyMembers', verifyToken, getFamilyMembers, responseSend)
+router.get('/getFamilyMembersByStaff/:userId', staffMiddleware, getFamilyMembersByStaff, responseSend)
 
 router.post('/adduser', staffMiddleware, addUser, responseSend)
 
@@ -72,6 +72,8 @@ router.get('/getprofile/public', verifyToken, getProfile, responseSend)
 router.put('/editProfile/public', verifyToken, editProfile, responseSend)
 
 router.post('/UpdateProfileImage/public', verifyToken, upload.single('image'), userUpdateProfileImage, responseSend)
+
+router.post('/UpdateProfileImage/:userId', staffMiddleware, upload.single('image'), userUpdateProfileImage, responseSend)
 
 router.put('/userTypeUpgrade/public/:userId', verifyToken, userTypeUpgrade)
 

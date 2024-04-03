@@ -20,10 +20,10 @@ const shippingSchema = new mongoose.Schema(
     firstname: { type: String, default: "" },
     lastname: { type: String, default: "" },
     company: { type: String, default: "" },
-    userid: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    seller_id: { type: mongoose.Schema.Types.ObjectId, ref: "sellers" },
-    type: { type: String, enum: ["billing", "shipping"] },
-    accCompany_id: { type: mongoose.Schema.Types.ObjectId, ref: "accCompany", index: true }
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "users", index: true },
+    seller_id: { type: mongoose.Schema.Types.ObjectId, ref: "sellers", index: true },
+    type: { type: String, enum: ["billing", "shipping"], index: true },
+    // accCompany_id: { type: mongoose.Schema.Types.ObjectId, ref: "accCompany", index: true }
   },
   {
     timestamps: true,
