@@ -592,7 +592,7 @@ const userTypeUpgrade = async (req,res) => {
   }
 };
 
-module.exports = userTypeUpgrade;
+// module.exports = userTypeUpgrade;
 
 
 
