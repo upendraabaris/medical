@@ -28,11 +28,13 @@ var upload = multer({
 });
 
 
-const { addImage, addImage1 } = require("../controllers/cloudinaryCtrl");
+const { addImage, addImage1, downloadDoc } = require("../controllers/cloudinaryCtrl");
 
 const { isAdmin, checkDomain } = require("../middleware/authMiddleware");
 
 router.post("/addImage", upload.single("image"), addImage);
 router.post("/addImage1", upload.single("image"), addImage1);
+
+router.get("/downloadDoc/:filename", /* upload.single("image"), */ downloadDoc);
 
 module.exports = router;

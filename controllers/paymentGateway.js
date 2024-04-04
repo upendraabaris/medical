@@ -20,6 +20,7 @@ const transactionInitialize = async (req, res) =>{
       amount: req.body.amount * 100, // amount in the smallest currency unit
       currency: "INR",
       receipt: transaction.order_id,
+      payment_capture: true
     };
     var instance = new Razorpay({
       key_id: process.env.RAZOR_KEY,

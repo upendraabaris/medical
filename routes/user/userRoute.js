@@ -1,9 +1,11 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff} = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc } = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
+
+const { addImage1, downloadDoc} = require("../../controllers/cloudinaryCtrl")
 
 const multer = require("multer");
 const path = require("path");
@@ -17,12 +19,13 @@ const MIME_TYPE_MAP = {
 
 var storage = multer.diskStorage({
   destination: (req, file, callBack) => {
-    const isValid = MIME_TYPE_MAP[file.mimetype];
-    var error = new Error("Invalid mime type");
-    if (isValid) {
-      error = null;
-    }
-    callBack(error, "./uploads/");
+    // const isValid = MIME_TYPE_MAP[file.mimetype];
+    // var error = new Error("Invalid mime type");
+    // if (isValid) {
+    //   error = null;
+    // }
+    // callBack(error, "./uploads/");
+    callBack(null, "./uploads/");
   },
   filename: (req, file, callBack) => {
     callBack(
@@ -79,7 +82,18 @@ router.put('/userTypeUpgrade/public/:userId', verifyToken, userTypeUpgrade)
 
 router.get('/getFamilyMembers/public', verifyToken, getFamilyMembers)
 router.delete('/deleteFamilyMember/public', /* verifyToken, */ deleteFamilyMember)
-router.get('/:id',staffMiddleware, getUserById, responseSend)
+
+// router.post("/uploadDoc", uploadDoc)
+
+
+router.post("/addImage1", upload.single("image"), addImage1)
+router.post('/submitDocument', verifyToken, addUserDoc)
+
+router.get("/downloadDoc/:filename", /* upload.single("image"), */ downloadDoc)
+
+
+router.get('/:id', staffMiddleware, getUserById, responseSend)
+
 
 
 

@@ -75,6 +75,31 @@ async function getObjectUrl(key) {
 //  const url = getSignedUrl(s3Client, command, { expiresIn: 60 * 60 * 24 * 7 });
   return url.Body
 }
+const { Readable } = require('stream')
+const downloadDoc = (async (req, res) => {
+  const folder = req.params.folder;
+  const filename = req.params.filename;
+//  console.log(filename)
+
+  const params = {
+    Bucket: "upheals",
+    Key: filename, // Concatenate the folder and file name
+  };
+  try {
+    
+    let url = await getObjectUrl(filename);
+      const pdfStream = Readable.from(url);
+      pdfStream.pipe(res);
+  } catch (error) {
+    console.error("Error downloading file:", error);
+    if (error.code === "NoSuchKey") {
+      res.status(500).json({ status: 404, error: "File not found" });
+    } else {
+      res.status(500).json({ status: 500, error: "Failed to download file" });
+    }
+  }
+});
+
 
 const addImage1 = async (req, res, next) => {
   try {
@@ -103,5 +128,6 @@ const addImage1 = async (req, res, next) => {
 
   module.exports = {
   addImage,
-  addImage1
+  addImage1,
+  downloadDoc
 };

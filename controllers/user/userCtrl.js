@@ -6,6 +6,7 @@ const cloudinary = require("../../utils/cloudinary");
 const {cloudinaryUploadImg, cloudinaryDeleteImg} =  require("../../utils/cloudinary")
 const path = require("path")
 const UserType = require("../../models/user/userTypeModel")
+const UserDocModel = require("../../models/documentModel")
 const getUser = async (req, res, next) => {
   try {
     // const user = await UserModel.find().populate('user_type_id').populate('nationality').populate('country_of_residence').exec();
@@ -562,6 +563,23 @@ const userUpdateProfileImage = (async (req, res) => {
 });
 
 
+const addUserDoc = async(req,res,next)=>{
+  try{
+      req.body.user_id = req.user
+      const UserDoc = await UserDocModel.create(req.body)
+      res.data = UserDoc
+      res.status_Code = "200"
+      next()
+  }catch(error){
+      res.error = true;
+      res.status_Code = "403";
+      res.message = error.message
+      res.data = {}
+      next()
+  }
+}
+
+
 
 const userTypeUpgrade = async (req,res) => {
   try {
@@ -813,4 +831,4 @@ const deleteFamilyMember = async (req, res, next) => {
 
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc }
