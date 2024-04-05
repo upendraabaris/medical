@@ -498,14 +498,9 @@ const editProfile = async (req, res, next) => {
     const { first_name, second_name, last_name, dob, blood_group, gender, nationality, email, mobile } = req.body;
 
     // Check if the email or mobile exists for any other user
-    const existingUser = await UserModel.findOne({
-      $and: [
-        { _id: { $ne: req.user || req.params.id } }, // Exclude the current user
-        { $or: [{ email }, { mobile }] } // Check if email or mobile matches
-      ]
-    });
+    const existingUser = await UserModel.findById(req.params.id);
 
-    if (existingUser) {
+    if (!existingUser) {
       // Email or mobile already exists for another user
       return res.status(400).json({ message: 'Email or mobile is connected with another user' });
     }
@@ -528,7 +523,7 @@ const editProfile = async (req, res, next) => {
     };
 
     // Update the user's profile information in the database
-    const updatedUser = await UserModel.findByIdAndUpdate(req.user || req.params.id, updateData, { new: true });
+    const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, updateData, { new: true });
 
     // Check if the user exists and has been updated
     if (!updatedUser) {
