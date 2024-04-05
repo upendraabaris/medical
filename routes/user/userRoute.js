@@ -74,6 +74,8 @@ router.get('/getprofile/public', verifyToken, getProfile, responseSend)
 
 router.put('/editProfile/public', verifyToken, editProfile, responseSend)
 
+router.put('/editProfile/public/:id', verifyToken, editProfile, responseSend)
+
 router.post('/UpdateProfileImage/public', verifyToken, upload.single('image'), userUpdateProfileImage, responseSend)
 
 router.post('/UpdateProfileImage/:userId', staffMiddleware, upload.single('image'), userUpdateProfileImage, responseSend)

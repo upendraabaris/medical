@@ -488,7 +488,7 @@ const editProfile = async (req, res, next) => {
     // Check if the email or mobile exists for any other user
     const existingUser = await UserModel.findOne({
       $and: [
-        { _id: { $ne: req.user } }, // Exclude the current user
+        { _id: { $ne: req.user || req.params.id } }, // Exclude the current user
         { $or: [{ email }, { mobile }] } // Check if email or mobile matches
       ]
     });
