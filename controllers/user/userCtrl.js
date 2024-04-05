@@ -285,6 +285,7 @@ const getFamilyMembers = async (req, res, next) => {
           last_name: "$last_name",
           email: "$email",
           mobile: "$mobile",
+          profile_pic: "$profile_pic",
           isDeath: 1
         }
       }
@@ -331,6 +332,7 @@ const getFamilyMembers = async (req, res, next) => {
           last_name: "$last_name",
           email: "$email",
           mobile: "$mobile",
+          profile_pic: "$profile_pic",
           isDeath: 1
         }
       }
@@ -508,9 +510,9 @@ const editProfile = async (req, res, next) => {
       return res.status(400).json({ message: 'Email or mobile is connected with another user' });
     }
 
-    if(existingUser.user_type_id != "65df43baaa8e764bd45b51f0"){
-      return res.status(400).json({ message: 'Only primary user can edit' });
-    }
+    // if(!existingUser || existingUser.user_type_id !== "65df43baaa8e764bd45b51f0"){
+    //   return res.status(400).json({ message: 'Only primary user can edit' });
+    // }
 
     // Construct the update object with the provided data
     const updateData = {
@@ -526,7 +528,7 @@ const editProfile = async (req, res, next) => {
     };
 
     // Update the user's profile information in the database
-    const updatedUser = await UserModel.findByIdAndUpdate(req.user, updateData, { new: true });
+    const updatedUser = await UserModel.findByIdAndUpdate(req.user || req.params.id, updateData, { new: true });
 
     // Check if the user exists and has been updated
     if (!updatedUser) {
