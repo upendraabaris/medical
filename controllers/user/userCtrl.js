@@ -280,6 +280,11 @@ const getFamilyMembers = async (req, res, next) => {
           gender: "$gender",
           nationality: "$nation.country_name",
           date_of_issue: "$createdAt",
+          first_name: "$first_name",
+          second_name: "$second_name",
+          last_name: "$last_name",
+          email: "$email",
+          mobile: "$mobile",
           isDeath: 1
         }
       }
@@ -321,6 +326,11 @@ const getFamilyMembers = async (req, res, next) => {
           gender: "$gender",
           nationality: "$nation.country_name",
           date_of_issue: "$createdAt",
+          first_name: "$first_name",
+          second_name: "$second_name",
+          last_name: "$last_name",
+          email: "$email",
+          mobile: "$mobile",
           isDeath: 1
         }
       }
@@ -496,6 +506,10 @@ const editProfile = async (req, res, next) => {
     if (existingUser) {
       // Email or mobile already exists for another user
       return res.status(400).json({ message: 'Email or mobile is connected with another user' });
+    }
+
+    if(existingUser.user_type_id != "65df43baaa8e764bd45b51f0"){
+      return res.status(400).json({ message: 'Only primary user can edit' });
     }
 
     // Construct the update object with the provided data
