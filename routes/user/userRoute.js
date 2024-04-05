@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc } = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory } = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -93,6 +93,12 @@ router.post('/submitDocument', verifyToken, addUserDoc)
 
 router.get("/downloadDoc/:filename", /* upload.single("image"), */ downloadDoc)
 
+router.post("/admin/addImage1", upload.single("image"), addImage1)
+router.get("/admin/downloadDoc/:filename", /* upload.single("image"), */ downloadDoc)
+
+router.post('/getdocument/public', verifyToken, getUserDocumentsByCategory, responseSend)
+
+router.post('/admin/getdocument', staffMiddleware, getUserDocumentsByCategory, responseSend)
 
 router.get('/:id', staffMiddleware, getUserById, responseSend)
 
