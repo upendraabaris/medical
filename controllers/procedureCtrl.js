@@ -11,7 +11,7 @@ const getProcedure = async(req,res,next)=>{
         // else {
         //     Procedure = JSON.parse(client);
         // }
-        const Procedure = await ProcedureModel.find()
+        const Procedure = await ProcedureModel.find().populate({ path: 'medical_specialty_id', select: 'medical_specialty' })
         res.data = Procedure
         res.status_Code = "200"
         next()

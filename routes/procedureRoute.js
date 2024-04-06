@@ -4,7 +4,7 @@ const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
 const {staffMiddleware} = require("../middleware/authMiddleware")
-
+/*  */
 router.get('/', staffMiddleware, getProcedure, responseSend)
 
 router.get('/:id', staffMiddleware, getProcedureById, responseSend)

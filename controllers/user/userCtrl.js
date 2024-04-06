@@ -551,7 +551,7 @@ const userUpdateProfileImage = (async (req, res) => {
     
     const imagepath = path.resolve("uploads/"+ req.file.filename);
 
-      const user = await UserModel.findById(req.user || req.params.userId);
+      const user = await UserModel.findById(req.params.userId);
       try{
         await cloudinary
         .cloudinaryDeleteImg(user?.profile_pic?.public_id)
@@ -562,7 +562,7 @@ const userUpdateProfileImage = (async (req, res) => {
       const img = await  cloudinary.cloudinaryUploadImg(imagepath)
       console.log(img)
       const updatedUser = await UserModel.findByIdAndUpdate(
-        req.user||req.params.userId,
+        req.params.userId,
         {
           profile_pic: img.url,
         },
