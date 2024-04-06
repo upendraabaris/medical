@@ -596,6 +596,21 @@ const addUserDoc = async(req,res,next)=>{
   }
 }
 
+const addUserDocByStaff = async(req,res,next)=>{
+  try{
+      req.body.user_id = req.params.id
+      const UserDoc = await UserDocModel.create(req.body)
+      res.data = UserDoc
+      res.status_Code = "200"
+      next()
+  }catch(error){
+      res.error = true;
+      res.status_Code = "403";
+      res.message = error.message
+      res.data = {}
+      next()
+  }
+}
 
 
 const userTypeUpgrade = async (req,res) => {
@@ -693,4 +708,4 @@ const deleteFamilyMember = async (req, res, next) => {
 
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff }

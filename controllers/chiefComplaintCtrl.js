@@ -41,10 +41,10 @@ const getChiefComplaintById = async(req,res,next)=>{
 
 const addChiefComplaint = async(req,res,next)=>{
     try{
-        const check = await ChiefComplaintModel.findOne({chief_complaint:req.body.chief_complaint})
-        if(check){
-            return res.json({message: "already exist in database"})
-        }
+        // const check = await ChiefComplaintModel.findOne({chief_complaint:req.body.chief_complaint})
+        // if(check){
+        //     return res.json({message: "already exist in database"})
+        // }
         const ChiefComplaint = await ChiefComplaintModel.create(req.body);
         res.data = ChiefComplaint
         res.status_Code = "200"
