@@ -344,3 +344,39 @@ const editProfile = async (req, res, next) => {
 //     next()
 //   }
 // };
+
+
+const mongoose = require("mongoose")
+const HealthIdSchema = new mongoose.Schema({
+  email: String,
+  firstName: String,
+  lastName: String,
+  middleName: String,
+  mobile: String,
+  // Add more fields as required
+});
+const HealthId = mongoose.model('HealthId', HealthIdSchema)
+const axios = require("axios")
+router.post('/api/v1/registration/aadhaar/createHealthIdWithAadhaarOtp', async (req, res) => {
+  try {
+    // Call Aadhaar service to create Health ID
+    const response = await axios.post('https://healthidsbx.abdm.gov.in/api/v1/registration/aadhaar/createHealthIdWithPreVerified', req.body, {
+      headers: {
+        'accept': '*/*',
+        'Accept-Language': 'en-US',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Assuming the response contains ABHA number
+    const abhaNumber = response.data.abhaNumber;
+
+    // Save the data to MongoDB
+    const healthId = new HealthId(req.body);
+    await healthId.save();
+
+    res.status(200).json({ abhaNumber });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});

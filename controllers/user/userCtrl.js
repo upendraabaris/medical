@@ -196,15 +196,15 @@ const addFamilyMember = async (req, res, next) => {
       return res.status(401).json({ message: 'Token not provided' });
     }
     const verifytoken = jwt.verify(token.replace('Bearer ', ''), "shicsdfhaljkvfjckds")?.user
-    // console.log(verifytoken)
-    const parentUser = await UserModel.findById(verifytoken);
+    console.log(verifytoken)
+    const parentUser = await UserModel.findById(verifytoken || req.body.parent_user_id);
     if (!parentUser) {
       return res.status(404).json({ message: 'Parent user not found' });
     }
 
     const { mobile, email, relation_type_id, /* isLoginPermit */   } = req.body
     const existingFamilyMember = await UserModel.findOne({
-      parent_user_id: verifytoken,
+      parent_user_id: verifytoken || req.body.parent_user_id,
       $or: [{ mobile }, { email }]
     });
 
@@ -227,7 +227,7 @@ const addFamilyMember = async (req, res, next) => {
       ...req.body,
       relation_type_id,
       // isLoginPermit: isLoginPermit || false,
-      parent_user_id: verifytoken
+      parent_user_id: verifytoken || req.body.parent_user_id
     });
     
     res.data = familyMember
@@ -580,6 +580,21 @@ const userUpdateProfileImage = (async (req, res) => {
 });
 
 
+// const userUpdateProfileImage = async(req,res)=>{
+//   try{
+//     const UserDoc = await UserModel.findOneAndUpdate(req.params.id)
+//     res.data = UserDoc
+//     res.status_Code = "200"
+//     next()
+// }catch(error){
+//     res.error = true;
+//     res.status_Code = "403";
+//     res.message = error.message
+//     res.data = {}
+//     next()
+// }
+// }
+
 const addUserDoc = async(req,res,next)=>{
   try{
       req.body.user_id = req.user
@@ -611,6 +626,53 @@ const addUserDocByStaff = async(req,res,next)=>{
       next()
   }
 }
+
+const updateUserDoc = async(req,res,next)=>{
+  try{
+      const UserDoc = await UserDocModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+      console.log(UserDoc)
+      res.data = UserDoc
+      res.status_Code = "200"
+      next()
+  }catch(error){
+      res.error = true;
+      res.status_Code = "403";
+      res.message = error.message
+      res.data = {}
+      next()
+  }
+}
+
+const deleteUserDoc = async(req,res,next)=>{
+  try{
+      const UserDoc = await UserDocModel.findByIdAndDelete(req.params.id)
+      console.log(UserDoc)
+      res.data = UserDoc
+      res.status_Code = "200"
+      next()
+  }catch(error){
+      res.error = true;
+      res.status_Code = "403";
+      res.message = error.message
+      res.data = {}
+      next()
+  }
+}
+
+
+const getCountByCategoryForUser = async (req,res) => {
+  try {
+    const counts = await UserDocModel.aggregate([
+      { $match: { user_id: new mongoose.Types.ObjectId(req.user) } }, // Match documents for the specified user
+      { $group: { _id: "$category", count: { $sum: 1 } } },
+      {$project: { _id:0,ctaegory:"$_id", count:1}} // Group documents by category and count them
+    ]);
+     res.json(counts);
+  } catch (error) {
+    throw new Error("Error in counting documents by category: " + error.message);
+  }
+};
+
 
 
 const userTypeUpgrade = async (req,res) => {
@@ -649,7 +711,7 @@ const getUserDocumentsByCategory = async (req, res, next) => {
     const category = req.body.category
     // Fetch documents based on the specified category
     const documents = await UserDocModel.find({ category });
-    await UserDocModel.populate(documents, { path: 'user_id', select: 'first_name second_name last_name email mobile' })
+    await UserDocModel.populate(documents, { path: 'user_id selectFamilyMember', select: 'first_name second_name last_name email mobile' })
     console.log(documents)
     // Check if any documents were found
     if (!documents || documents.length === 0) {
@@ -708,4 +770,4 @@ const deleteFamilyMember = async (req, res, next) => {
 
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser }

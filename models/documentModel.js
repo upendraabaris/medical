@@ -14,13 +14,15 @@ const userDocumentSchema = new mongoose.Schema({
     linkDoctorPrescription: { type: String },
     pathologyLabName: { type: String/* , required: true */ },
     categoryDocumentType: { type: String/* , required: true */ },
-    selectFamilyMember: { type: String },
+    selectFamilyMember: { type: mongoose.Schema.Types.ObjectId, ref: "User", index: true },
     vaccinationType: { type: String/* , required: true */ },
     expiryDate: { type: Date/* , required: true */ },
     insurerCompanyName: { type: String/* , required: true */ },
-    insuranceType: { type: String, /* enum: ['Health/Medical Insurance', 'Life Insurance'], */ },
+    insuranceType: { type: String, enum: ['Health/Medical Insurance', 'Life Insurance', ''], },
     selectProcedure: { type: String },
-    document: [{ type: String , required: true }],
+    document: [{ type: String /* , required: true */ }],
+    document_1: { type: String /* , required: true */ },
+    document_2: { type: String /* , required: true */ },
     // insurance_policy: [{ type: String, required: true }],
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", index: true }
 }, {
@@ -40,3 +42,4 @@ module.exports = mongoose.model("userDocument", userDocumentSchema)
 // pan_card: { type: String, require: [true, "Pan card doc is a must"] },
 // gst: { type: String },
 // bank_proof: { type: String, require: [true, "Bank Proof is a must"] },
+

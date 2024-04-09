@@ -92,8 +92,9 @@ const test = asyncHandler(async (req, res) => {
 
 const checkout = asyncHandler(async (req, res) => {
   try {
-    //    let payments;
-    let body = req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
+       let payments;
+       const newTransWallet = await Transaction.create(req.body)
+      let body = req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
 
     var crypto = require("crypto");
     var expectedSignature = crypto
@@ -116,7 +117,8 @@ const checkout = asyncHandler(async (req, res) => {
       wallet.wallet_Payment += trans.amount;
       wallet.save();
  */    }
-    res.redirect("http://localhost:8100");
+    // res.redirect("http://localhost:8100");
+    res.json({message:"success"})
 
   } catch (error) {
     throw new Error(error);

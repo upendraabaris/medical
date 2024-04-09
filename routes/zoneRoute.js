@@ -1,11 +1,13 @@
 const router = require("express").Router()
-const {getZone, getZoneById, addZone, updateZone, deleteZone, deleteAllZone} = require("../controllers/zoneCtrl")
+const {getZone, getZoneById, addZone, updateZone, deleteZone, deleteAllZone, getZoneCityMapping} = require("../controllers/zoneCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
 const {staffMiddleware} = require("../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getZone, responseSend)
+
+router.get('/getZoneCityMapping', staffMiddleware, getZoneCityMapping, responseSend)
 
 router.get('/:id', staffMiddleware, getZoneById, responseSend)
 

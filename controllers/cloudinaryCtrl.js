@@ -70,17 +70,19 @@ async function getObjectUrl(key) {
     Bucket: "upheals",
     Key: key
   }) 
+  console.log(command)
   const url =await  s3Client.send(command);
 //  console.log(url);
 //  const url = getSignedUrl(s3Client, command, { expiresIn: 60 * 60 * 24 * 7 });
+// console.log(url.Body)
   return url.Body
+  // res.json(url)
 }
 const { Readable } = require('stream')
 const downloadDoc = (async (req, res) => {
   const folder = req.params.folder;
   const filename = req.params.filename;
 //  console.log(filename)
-
   const params = {
     Bucket: "upheals",
     Key: filename, // Concatenate the folder and file name
@@ -90,6 +92,7 @@ const downloadDoc = (async (req, res) => {
     let url = await getObjectUrl(filename);
       const pdfStream = Readable.from(url);
       pdfStream.pipe(res);
+      // res.json(url)
   } catch (error) {
     console.error("Error downloading file:", error);
     if (error.code === "NoSuchKey") {
@@ -129,5 +132,5 @@ const addImage1 = async (req, res, next) => {
   module.exports = {
   addImage,
   addImage1,
-  downloadDoc
+  downloadDoc,
 };

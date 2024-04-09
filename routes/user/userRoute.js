@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff } = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser } = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -45,8 +45,8 @@ var upload = multer({
 // const {verifyToken} = require("../../middleware/authMiddleware")
 const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/', /* staffMiddleware, */ getUser, responseSend)
 
+router.get('/', /* staffMiddleware, */ getUser, responseSend)
 router.get('/getFamilyMembersByStaff/:userId', staffMiddleware, getFamilyMembersByStaff, responseSend)
 
 router.post('/adduser', staffMiddleware, addUser, responseSend)
@@ -67,8 +67,8 @@ router.get('/page/:page&:count', pagination, responseSend)
 router.post('/addToFavorites', verifyToken, addToFavorites, responseSend)
 
 router.post('/addfamily', staffMiddleware, addFamilyMember)
-
 router.post('/addfamily/public', verifyToken, addFamilyMember)
+
 
 router.get('/getprofile/public', verifyToken, getProfile, responseSend)
 
@@ -94,12 +94,23 @@ router.get("/downloadDoc/:filename", /* upload.single("image"), */ downloadDoc)
 router.post('/submitDocument/:id', staffMiddleware, addUserDocByStaff)
 router.post('/submitDocument', verifyToken, addUserDoc)
 
+router.put('/updateDocument/public/:id', verifyToken, updateUserDoc, responseSend)
+
+router.put('/updateDocument/:id', staffMiddleware, updateUserDoc, responseSend)
+
+router.delete('/deleteDocument/public/:id', verifyToken, deleteUserDoc, responseSend)
+
+router.delete('/deleteDocument/:id', staffMiddleware, deleteUserDoc, responseSend)
+
+router.get('/getdocumentcount', verifyToken, getCountByCategoryForUser)
+
 // router.post("/admin/addImage1", upload.single("image"), addImage1)
 // router.get("/admin/downloadDoc/:filename", /* upload.single("image"), */ downloadDoc)
 
 router.post('/getdocument/public', verifyToken, getUserDocumentsByCategory, responseSend)
 
 router.post('/getdocument', staffMiddleware, getUserDocumentsByCategory, responseSend)
+
 
 router.get('/:id', staffMiddleware, getUserById, responseSend)
 

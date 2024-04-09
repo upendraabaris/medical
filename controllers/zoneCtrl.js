@@ -116,4 +116,60 @@ const deleteAllZone = async (req, res, next) => {
     }
 }
 
-module.exports = {getZone, getZoneById, addZone, updateZone, deleteZone, deleteAllZone}
+const getZoneCityMapping = async(req,res,next)=>{
+    try{
+        // const City = await CityModel.find().populate('state_id').exec();
+        const City = await ZoneModel.aggregate([
+            {
+                $lookup:{
+                    from: "cities",
+                    localField: "cities",//kya krna h
+                    foreignField: "_id",
+                    as: "cityinfo"
+                }
+            },
+            {
+                    $unwind:"$cityinfo"
+            },
+            {
+                $lookup: {
+                    from: "states",
+                    localField: "cityinfo.state_id",
+                    foreignField: "_id", // Assuming _id is the ObjectId field in State model
+                    as: "stateInfo"
+                }
+            },
+            {
+                $lookup: {
+                    from: "countries",
+                    localField: "stateInfo.country_id",
+                    foreignField: "_id", // Assuming _id is the ObjectId field in State model
+                    as: "countryInfo"
+                }
+            },
+            {
+                $project:{
+                    _id:0,
+                    name:1,
+                    "city_name": "$cityinfo.city_name",
+                    // "state_id": "$cityinfo.state_id",
+                    stateName: { $arrayElemAt: ["$stateInfo.state_name", 0] },
+                    // "country_id": "$stateInfo.country_id",
+                    countryName: { $arrayElemAt: ["$countryInfo.country_name", 0] }
+                }
+            }
+        ]);
+        res.data = City
+        res.status_Code = "200"
+        next()
+    }catch(error){
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message
+        res.data = {}
+        next()
+    }
+}
+
+
+module.exports = {getZone, getZoneById, addZone, updateZone, deleteZone, deleteAllZone, getZoneCityMapping}

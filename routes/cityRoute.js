@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getCity, getCityById, addCity, updateCity, deleteCity, getCityMapping, deleteAllCity} = require("../controllers/cityCtrl")
+const {getCity, getCityById, addCity, updateCity, deleteCity, deleteAllCity} = require("../controllers/cityCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -8,8 +8,6 @@ const {staffMiddleware} = require("../middleware/authMiddleware")
 router.get('/', /* staffMiddleware, */ getCity, responseSend)
 
 router.get('/public', getCity, responseSend)
-
-router.get('/getCityMapping', staffMiddleware, getCityMapping, responseSend)
 
 router.get('/:id', staffMiddleware, getCityById, responseSend)
 
