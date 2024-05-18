@@ -4,6 +4,7 @@ const staffSchema = new mongoose.Schema({
   first_name: { type: String },
   last_name: { type: String },
   email: { type: String, unique: true },
+  mobile: { type: String },
   password: { type: String },
   staff_type_id: { type: mongoose.Schema.Types.ObjectId , ref: "stafftype"},
   profile_pic: { type: String },

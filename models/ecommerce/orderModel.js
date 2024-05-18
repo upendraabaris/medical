@@ -116,6 +116,13 @@ var orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    Payment_Status: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "paymentStatusMaster",
+      default: () => {
+        return "644fba2175eb6d3d4914a60d";
+      },
+    },
   },
   {
     timestamps: true,
@@ -127,4 +134,4 @@ orderSchema.index({ "$*": "text" });
 //orderSchema.plugin(mongooseSequence, { inc_field: "id" });
 
 //Export the model
-module.exports = mongoose.model("Order", orderSchema);
+module.exports = mongoose.model("Order1", orderSchema);

@@ -6,7 +6,7 @@ const getZone = async(req,res,next)=>{
         let client = await Client.get('zone:getZone');
         let Zone;
         if(client == null) {
-            Zone = await ZoneModel.find().populate('cities').exec();
+            Zone = await ZoneModel.find().populate('cities').sort({ name: 1 }).exec();
             await Client.set('zone:getZone', JSON.stringify(Zone));
         }
         else {
@@ -116,6 +116,39 @@ const deleteAllZone = async (req, res, next) => {
     }
 }
 
+const getZoneByStateId = async (req, res, next) => {
+    try {
+        const stateId = req.params.state_id;
+
+        // Check if the state_id is provided
+        if (!stateId) {
+            throw new Error("State ID is required.");
+        }
+
+        let client = await Client.get(`zone:getZone:${stateId}`);
+        let Zone;
+
+        if (client == null) {
+            // Assuming ZoneModel has a field called 'state' which holds the state_id
+            Zone = await ZoneModel.find({ state_id: stateId }).sort({ name: 1 }).exec();
+            await Client.set(`zone:getZone:${stateId}`, JSON.stringify(Zone));
+        } else {
+            Zone = JSON.parse(client);
+        }
+
+        res.data = Zone;
+        res.status_Code = "200";
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+
 const getZoneCityMapping = async(req,res,next)=>{
     try{
         // const City = await CityModel.find().populate('state_id').exec();
@@ -172,4 +205,4 @@ const getZoneCityMapping = async(req,res,next)=>{
 }
 
 
-module.exports = {getZone, getZoneById, addZone, updateZone, deleteZone, deleteAllZone, getZoneCityMapping}
+module.exports = {getZone, getZoneById, addZone, updateZone, deleteZone, deleteAllZone, getZoneCityMapping, getZoneByStateId}

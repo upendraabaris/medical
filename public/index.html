@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+</head>
+<body>
+    <!-- <input type="text" name="message" id="message">
+    <button id="sendBtn">send message</button>
+    <div id="messages"></div> -->
+
+    <input type="text" id="receiverSocketId" placeholder="Receiver Socket ID">
+    <input type="text" id="messageInput" placeholder="Type a message">
+    <button onclick="sendMessage()">Send Message</button>
+    <button onclick="disconnect()">Disconnect</button>
+    <ul id="messages"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+            // const socket = io();
+            // const senBtn = document.getElementById("sendBtn")
+            // const messageInput = document.getElementById("message")
+            // const allMessages = document.getElementById("messages")
+            // socket.on("message", (message)=>{
+            //     // console.log(message)
+            //     const p = document.createElement("p")
+            //     p.innerText = message
+            //     allMessages.appendChild(p)
+            // })
+
+            // sendBtn.addEventListener('click',()=>{
+            //     const message = messageInput.value
+            //     console.log(message)
+            //     socket.emit('user-message', message)
+            // })
+
+            const socket = io();
+
+            function sendMessage(){
+                const receiverSocketId = document.getElementById('receiverSocketId').value;
+                const roomName = document.getElementById('messageInput').value;
+
+                socket.emit('join', {
+                    receiverSocketId,
+                    roomName
+                })
+
+                document.getElementById('messageInput').value = ''
+            }
+
+            socket.on ('receive-message', (message)=>{
+                const messagesContainer = document.getElementById('messages')
+                const li = document.createElement('li')
+                li.innerText = `${message.sender}: ${message.text}`
+                messagesContainer.appendChild(li)
+            })
+            
+
+            socket.emit('join', roomName);
+
+            // function sendMessage(){
+            //     socket.on ('disconnect', (message)=>{
+            //     console.log(`discooneted:${message}`)
+            // })
+            // }
+    </script>
+</body>
+</html>

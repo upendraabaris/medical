@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getPatientVitalInformation, getPatientVitalInformationById, addPatientVitalInformation, updatePatientVitalInformation, deletePatientVitalInformation, deleteAllVitalInformation} = require("../controllers/patientVitalInfoCtrl")
+const {getPatientVitalInformation, getPatientVitalInformationById, addPatientVitalInformation, updatePatientVitalInformation, deletePatientVitalInformation, deleteAllVitalInformation, getPatientVitalInformationByUserId} = require("../controllers/patientVitalInfoCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -20,6 +20,8 @@ router.put('/updatePatientVitalInfo/:id', staffMiddleware, updatePatientVitalInf
 router.put('/updatePatientVitalInfo/public/:id', staffMiddleware, updatePatientVitalInformation, responseSend)
 
 router.delete('/deletePatientVitalInfo/:id', staffMiddleware, deletePatientVitalInformation, responseSend)
+
+router.get('/VitalInformationByUserId/:id', /* staffMiddleware, */ getPatientVitalInformationByUserId, responseSend)
 
 router.delete('/deleteAll/:id', staffMiddleware, deleteAllVitalInformation, responseSend)
 

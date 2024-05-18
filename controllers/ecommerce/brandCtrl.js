@@ -96,7 +96,7 @@ const updateBrand = asyncHandler(async (req, res) => {
 });
 
 const deleteBrand = asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const  id  = req.params.id;
   // validateMongoDbId(id);
   try {
     let brands = await Brand.find({
@@ -157,17 +157,17 @@ const getBrandPublicList = asyncHandler(async (req, res) => {
 
 const getallBrand = asyncHandler(async (req, res) => {
   try {
-    if(req.type == "Staff" || req.type == "Seller") {
+    // if(req.type == "Staff" || req.type == "Seller") {
     const getallBrand = await Brand.find({
-      accCompany_id: req.companyId,
-      language_id: req.user.language_id,
+      // accCompany_id: req.companyId,
+      // language_id: req.user.language_id,
     });
     res.json(getallBrand);
-    }
-    else {
-      throw new Error("You are not Authorize");
-    }
-    res.json(getallBrand);
+    // }
+    // else {
+    //   throw new Error("You are not Authorize");
+    // }
+    // res.json(getallBrand);
   } catch (error) {
     throw new Error(error);
   }

@@ -5,13 +5,15 @@ const {getSos, getSosById, addSos, updateSos, deleteSos} = require("../../contro
 const {responseSend} = require("../../utils/response")
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
-const {staffMiddleware} = require("../../middleware/authMiddleware")
+const {staffMiddleware,verifyToken} = require("../../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getSos, responseSend)
 
 router.get('/:id', staffMiddleware, getSosById, responseSend)
 
 router.post('/addSos', staffMiddleware, addSos, responseSend)
+
+router.post('/public/addSos', verifyToken, addSos, responseSend)
 
 router.put('/updateSos/:id', staffMiddleware, updateSos, responseSend)
 

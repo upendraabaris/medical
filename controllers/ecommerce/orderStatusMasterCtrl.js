@@ -1,4 +1,4 @@
-const orderStatusMaster = require("../models/orderStatusMasterModel");
+const orderStatusMaster = require("../../models/ecommerce/orderStatusMasterModel");
 const asyncHandler = require("express-async-handler");
 
 const getorderStatusMasterList = asyncHandler(async (req, res) => {

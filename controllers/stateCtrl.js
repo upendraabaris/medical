@@ -3,31 +3,56 @@ const CityModel = require("../models/cityModel")
 const Client = require("../middleware/redis")
 const getState = async (req, res, next) => {
     try {
-        // const State = await StateModel.find().populate({path: 'country_id', select: "country_name -_id"}).exec();
-        let client = await Client.get('region:getState');
+        let client = await Client.get('state:getState');
         let State;
-        if(client == null) {
-            State = await StateModel.find().populate({path: 'country_id', select: "country_name -_id"}).exec()
+        if (client == null) {
+            // State = await StateModel.find().populate({ path: 'country_id', select: "country_name -_id" }).sort({ state_name: 1 }).exec();
+            State = await StateModel.find().populate({ path: 'country_id', select: "country_name _id" }).sort({ state_name: 1 }).exec();
             await Client.set('state:getState', JSON.stringify(State));
-        }
-        else {
+        } else {
             State = JSON.parse(client);
         }
-        res.data = State
-        res.status_Code = "200"
-        next()
+        res.data = State;
+        res.status_Code = "200";
+        next();
     } catch (error) {
         res.error = true;
         res.status_Code = "403";
-        res.message = error.message
-        res.data = {}
-        next()
+        res.message = error.message;
+        res.data = {};
+        next();
     }
 }
 
+const getStateByCountryId = async (req, res, next) => {
+    try {
+        const countryId  = req.params.countryId; // Assuming countryId is sent in the request parameters
+        
+        let client = await Client.get(`state:getState:${countryId}`); // Using countryId in cache key
+        let State;
+        if (client == null) {
+            State = await StateModel.find({ country_id: countryId }).populate({ path: 'country_id', select: "country_name -_id" }).sort({ state_name: 1 }).exec();
+            await Client.set(`state:getState:${countryId}`, JSON.stringify(State));
+        } else {
+            State = JSON.parse(client);
+        }
+        res.data = State;
+        res.status_Code = "200";
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+
+
 const getStateById = async (req, res, next) => {
     try {
-        const State = await StateModel.findById(req.params.id).populate('country_id').exec();
+        const State = await StateModel.findById(req.params.id).populate('country_id').sort({ state_name: 1 }).exec();
         res.data = State
         res.status_Code = "200"
         next()
@@ -121,7 +146,7 @@ const addData = async (req, res, next) => {
         list.forEach((state) => {
             if (!cities.includes({ city_name: state.City })) {
                 let stateId = states.find((sta) => { if (state.State === sta.state_name) { return sta } });
-                cities.push(new CityModel({ state_id: stateId?._id, s_no: state.s_no, city_name: state.City }))
+                cities.push(new CityModel({ state_id: stateId?._id, s_no: state.S_No, city_name: state.City }))
             }
         });
         let saveCity = []
@@ -164,4 +189,4 @@ const deleteAllState = async (req, res, next) => {
     }
 }
 
-module.exports = { getState, getStateById, addState, updateState, deleteState, addData, deleteAllState }
+module.exports = { getState, getStateById, addState, updateState, deleteState, addData, deleteAllState, getStateByCountryId }

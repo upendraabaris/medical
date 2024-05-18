@@ -11,7 +11,7 @@ router.get('/', staffMiddleware, getUserType, responseSend)
 
 router.get('/:id', staffMiddleware, getUserTypeById, responseSend)
 
-router.post('/addUserType', staffMiddleware, addUserType, responseSend)
+router.post('/addUserType', /* staffMiddleware, */ addUserType, responseSend)
 
 router.put('/updateUserType/:id', staffMiddleware, updateUserType, responseSend)
 

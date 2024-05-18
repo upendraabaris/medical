@@ -100,4 +100,22 @@ const deleteAllVitalInformation = async (req, res, next) => {
     }
 }
 
-module.exports = {getPatientVitalInformation, getPatientVitalInformationById, addPatientVitalInformation, updatePatientVitalInformation, deletePatientVitalInformation, deleteAllVitalInformation}
+const getPatientVitalInformationByUserId = async(req,res,next)=>{
+    try{
+        let id = req.params.id
+        console.log(id)
+        const PatientVitalInformation = await PatientVitalInformationModel.find({user_id:id});
+        res.data = PatientVitalInformation
+        res.status_Code = "200"
+        next()
+    }catch(error){
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message
+        res.data = {}
+        next()
+    }
+}
+
+
+module.exports = {getPatientVitalInformation, getPatientVitalInformationById, addPatientVitalInformation, updatePatientVitalInformation, deletePatientVitalInformation, deleteAllVitalInformation, getPatientVitalInformationByUserId}

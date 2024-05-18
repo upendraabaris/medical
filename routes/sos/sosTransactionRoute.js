@@ -5,13 +5,13 @@ const {getSosTransaction, getSosTransactionById, addSosTransaction, updateSosTra
 const {responseSend} = require("../../utils/response")
 
 // const {verifyToken} = require("../../middleware/authMiddleware")
-const {staffMiddleware} = require("../../middleware/authMiddleware")
+const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
 router.get('/', staffMiddleware, getSosTransaction, responseSend)
 
 router.get('/:id', staffMiddleware, getSosTransactionById, responseSend)
 
-router.post('/addSosTransaction', staffMiddleware, addSosTransaction, responseSend)
+router.post('/public/addSosTransaction', verifyToken, addSosTransaction, responseSend)
 
 router.put('/updateSosTransaction/:id', staffMiddleware, updateSosTransaction, responseSend)
 

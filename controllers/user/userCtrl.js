@@ -317,6 +317,14 @@ const getFamilyMembers = async (req, res, next) => {
           as: 'nation'
         }
       },
+      {
+        $lookup: {
+          from: 'userrelations', // Collection name
+          localField: 'relation_type_id',
+          foreignField: '_id',
+          as: 'relation'
+        }
+      },
       // Project to reshape the output
       {
         $project: {
@@ -332,6 +340,7 @@ const getFamilyMembers = async (req, res, next) => {
           last_name: "$last_name",
           email: "$email",
           mobile: "$mobile",
+          relation: "$relation.relationtype",
           profile_pic: "$profile_pic",
           isDeath: 1
         }
@@ -379,6 +388,11 @@ const getFamilyMembersByStaff = async (req, res, next) => {
           gender: "$gender",
           nationality: "$nation.country_name",
           date_of_issue: "$createdAt",
+          first_name: "$first_name",
+          second_name: "$second_name",
+          last_name: "$last_name",
+          email: "$email",
+          mobile: "$mobile",
           isDeath: 1
         }
       }
@@ -392,7 +406,7 @@ const getFamilyMembersByStaff = async (req, res, next) => {
 
     const familyMembers = await UserModel.aggregate([
       // Match documents with the given parent user ID
-      { $match: { parent_user_id: new mongoose.Types.ObjectId(req.user) } },
+      { $match: { parent_user_id: new mongoose.Types.ObjectId(userId) } },
       // Lookup to get family member details
       {
         $lookup: {
@@ -410,6 +424,14 @@ const getFamilyMembersByStaff = async (req, res, next) => {
           as: 'nation'
         }
       },
+      {
+        $lookup: {
+          from: 'userrelations', // Collection name
+          localField: 'relation_type_id',
+          foreignField: '_id',
+          as: 'relation'
+        }
+      },
       // Project to reshape the output
       {
         $project: {
@@ -419,11 +441,18 @@ const getFamilyMembersByStaff = async (req, res, next) => {
           blood_group: "$blood_group",
           gender: "$gender",
           nationality: "$nation.country_name",
+          relation: "$relation.relationtype",
           date_of_issue: "$createdAt",
+          first_name: "$first_name",
+          second_name: "$second_name",
+          last_name: "$last_name",
+          email: "$email",
+          mobile: "$mobile",
           isDeath: 1
         }
       }
     ]);
+    console.log(familyMembers)
     const filteredFamilyMembers = familyMembers.filter(member => !member.isDeath)
     
     // Construct the response object containing parent user data and family member data
@@ -495,7 +524,7 @@ const editProfile = async (req, res, next) => {
     // const userId = req.user; // Get the user ID from the token or wherever it's stored
 
     // Extract the updated profile data from the request body
-    const { first_name, second_name, last_name, dob, blood_group, gender, nationality, email, mobile } = req.body;
+    const { first_name, second_name, last_name, dob, blood_group, gender, nationality, email, mobile, profile_pic } = req.body;
 
     // Check if the email or mobile exists for any other user
     // const existingUser = await UserModel.findOne({
@@ -525,7 +554,8 @@ const editProfile = async (req, res, next) => {
       gender,
       nationality,
       email,
-      mobile
+      mobile,
+      profile_pic
     };
 
     // Update the user's profile information in the database
@@ -546,34 +576,52 @@ const editProfile = async (req, res, next) => {
 
 const userUpdateProfileImage = (async (req, res) => {
   try {
-    // let id = req.user._id;
-    if (req.file != undefined) {
-    
-    const imagepath = path.resolve("uploads/"+ req.file.filename);
+    const userId = req.params.userId;
+    console.log(userId)
+    const newProfilePicUrl = req.body.profile_pic; // Assuming the new profile picture URL is sent in the request body
 
-      const user = await UserModel.findById(req.params.userId);
-      try{
-        await cloudinary
-        .cloudinaryDeleteImg(user?.profile_pic?.public_id)
-        .then((result) => {});
-      }catch(error){
-      }
+    // Update the user's profile picture URL in the database
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      userId,
+      { profile_pic: newProfilePicUrl },
+      { new: true }
+    );
 
-      const img = await  cloudinary.cloudinaryUploadImg(imagepath)
-      console.log(img)
-      const updatedUser = await UserModel.findByIdAndUpdate(
-        req.params.userId,
-        {
-          profile_pic: img.url,
-        },
-        {
-          new: true,
-        }
-      );
-      res.json({message: "profile picture updated successfully", pfofile_pic:updatedUser.profile_pic});
-    } else {
-      throw new Error("Please Upload the image");
+    if (!updatedUser) {
+      // If the user is not found
+      return res.status(404).json({ message: "User not found" });
     }
+
+    // Send a response indicating successful profile picture update
+    res.json({ message: "Profile picture updated successfully", profile_pic: updatedUser.profile_pic });
+    // // let id = req.user._id;
+    // if (req.file != undefined) {
+    
+    // const imagepath = path.resolve("uploads/"+ req.file.filename);
+
+    //   const user = await UserModel.findById(req.params.userId);
+    //   try{
+    //     await cloudinary
+    //     .cloudinaryDeleteImg(user?.profile_pic?.public_id)
+    //     .then((result) => {});
+    //   }catch(error){
+    //   }
+
+    //   const img = await  cloudinary.cloudinaryUploadImg(imagepath)
+    //   console.log(img)
+    //   const updatedUser = await UserModel.findByIdAndUpdate(
+    //     req.params.userId,
+    //     {
+    //       profile_pic: img.url,
+    //     },
+    //     {
+    //       new: true,
+    //     }
+    //   );
+    //   res.json({message: "profile picture updated successfully", pfofile_pic:updatedUser.profile_pic});
+    // } else {
+    //   throw new Error("Please Upload the image");
+    // }
   } catch (error) {
     throw new Error(error);
   }
@@ -766,8 +814,124 @@ const deleteFamilyMember = async (req, res, next) => {
   }
 };
 
+/* ---- user voluntary deletion start ---- */
+const deleteUserVoluntary = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Set deletion status to "archived" and record timestamp
+    user.deletionStatus = 'archived';
+    user.archivedAt = new Date();
+    await user.save();
+
+    res.json({ message: "User archived successfully", data: user });
+  } catch (error) {
+    console.error("Error archiving user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Background process or cron job to remove archived users after 1 minute
+const removeExpiredArchivedUsers = async () => {
+  try {
+    const oneMinuteAgo = new Date();
+    oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1);
+
+    await UserModel.deleteMany({ deletionStatus: 'archived', archivedAt: { $lt: oneMinuteAgo } });
+    console.log("Expired archived users removed successfully.");
+  } catch (error) {
+    console.error("Error removing expired archived users:", error);
+  }
+};
+
+// Schedule the removal process to run every minute
+// setInterval(removeExpiredArchivedUsers, 60 * 1000); // Run every minute
+
+// use cron job schedular
+
+
+/* ---- user voluntary deletion end ---- */
+
+
+const getUserGenderRatio = async () => {
+  try {
+    const totalUsers = await UserModel.countDocuments();
+    const maleUsers = await UserModel.countDocuments({ gender: 'Male' });
+
+    return {
+      male: maleUsers,
+      female: totalUsers - maleUsers,
+      total: totalUsers
+    };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const getUserAgeRange = async () => {
+  try {
+    const today = new Date();
+    const users = await UserModel.find({}, { dob: 1 });
+    const totalUsers = users.length;
+
+    let ageGroups = {
+      '0-20': 0,
+      '21-30': 0,
+      '31-40': 0,
+      '41-50': 0,
+      '51-60': 0,
+      '61+': 0
+    };
+
+    users.forEach(user => {
+      let birthDate = new Date(user.dob);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      
+      // Adjust for leap years
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      // Categorize users into age groups
+      if (age <= 20) {
+        ageGroups['0-20']++;
+      } else if (age <= 30) {
+        ageGroups['21-30']++;
+      } else if (age <= 40) {
+        ageGroups['31-40']++;
+      } else if (age <= 50) {
+        ageGroups['41-50']++;
+      } else if (age <= 60) {
+        ageGroups['51-60']++;
+      } else {
+        ageGroups['61+']++;
+      }
+    });
+
+    return { ageGroups, totalUsers };
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+const getUserStats = async (req, res) => {
+  try {
+    const [genderRatio, ageRange] = await Promise.all([
+      getUserGenderRatio(),
+      getUserAgeRange()
+    ]);
+
+    res.json({ genderRatio, ageRange });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 
 
-
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser }
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser, deleteUserVoluntary, getUserGenderRatio, getUserStats }

@@ -5,7 +5,7 @@ const getRegion = async(req,res,next)=>{
         let client = await Client.get('region:getRegion');
         let Region;
         if(client == null) {
-            Region = await RegionModel.find();
+            Region = await RegionModel.find().sort({regionname: 1});
             await Client.set('region:getRegion', JSON.stringify(Region));
         }
         else {

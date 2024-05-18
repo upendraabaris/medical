@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getCurrency, getCurrencyById, addCurrency, updateCurrency, deleteCurrency, deleteAllCurrency} = require("../controllers/currencyCtrl")
+const {getCurrency, getCurrencyById, addCurrency, updateCurrency, deleteCurrency, deleteAllCurrency, getCurrencyByCountryId} = require("../controllers/currencyCtrl")
 
 const {responseSend} = require("../utils/response")
 
@@ -12,9 +12,11 @@ router.get('/:id', staffMiddleware, getCurrencyById, responseSend)
 
 router.post('/addcurrency', staffMiddleware, addCurrency, responseSend)
 
-router.put('/updatcurrency/:id', staffMiddleware, updateCurrency, responseSend)
+router.put('/updatecurrency/:id', staffMiddleware, updateCurrency, responseSend)
 
 router.delete('/deletecurrency/:id', staffMiddleware, deleteCurrency, responseSend)
+
+router.get('/getCurrencyByCountryId/:id', getCurrencyByCountryId, responseSend)
 
 router.delete('/deleteAll/:id', staffMiddleware, deleteAllCurrency, responseSend)
 

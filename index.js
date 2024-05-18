@@ -35,9 +35,9 @@ const mediaRoute = require("./routes/media/mediaRoute")
 const mediaTypeRoute = require("./routes/media/mediaTypeRoute")
 const businessPartnerRoute = require("./routes/businessPartnerRoute")
 const apiRoute = require("./routes/apiRoute")
-const orderRoute = require("./routes/order/orderRoute")
-const orderStatusRoute = require("./routes/order/orderStatusRoute")
-const orderResponseTypeRoute = require("./routes/order/orderResponseTypeRoute")
+// const orderRoute = require("./routes/order/orderRoute")
+// const orderStatusRoute = require("./routes/order/orderStatusRoute")
+// const orderResponseTypeRoute = require("./routes/order/orderResponseTypeRoute")
 const departmentRoute = require("./routes/departmentRoute")
 
 const serviceRoute = require("./routes/service/serviceRoute")
@@ -69,7 +69,7 @@ const emrOptionRoute = require("./routes/emr/emrOptionRoute")
 const emrResponseRoute = require("./routes/emr/emrResponseRoute")
 const shippingAddressRoute = require("./routes/shippingAddressRoute")
 const userInsuranceRoute = require("./routes/user/userInsuranceRoute")
-const sosApplicationFormRoute = require("./routes/sos/sosApplicationRoute")
+const sosProfileRoute = require("./routes/sos/sosProfileRoute")
 
 const serviceHistoryRoute = require("./routes/serviceHistoryRoute")
 const bannerRoute = require("./routes/ecommerce/bannerRoute")
@@ -126,6 +126,83 @@ const paymentGatewayRoute = require("./routes/paymentGatewayRoute")
 
 const cloudinaryRoute = require("./routes/cloudinaryRoute")
 
+const medicalConsultationRoute = require("./routes/MedicalConsultantionRoute")
+const sellerPhotoGalleryRoute = require("./routes/ecommerce/sellerPhotoGalleryRoute")
+const sellerVideoGalleryRoute = require("./routes/ecommerce/sellerVideoGalleryRoute")
+
+const healthProfileRoute = require("./routes/healthProfileRoute")
+
+const generalSettingRoute = require("./routes/generalSettingRoute")
+
+const orderRoute1 = require("./routes/ecommerce/orderRoute")
+
+const orderStatusRoute = require("./routes/ecommerce/orderStatusMasterRoute")
+const paymentStatusRoute = require("./routes/ecommerce/paymentStatusMasterRoute")
+
+
+const healthAssessment = require("./routes/healthAssessmentQuestionRoute")
+
+const hospitalEmpanelmentRoute = require("./routes/hospital/HospitalEmpanelmentRoute")
+const designationRoute = require("./routes/designationRoute")
+
+const subSpecialityRoute = require("./routes/medicalSpecialty/subSpecialityRoute")
+const vitalCategoryRoute = require("./routes/vitalCategoryRoute")
+const vitalListingRoute = require("./routes/vitalListingRoute")
+
+
+const postTypeRoute = require("./routes/posts/postTypeRoute")
+
+const insuranceEmpanelmentRoute = require("./routes/insuranceEmpanelmentRoute")
+const testimonialRoute = require("./routes/testimonialRoute")
+const doctorAttendentRoute = require("./routes/doctorAttendentRoute")
+
+const sellerTypeRoute = require("./routes/ecommerce/sellerTypeRoute")
+const orderTypeRoute = require("./routes/ecommerce/orderTypeRoute")
+
+const eventTypeRoute = require("./routes/eventTypeRoute")
+const eventRoute = require("./routes/eventRoute")
+
+const postalCodeRoute = require("./routes/postalCodeRoute")
+
+const blockRoute = require("./routes/blockRoute")
+const engagementTypeRoute = require("./routes/engagementTypeRoute")
+
+const userRoleRoute = require("./routes/user/userRoleRoute")
+const sellerUserRoute = require("./routes/ecommerce/sellerUserRoute")
+const sellerEngagementMappingRoute = require("./routes/ecommerce/sellerEngagementMappingRoute")
+const unitRoute = require("./routes/ecommerce/unitRoute")
+
+const sellerUserMappingRoute = require("./routes/ecommerce/sellerUserMappingRoute")
+
+
+const packageTypeRoute = require("./routes/packageTypeRoute")
+const admissionTypeRoute = require("./routes/admissionTypeRoute")
+const indicationForAdmissionRoute = require("./routes/indicationRoute")
+const NbsuPatientRoute = require("./routes/nbsuPatientRoute")
+const patientIndicationMappingRoute = require("./routes/patientIndicationMappingRoute")
+const presumptiveDiagnosisRoute = require("./routes/presumptiveDiagnosisRoute")
+const nbMotherDataRoute = require("./routes/nbMotherDataRoute")
+
+const nbBirthRoute = require("./routes/nbBirthRoute")
+const packageRoute = require("./routes/packageRoute")
+const resuscitationRoute = require("./routes/resuscitationRoute")
+
+const clinicalDiagnosisRoute = require("./routes/clinicalDiagnosisRoute")
+const eventBookingRoute = require("./routes/eventBookingRoute")
+
+const nbsuChiefComplaintRoute = require("./routes/nbsuChiefComplaintRoute")
+const nbsuDiagnosisMappingRoute = require("./routes/nbsuDiagnosisRoute")
+const sosContactRoute = require("./routes/sos/sosContactRoute")
+
+
+const vitalGroupRoute = require("./routes/vitalGroupRoute")
+
+const systemicExaminationRoute = require("./routes/systemicExaminationRoute")
+const vitalValueRoute = require("./routes/vitalValueRoute")
+const radiologyDiagnosisRoute = require("./routes/radiologyDiagnosisRoute")
+const generalExaminationRoute = require("./routes/generalExaminationRoute")
+const radiologyVitalValueRoute = require("./routes/radiologyVitalValueRoute")
+
 const cors = require("cors")
 
 
@@ -151,9 +228,9 @@ app.use('/api/media', mediaRoute)
 app.use('/api/mediatype', mediaTypeRoute)
 app.use('/api/business-partner', businessPartnerRoute)
 app.use('/api/apimaster', apiRoute)
-app.use('/api/order', orderRoute)
-app.use('/api/order-status', orderStatusRoute)
-app.use('/api/order-response-type', orderResponseTypeRoute)
+// app.use('/api/order', orderRoute)
+// app.use('/api/order-status', orderStatusRoute)
+// app.use('/api/order-response-type', orderResponseTypeRoute)
 app.use('/api/department', departmentRoute)
 
 app.use('/api/service', serviceRoute)
@@ -185,7 +262,7 @@ app.use('/api/emr-option', emrOptionRoute)
 app.use('/api/emr-response', emrResponseRoute)
 app.use('/api/shipping-address', shippingAddressRoute)
 app.use('/api/user/insurance', userInsuranceRoute)
-app.use('/api/sos/application', sosApplicationFormRoute)
+app.use('/api/sosprofile', sosProfileRoute)
 
 app.use('/api/service-history', serviceHistoryRoute)
 app.use('/abi/banner', bannerRoute)
@@ -214,7 +291,7 @@ app.use('/api/user-relation', userRelationRoute)
 app.use('/api/user-reference', userReferenceRoute)
 app.use('/api/favorite-contact', favoriteContactRoute)
 
-app.use('/api/posts', postRoute)
+app.use('/api/post', postRoute)
 app.use('/api/likes', likeRoute)
 app.use('/api/comments', commentRoute)
 app.use('/api/order/cancel-order', cancelOrderRoute)
@@ -240,9 +317,209 @@ app.use('/api/cloudinary', cloudinaryRoute)
 
 app.use('/api/paymentGateway', paymentGatewayRoute)
 
+app.use('/api/medicalConsultation', medicalConsultationRoute)
+app.use('/api/sellerPhotoGallery', sellerPhotoGalleryRoute)
+app.use('/api/sellerVideoGallery', sellerVideoGalleryRoute)
+
+app.use('/api/healthprofile', healthProfileRoute)
+
+app.use('/api/upheals/general-settings', generalSettingRoute)
+app.use('/api/orders', orderRoute1)
+
+app.use('/api/order-status', orderStatusRoute)
+app.use('/api/payment-status', paymentStatusRoute)
+
+app.use('/api/healthAssessment', healthAssessment)
+
+app.use('/api/hospitalEmpanelment', hospitalEmpanelmentRoute)
+app.use('/api/designation', designationRoute)
+app.use('/api/subSpeciality', subSpecialityRoute)
+app.use('/api/vitalCategory', vitalCategoryRoute)
+app.use('/api/keyvitalListing', vitalListingRoute)
+
+app.use('/api/post-type', postTypeRoute)
+
+app.use('/api/insuranceEmpanelment', insuranceEmpanelmentRoute)
+app.use('/api/testimonial', testimonialRoute)
+app.use('/api/doctorAttendent', doctorAttendentRoute)
+
+app.use('/api/sellerType', sellerTypeRoute)
+app.use('/api/orderType', orderTypeRoute)
+
+app.use('/api/eventType', eventTypeRoute)
+app.use('/api/event', eventRoute)
+app.use('/api/postalCode', postalCodeRoute)
+
+app.use('/api/sellerUser', sellerUserRoute)
+
+app.use('/api/block', blockRoute)
+// app.use('/api/engagementType', engagementTypeRoute)
+
+app.use('/api/userRole', userRoleRoute)
+app.use('/api/sellerEngagement', sellerEngagementMappingRoute)
+app.use('/api/unit', unitRoute)
+
+app.use('/api/sellerUserMapping', sellerUserMappingRoute)
+
+app.use('/api/packagetype', packageTypeRoute)
+app.use('/api/admissionType', admissionTypeRoute)
+app.use('/api/indication', indicationForAdmissionRoute)
+app.use('/api/NbsuPatient', NbsuPatientRoute)
+app.use('/api/patientIndicationMapping', patientIndicationMappingRoute)
+// app.use('/api/presumptiveDiagnosis', presumptiveDiagnosisRoute)
+app.use('/api/nbMotherData', nbMotherDataRoute)
+
+app.use('/api/nbBirth', nbBirthRoute)
+app.use('/api/package',packageRoute)
+app.use('/api/resuscitation', resuscitationRoute)
+
+app.use('/api/clinicalDiagnosis', clinicalDiagnosisRoute)
+app.use('/api/eventBooking', eventBookingRoute)
+
+app.use('/api/nbsuChiefComplaint', nbsuChiefComplaintRoute)
+app.use('/api/nbsuDiagnosisMapping', nbsuDiagnosisMappingRoute)
+app.use('/api/sosContact', sosContactRoute)
+
+app.use('/api/vitalGroup', vitalGroupRoute)
+
+app.use('/api/systemicExamination', systemicExaminationRoute)
+app.use('/api/vitalValue', vitalValueRoute)
+app.use('/api/radiologyDiagnosis', radiologyDiagnosisRoute)
+app.use('/api/generalExamination', generalExaminationRoute)
+app.use('/api/radiologyVitalValue', radiologyVitalValueRoute)
+
+// const axios = require("axios")
+// app.post('/send-sms', async(req, res, next) => {
+//     try{
+//         const { phone, message } = req.body;
+
+//     // Replace with your actual GupShup credentials
+//     const userId = '8851746286';
+//     const password = 'mYXxXUCw';
+
+    
+
+//     const data = await axios.post("https://enterprise.smsgupshup.com/GatewayAPI/rest", {
+//         method: 'sendMessage',
+//         send_to: phone,
+//         msg: message,
+//         msg_type: 'TEXT',
+//         userid: userId,
+//         auth_scheme: 'PLAIN',
+//         password: password,
+//         format: 'JSON'
+//       }, {})
+    
+    
+  
+//     const options = {
+//       method: 'POST',
+//       url: 'https://enterprise.smsgupshup.com/GatewayAPI/rest',
+//       form: {
+//         method: 'sendMessage',
+//         send_to: phone,
+//         msg: message,
+//         msg_type: 'TEXT',
+//         userid: userId,
+//         auth_scheme: 'PLAIN',
+//         password: password,
+//         format: 'JSON'
+//       }
+//     };
+//     res.json(data.data)
+//     next()
+  
+//     }catch(error){
+//         throw new Error(error.message)
+//     }
+//   });
+const http = require("http")
+const { Server } = require("socket.io")
+
+const server = http.createServer(app)
+const io = new Server(server, {
+  // cors: true,
+  cors: {
+    origin: "*", // Replace with your Next.js app origin
+    methods: ['GET', 'POST']
+  }
+});
+
+io.on("connection", (socket)=>{
+  console.log("A user connected:", socket.id)
+
+  socket.on("send-message", (data)=>{
+      io.to(data.receiverSocketId).emit("receive-message",{
+          sender: socket.id,
+          text: data.text
+      })
+  })
+  // socket.on('disconnect', () => {
+  //     console.log('A user disconnected:', socket.id);
+  //   })
+
+  // Triggered when a peer hits the join room button.
+  socket.on("join", (roomName) => {
+    const {rooms} = io.sockets.adapter;
+    const room = rooms.get(roomName);
+
+    // room == undefined when no such room exists.
+    if (room === undefined) {
+      socket.join(roomName);
+      socket.emit("created");
+    } else if (room.size === 1) {
+      // room.size == 1 when one person is inside the room.
+      socket.join(roomName);
+      socket.emit("joined");
+    } else {
+      // when there are already two people inside the room.
+      socket.emit("full");
+    }
+    console.log(rooms);
+  });
+  // Triggered when the person who joined the room is ready to communicate.
+  socket.on("ready", (roomName) => {
+    socket.broadcast.to(roomName).emit("ready"); // Informs the other peer in the room.
+  });
+
+  // Triggered when server gets an icecandidate from a peer in the room.
+  // socket.on("ice-candidate", (candidate: RTCIceCandidate, roomName: string) => {
+  //   console.log(candidate);
+  //   socket.broadcast.to(roomName).emit("ice-candidate", candidate); // Sends Candidate to the other peer in the room.
+  // });
+  
+  // Triggered when server gets an offer from a peer in the room.
+  socket.on("offer", (offer, roomName) => {
+    socket.broadcast.to(roomName).emit("offer", offer); // Sends Offer to the other peer in the room.
+  });
+
+  // Triggered when server gets an answer from a peer in the room.
+  socket.on("answer", (answer, roomName) => {
+    socket.broadcast.to(roomName).emit("answer", answer); // Sends Answer to the other peer in the room.
+  });
+
+  socket.on("leave", (roomName) => {
+    socket.leave(roomName);
+    socket.broadcast.to(roomName).emit("leave");
+  });
+  socket.on('disconnect', () => {
+    console.log('A user disconnected:', socket.id);
+    socket.emit(socket.id)
+  })
+
+})
+
+const path = require("path")
+
+app.use(express.static(path.resolve('./public')))
+app.get('/', (req,res)=>{
+  res.sendFile('/public/index.html')
+})
+
+
 app.use(responseSend)
 // const port = 5000
-app.listen(process.env.PORT,()=>{
+server.listen(process.env.PORT,()=>{
     console.log("server is running on port",process.env.PORT)
 })
 

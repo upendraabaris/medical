@@ -13,7 +13,7 @@ router.get('/', staffMiddleware, getEmr)
 
 router.get('/:id', staffMiddleware, getEmrById)
 
-router.post('/addEmr', /* staffMiddleware, */ addEmr)
+router.post('/addEmr', staffMiddleware, addEmr)
 
 router.put('/updateEmr/:id', staffMiddleware, updateEmr)
 
@@ -29,7 +29,7 @@ const emrQuestionTypeModel = require("../../models/emr/emrQuestionTypeModel")
 const emrResponseModel = require("../../models/emr/emrResponseModel")
 const ChiefComplaintModel = require("../../models/chiefComplaintModel")
 
-
+const MedicalConsultationQuestion = require("../../models/medicalConsultationModel")
 router.post('/adddata', async(req,res,next)=>{
     try{
         let chiefComplaint = [];
@@ -47,27 +47,23 @@ router.post('/adddata', async(req,res,next)=>{
             } */
 //        }
     
-        req.body.list.forEach((question) =>{
-            chiefComplaint.push(ChiefComplaintModel.findOne({ chief_complaint: new RegExp(question.symptoms, "i") }));
+        // req.body.list.forEach((question) =>{
+        //     chiefComplaint.push(ChiefComplaintModel.findOne({ chief_complaint: new RegExp(question.symptoms, "i") }));
             
-        })
-        const complaints = await Promise.all(chiefComplaint);
+        // })
+        // const complaints = await Promise.all(chiefComplaint);
 //        console.log(complaints.length)
         let questions = [];
         let options = [];
         req.body.list.forEach((question) => {
             let data  = question;
-            let chief = complaints.find((item) => item?.chief_complaint == question.symptoms);
-            if(chief == undefined) {
+            // let chief = complaints.find((item) => item?.chief_complaint == question.symptoms);
+            // if(chief == undefined) {
 
-            }
-            else {
-                let questionnaire = new emr({
-                    chief_complaint_id: chief._id,
-                    emr_question: data.question
-                })  
+            // }
+                
                 // console.log(data.question)
-                 questions.push(questionnaire)
+                 
                 // console.log(data)
                 let optionAvail = [];
                 Object.keys(data).forEach((key) => {
@@ -76,27 +72,28 @@ router.post('/adddata', async(req,res,next)=>{
                     }
                           
                 })
-
-                options.push(new emrOptionModel({
-                    emr_id: questionnaire._id,
-                    emr_option_text: optionAvail,
-                }))
                 
-    
-            }
+                console.log(optionAvail)
+                let questionnaire = new MedicalConsultationQuestion({
+                    category: data.category,
+                    type:data.type,
+                    symptoms: data.symptoms,
+                    img_banner: data.img_banner,
+                    question: data.question,
+                    options: optionAvail
+                })
+                questions.push(questionnaire)
             // const savedEmrMaster = await emr.save();
            
             
         })
         let data = [];
         questions.forEach((question)=>{
-            data.push(question.save())
-        })
-        options.forEach((question)=>{
+            console.log(question)
             data.push(question.save())
         })
         await Promise.all(data)
-        res.json({questions, options})   
+        res.json({questions})   
     }catch(error){
         res.json({message: error.message})
     }

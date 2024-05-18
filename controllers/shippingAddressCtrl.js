@@ -4,7 +4,7 @@ const User = require("../models/user/userModel");
 
 const getshippingAddressList = (async (req, res) => {
   try {
-    const allshippingAddresss = await shippingAddress.find();
+    const allshippingAddresss = await shippingAddress.find().populate(['country', 'state', 'city']);
     res.json(allshippingAddresss);
   } catch (error) {
     throw new Error(error);
@@ -14,8 +14,9 @@ const getshippingAddressList = (async (req, res) => {
 const getshippingAddressListCustomerId = (async (req, res) => {
   try {
     const allShippinAddress = await shippingAddress.find({
-      user_id: req.user || req.params.id,
-    });
+      // user_id: req.user || req.params.id, type: "shipping"
+      user_id: req.params.id, type: "shipping"
+    }).populate(['country', 'state', 'city']);
     res.json(allShippinAddress);
   } catch (error) {
     throw new Error(error);
@@ -27,7 +28,7 @@ const getshippingAddressListByCustomerId = (async (req, res) => {
     const allShippinAddress = await shippingAddress.find({
       userid: req.params.id,
       type: "shipping"
-    });
+    }).populate(['country', 'state', 'city']);
     res.json(allShippinAddress);
   } catch (error) {
     throw new Error(error);
@@ -37,9 +38,9 @@ const getshippingAddressListByCustomerId = (async (req, res) => {
 const getbillingAddressListByCustomerId = (async (req, res) => {
   try {
     const allShippinAddress = await shippingAddress.find({
-      userid: req.params.id,
+      user_id: req.params.id,
       type: "billing"
-    });
+    }).populate(['country', 'state', 'city']);
     res.json(allShippinAddress);
   } catch (error) {
     throw new Error(error);
@@ -85,8 +86,8 @@ const createshippingAddressBySeller = (async (req, res) => {
 
 const createShippingAddressByCustomer = (async (req, res) => {
   try {
-    req.body.user_id = req.user;
-    console.log(req.user)
+    req.body.user_id = req.user||req.body.user_id;
+    console.log(req.body)
     const sellers = await shippingAddress.create(req.body);
     res.json(sellers);
   } catch (error) {
@@ -114,7 +115,10 @@ const deleteshippingAddress = (async (req, res) => {
   try {
     const { id } = req.params;
     const deletedshippingAddress = await shippingAddress.findByIdAndDelete(id);
-    res.json(deletedshippingAddress);
+    if (!deletedshippingAddress) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+    res.json({ message: "Address deleted successfully", data: deletedshippingAddress });
   } catch (error) {
     throw new Error(error);
   }
@@ -124,7 +128,7 @@ const deleteShippingAddressByCustomer = (async (req, res) => {
   try {
     const { id } = req.params;
     const deletedshippingAddress = await shippingAddress.findOneAndDelete({_id: id, user_id:req.user});
-    res.json(deletedshippingAddress);
+    res.json({message:"address deleted successfully", data: deletedshippingAddress} );
   } catch (error) {
     throw new Error(error);
   }

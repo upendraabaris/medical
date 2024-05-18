@@ -20,7 +20,7 @@ const getMedicalSpecialty = async(req,res,next)=>{
                 superSpecialty: "$super_specialty_data.super_specialization" // Access the name field from the joined collection
               }
             }
-          ]);
+          ]).sort({ medical_specialty: 1 });
         res.data = MedicalSpecialty
         res.status_Code = "200"
         next()

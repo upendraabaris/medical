@@ -9,7 +9,7 @@ const {
   createorderStatusMaster,
   updateorderStatusMaster,
   deleteorderStatusMaster,
-} = require("../controller/orderStatusMasterCtrl");
+} = require("../../controllers/ecommerce/orderStatusMasterCtrl");
 
 router.get("/", getorderStatusMasterList);
 router.get("/delivery", getorderStatusMasterListForDeliveryBoy);

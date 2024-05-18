@@ -1,42 +1,42 @@
-const Order = require("../models/orderModel");
+const Order = require("../../models/ecommerce/orderModel");
 const asyncHandler = require("express-async-handler");
-const User = require("../models/userModel");
-const ShippingAddress = require("../models/shippingAddressModel");
-const Product = require("../models/productModel");
-const orderStatusTransaction = require("../models/orderStatusTransactionModel");
-const pickupPoint_Order = require("../models/pickupPoint_OrderModel");
-const OrderMaster = require("../models/orderMasterModel");
+const User = require("../../models/user/userModel");
+const ShippingAddress = require("../../models/shippingAddressModel");
+const Product = require("../../models/ecommerce/productModel");
+const orderStatusTransaction = require("../../models/ecommerce/orderStatusTransactionModel");
+const pickupPoint_Order = require("../../models/ecommerce/pickupPoint_OrderModel");
+// const OrderMaster = require("../models/orderMasterModel");
 /* const ClubPointsUsers = require("../models/clubPointsUserModel");
 const EMI = require("../models/emiModel");
- */const PickupPointsStock = require("../models/pickupPoint_stockModel");
+//  */const PickupPointsStock = require("../../models/ecommerce/pickupPoint_stockModel");
 const mongoose = require("mongoose");
-const ProductStock = require("../models/pickupPoint_stockModel");
-const ProductStockQty = require("../models/productStockModel");
-const OrderAssign = require("../models/assignOrderModel");
-const Delivery = require("../models/deliveriesModel");
+// const ProductStock = require("../models/pickupPoint_stockModel");
+// const ProductStockQty = require("../models/productStockModel");
+// const OrderAssign = require("../models/assignOrderModel");
+// const Delivery = require("../models/deliveriesModel");
 
-const Wholesale = require("../models/wholesaleModel");
-const WholesalePrice = require("../models/wholesaleModel");
-const ProductCostVariation = require("../models/productCostVariationModel");
-const Currency = require("../models/currencyModel");
+// const Wholesale = require("../models/wholesaleModel");
+// const WholesalePrice = require("../models/wholesaleModel");
+// const ProductCostVariation = require("../models/productCostVariationModel");
+// const Currency = require("../models/currencyModel");
 
-const AssignOrder = require("../models/assignOrderModel");
+// const AssignOrder = require("../models/assignOrderModel");
 /* const AffiliateBasic = require("../models/affiliateBasicModel");
 const AffiliateLogs = require("../models/affiliateLogslModel");
 const AffiliateUser = require("../models/affiliateUserModel");
- */const Seller = require("../models/sellersModel");
-const AssignDeliveryBoy = require("../models/assignDeliveryBoyModel");
-const Coupon = require("../models/couponModel");
+ */const Seller = require("../../models/ecommerce/sellersModel");
+// const AssignDeliveryBoy = require("../models/assignDeliveryBoyModel");
+// const Coupon = require("../models/couponModel");
 
-const ShippingSettings = require("../models/shipping/shippingSettingModel");
-const ShippingPrice = require("../models/shipping/shippingPriceModel");
+// const ShippingSettings = require("../models/shipping/shippingSettingModel");
+// const ShippingPrice = require("../models/shipping/shippingPriceModel");
 const jwt = require("jsonwebtoken");
-const Country = require("../models/crm/countryModel");
+// const Country = require("../models/crm/countryModel");
 
 
 
-const GeneralSetting = require("../models/generalSettingsModel");
-const Client = require("../middlewares/redis");
+const GeneralSetting = require("../../models/generalSettingsModel");
+const Client = require("../../middleware/redis");
 
 const getOrders = asyncHandler(async (req, res) => {
   const { _id } = req.user;
@@ -180,15 +180,17 @@ const getAllOrders_Sellers = asyncHandler(async (req, res) => {
 
 const getAllOrders = asyncHandler(async (req, res) => {
   try {
+    console.log(req.body.id)
+    console.log(req.body.order_type)
     let generalSettingCache = await Client.get(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`);
     
     let generalSetting;
     console.log(generalSetting);
 
     if(generalSettingCache == null) {
-      const generalSettings = await GeneralSetting.findOne({
-        accCompany_id: req.companyId,
-        parent_id: "6488381f3f26992c4c3484fb",
+      const generalSettings = await GeneralSetting.findById({
+        // accCompany_id: req.companyId,
+        _id: "6488381f3f26992c4c3484fb",
       });  
       await Client.set(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`, JSON.stringify(generalSettings));
       await Client.expire(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`, 3600);
@@ -198,13 +200,16 @@ const getAllOrders = asyncHandler(async (req, res) => {
     if(generalSetting == null || generalSetting == "null" || generalSetting == undefined) {
       generalSetting = "Asia/Kolkata";
     }
+    order_type = req.body.order_type,
+    user_id = req.body.user_id
 
     let orders = await pickupPoint_Order.aggregate([
       {
         $match: {
-          accCompany_id: new mongoose.Types.ObjectId(req.companyId),
-        },
-      },
+            order_type: order_type,
+            user_id: new mongoose.Types.ObjectId(user_id)
+        }
+    },
       {
         $lookup: {
           from: "orderstatus_transactions",
@@ -282,7 +287,10 @@ const getAllOrders = asyncHandler(async (req, res) => {
           user: { $cond: { if: { $size: "$user" }, then: { firstname: {$first: "$user.firstname"}, lastname: {$first: "$user.lastname"} }, else: { firstname: "$billingAddress.bfirstname", lastname: "$billingAddress.blastname" }} },
           seller_id: {$first: "$seller"},
           paymentStatus: { $first: "$Payment_Status" },
-          contactDetail:  "$contactDetail"
+          contactDetail:  "$contactDetail",
+          order_type: "$order_type",
+          questions: "$questions",
+          vitals: "$vitals"
         },
       },
       {
@@ -315,6 +323,303 @@ const getAllOrders = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
+
+const getAllOrdersByType = asyncHandler(async (req, res) => {
+  try {
+    console.log(req.body.id)
+    console.log(req.body.order_type)
+    let generalSettingCache = await Client.get(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`);
+    
+    let generalSetting;
+    console.log(generalSetting);
+
+    if(generalSettingCache == null) {
+      const generalSettings = await GeneralSetting.findById({
+        // accCompany_id: req.companyId,
+        _id: "6488381f3f26992c4c3484fb",
+      });  
+      await Client.set(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`, JSON.stringify(generalSettings));
+      await Client.expire(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`, 3600);
+      generalSetting = generalSettings.Timezone;
+    }
+
+    if(generalSetting == null || generalSetting == "null" || generalSetting == undefined) {
+      generalSetting = "Asia/Kolkata";
+    }
+    order_type = req.body.order_type,
+    user_id = req.body.user_id
+
+    let orders = await pickupPoint_Order.aggregate([
+      {
+        $match: {
+            order_type: order_type,
+            // user_id: new mongoose.Types.ObjectId(user_id)
+        }
+    },
+      {
+        $lookup: {
+          from: "orderstatus_transactions",
+          localField: "_id",
+          foreignField: "orderId",
+          as: "orderStatus",
+        },
+      },
+      {
+        $lookup: {
+          from: "timeslots",
+          let: {
+            timeSlot: "$timeSlot",
+            companyId: new mongoose.Types.ObjectId(req.companyId)
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [{ $eq: ["$$timeSlot", "$uid"] }, { $eq: ["$$companyId", "$accCompany_id"] }],
+                },
+              },
+            },
+          ],
+          as: "timeSlot",
+        }        
+      },
+      {
+        $lookup: {
+          from: "currencies",
+          localField: "currency",
+          foreignField: "_id",
+          as: "currency"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $lookup: {
+          from: "paymentstatusmasters",
+          localField: "Payment_Status",
+          foreignField: "_id",
+          as: "Payment_Status"
+        }
+      },
+      {
+        $lookup: {
+          from: "sellers",
+          localField: "seller_id",
+          foreignField: "_id",
+          as: "seller"
+        }
+      },
+      {
+        $project: {
+          _id: "$_id",
+          status: { $last: "$orderStatus.orderStatusId" },
+          Balance: "$Balance",
+          Paid: "$Paid",
+          grandTotal: "$grandTotal",
+          createdAt: { $dateToString: { date: "$createdAt", format: "%d/%m/%Y, %H:%M:%S", timezone: generalSetting }  },
+          referenceNo: "$order_referenceNo",
+          invoiceDate: { $dateToString: { date: "$invoiceDate", format: "%d/%m/%Y, %H:%M:%S", timezone: generalSetting }  },
+          invoiceNo: "$order_invoiceNo",
+          timeSlot: {$first: "$timeSlot.name"},
+          deliveryType: "$deliveryType",
+          date: "$date",
+          currency: { $first: "$currency" },
+          user: { $cond: { if: { $size: "$user" }, then: { firstname: {$first: "$user.firstname"}, lastname: {$first: "$user.lastname"} }, else: { firstname: "$billingAddress.bfirstname", lastname: "$billingAddress.blastname" }} },
+          seller_id: {$first: "$seller"},
+          paymentStatus: { $first: "$Payment_Status" },
+          contactDetail:  "$contactDetail",
+          order_type: "$order_type",
+          questions: "$questions",
+          vitals: "$vitals"
+        },
+      },
+      {
+        $lookup: {
+          from: "orderstatusmasters",
+          localField: "status",
+          foreignField: "_id",
+          as: "status",
+        },
+      },
+      {
+        $sort: {"createdAt": -1 }
+      }
+    ]);
+/*     let sellers = [];
+    orders.forEach((order) => {
+      sellers.push(Seller.findById(order.seller_id));
+    })
+    Promise.all(sellers).then((result) => {
+      orders?.forEach((order) => {
+        result?.forEach((seller) => {
+          if(String(order?.seller_id) == String(seller?._id)) {
+            order.seller_id = seller;
+          }
+        })
+      })
+ */      res.json(orders);
+//    })
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+
+const getAllOrdersByUser = asyncHandler(async (req, res) => {
+  try {
+    console.log(req.body.id)
+    console.log(req.body.order_type)
+    let generalSettingCache = await Client.get(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`);
+    
+    let generalSetting;
+    console.log(generalSetting);
+
+    if(generalSettingCache == null) {
+      const generalSettings = await GeneralSetting.findById({
+        // accCompany_id: req.companyId,
+        _id: "6488381f3f26992c4c3484fb",
+      });  
+      await Client.set(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`, JSON.stringify(generalSettings));
+      await Client.expire(`GeneralSetting:${req.companyId}:6488381f3f26992c4c3484fb`, 3600);
+      generalSetting = generalSettings.Timezone;
+    }
+
+    if(generalSetting == null || generalSetting == "null" || generalSetting == undefined) {
+      generalSetting = "Asia/Kolkata";
+    }
+    order_type = req.body.order_type,
+    user_id = req.body.user_id
+
+    let orders = await pickupPoint_Order.aggregate([
+      {
+        $match: {
+            // order_type: order_type,
+            user_id: new mongoose.Types.ObjectId(req.user)
+        }
+    },
+      {
+        $lookup: {
+          from: "orderstatus_transactions",
+          localField: "_id",
+          foreignField: "orderId",
+          as: "orderStatus",
+        },
+      },
+      {
+        $lookup: {
+          from: "timeslots",
+          let: {
+            timeSlot: "$timeSlot",
+            companyId: new mongoose.Types.ObjectId(req.companyId)
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [{ $eq: ["$$timeSlot", "$uid"] }, { $eq: ["$$companyId", "$accCompany_id"] }],
+                },
+              },
+            },
+          ],
+          as: "timeSlot",
+        }        
+      },
+      {
+        $lookup: {
+          from: "currencies",
+          localField: "currency",
+          foreignField: "_id",
+          as: "currency"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $lookup: {
+          from: "paymentstatusmasters",
+          localField: "Payment_Status",
+          foreignField: "_id",
+          as: "Payment_Status"
+        }
+      },
+      {
+        $lookup: {
+          from: "sellers",
+          localField: "seller_id",
+          foreignField: "_id",
+          as: "seller"
+        }
+      },
+      {
+        $project: {
+          _id: "$_id",
+          status: { $last: "$orderStatus.orderStatusId" },
+          Balance: "$Balance",
+          Paid: "$Paid",
+          grandTotal: "$grandTotal",
+          createdAt: { $dateToString: { date: "$createdAt", format: "%d/%m/%Y, %H:%M:%S", timezone: generalSetting }  },
+          referenceNo: "$order_referenceNo",
+          invoiceDate: { $dateToString: { date: "$invoiceDate", format: "%d/%m/%Y, %H:%M:%S", timezone: generalSetting }  },
+          invoiceNo: "$order_invoiceNo",
+          timeSlot: {$first: "$timeSlot.name"},
+          deliveryType: "$deliveryType",
+          date: "$date",
+          currency: { $first: "$currency" },
+          user: { $cond: { if: { $size: "$user" }, then: { firstname: {$first: "$user.firstname"}, lastname: {$first: "$user.lastname"} }, else: { firstname: "$billingAddress.bfirstname", lastname: "$billingAddress.blastname" }} },
+          seller_id: {$first: "$seller"},
+          paymentStatus: { $first: "$Payment_Status" },
+          contactDetail:  "$contactDetail",
+          order_type: "$order_type",
+          questions: "$questions",
+          vitals: "$vitals"
+        },
+      },
+      {
+        $lookup: {
+          from: "orderstatusmasters",
+          localField: "status",
+          foreignField: "_id",
+          as: "status",
+        },
+      },
+      {
+        $sort: {"createdAt": -1 }
+      }
+    ]);
+/*     let sellers = [];
+    orders.forEach((order) => {
+      sellers.push(Seller.findById(order.seller_id));
+    })
+    Promise.all(sellers).then((result) => {
+      orders?.forEach((order) => {
+        result?.forEach((seller) => {
+          if(String(order?.seller_id) == String(seller?._id)) {
+            order.seller_id = seller;
+          }
+        })
+      })
+ */      res.json(orders);
+//    })
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+
+
 
 const getAllOrdersFilter = asyncHandler(async (req, res) => {
   try {
@@ -3783,5 +4088,6 @@ module.exports = {
   pickupCustomerRevenue,
 
   getOrderAdminById,
-  getAllOrdersFilter
+  getAllOrdersFilter,
+  getAllOrdersByType
 };

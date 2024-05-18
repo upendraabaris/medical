@@ -59,10 +59,14 @@ const {
   pickupCustomerRevenue,
 
   getOrderAdminById,
-  getAllOrdersFilter
-} = require("../controller/orderCtrl");
+  getAllOrdersFilter,
+  getAllOrdersByType
+} = require("../../controllers/ecommerce/orderCtrl");
 
-const { checkDomain, authMiddleware, isAdmin, isSeller, authMiddlewareNotCompulsory } = require("../middlewares/authMiddleware");
+const { checkDomain, authMiddleware, isAdmin, verifyToken, /* isSeller, */ authMiddlewareNotCompulsory } = require("../../middleware/authMiddleware");
+
+const { addMedicalOrder, addMedicalOrderByAdmin, totalExpenses } = require("../../controllers/ecommerce/MedicalOrderCtrl")
+const {responseSend} = require("../../utils/response")
 const router = express.Router();
 
 router.post("/add_Order", checkDomain, createorder);
@@ -74,9 +78,11 @@ router.post("/order_Assign/:id", orderAssign);
 router.post("/filter", isAdmin, getAllOrdersFilter);
 
 router.get("/get", getOrders);
-router.get("/getallorders", isAdmin, getAllOrders);
+router.post("/getallorders", isAdmin, getAllOrders);
 router.get("/getOrderPickup", orderInHousePickupPointList);
 router.get("/getAllOrderPickup", orderPickupPointList);
+
+router.post("/getallorders/type", isAdmin, getAllOrdersByType);
 
 router.get("/count", isAdmin, orderCount);
 router.get("/allPickupPoints/count", isAdmin, orderPickupPointsCount);
@@ -123,7 +129,7 @@ router.get("/report/:id", getOrderReport);
 router.post("/orderSellerListFilter", orderSellerListFilter);
 router.post("/orderPickupPointList/filter", orderPickupPointListFilter);
 
-router.get("/seller_list", isSeller, getAllOrders_Sellers);
+// router.get("/seller_list", isSeller, getAllOrders_Sellers);
 router.get("/admin_list", getAllOrders_Sellers);
 
 router.get("/getOrderById/:id", authMiddleware, checkDomain, getOrderById);
@@ -141,5 +147,10 @@ router.put("/order/update-order/:id", updateOrderStatus);
 router.delete("/delete_Order/:id", deleteOrdersById);
 
 router.post("/order_filter", orderFilter);
+
+router.post('/medicalorder', /* verifyToken, */ addMedicalOrder, responseSend)
+router.post('/medicalorder/admin', /* verifyToken, */ addMedicalOrderByAdmin, responseSend)
+
+router.get('/total-expenses', verifyToken, totalExpenses, responseSend)
 
 module.exports = router;

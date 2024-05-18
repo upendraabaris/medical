@@ -5,6 +5,7 @@ const chiefComplaintSchema = new mongoose.Schema({
   chief_complaint: { type: String, required: true, unique:[true,"already exist in database"] },
   chief_complaint_banner_image: { type: String },
   chief_complaint_banner_video: { type: String },
+  patient_type: { type: String, enum: ['Adult', 'Newborn']}
 },
 {
     timestamps: true,

@@ -5,11 +5,11 @@ const {responseSend} = require("../utils/response")
 // const {verifyToken} = require("../middleware/authMiddleware")
 const {staffMiddleware} = require("../middleware/authMiddleware")
 
-router.get('/', staffMiddleware, getRegion, responseSend)
+router.get('/', /* staffMiddleware, */ getRegion, responseSend)
 
 router.get('/:id', staffMiddleware, getRegionById, responseSend)
 
-router.post('/addRegion', staffMiddleware, addRegion, responseSend)
+router.post('/addRegion', /* staffMiddleware, */ addRegion, responseSend)
 
 router.put('/updateRegion/:id', staffMiddleware, updateRegion, responseSend)
 

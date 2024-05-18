@@ -5,7 +5,8 @@ const ChiefComplaintModel = require("../../models/chiefComplaintModel")
 const mongoose = require("mongoose")
 const getEmr = async(req,res,next)=>{
     try{
-        const Emr = await EmrModel.find();
+        const Emr = await EmrModel.find().populate(['chief_complaint_id','medical_specialty_id','emr_question_type_id']).exec();
+        console.log("djvlbsfh")
         res.data = Emr
         res.status_Code = "200"
         next()

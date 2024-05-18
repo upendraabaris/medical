@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser } = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser, deleteUserVoluntary, getUserGenderRatio, getUserStats } = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -46,7 +46,7 @@ var upload = multer({
 const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
 
-router.get('/', /* staffMiddleware, */ getUser, responseSend)
+router.get('/', staffMiddleware, getUser, responseSend)
 router.get('/getFamilyMembersByStaff/:userId', staffMiddleware, getFamilyMembersByStaff, responseSend)
 
 router.post('/adduser', staffMiddleware, addUser, responseSend)
@@ -76,7 +76,7 @@ router.put('/editProfile/public', verifyToken, editProfile, responseSend)
 
 router.put('/editProfile/public/:id', verifyToken, editProfile, responseSend)
 
-router.post('/UpdateProfileImage/public/:userId', verifyToken, upload.single('image'), userUpdateProfileImage, responseSend)
+router.put('/UpdateProfileImage/public/:userId', /* verifyToken, */ upload.single('image'), userUpdateProfileImage, responseSend)
 
 router.post('/UpdateProfileImage/:userId', staffMiddleware, upload.single('image'), userUpdateProfileImage, responseSend)
 
@@ -111,6 +111,11 @@ router.post('/getdocument/public', verifyToken, getUserDocumentsByCategory, resp
 
 router.post('/getdocument', staffMiddleware, getUserDocumentsByCategory, responseSend)
 
+router.delete('/deleteUserVoluntary/:userId', deleteUserVoluntary, responseSend)
+
+router.get('/gender-ratio', getUserGenderRatio, responseSend)
+
+router.get('/admin/user-status', getUserStats, responseSend)
 
 router.get('/:id', staffMiddleware, getUserById, responseSend)
 

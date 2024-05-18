@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const shippingSchema = new mongoose.Schema(
   {
-    country: { type: String, require: true, default: "" },
-    state: { type: String, require: true, default: "" },
-    city: { type: String, require: true, default: "" },
+    country: { type: mongoose.Schema.Types.ObjectId, ref:'Country', require: true, default: "" },
+    state: { type: mongoose.Schema.Types.ObjectId, ref: 'State', require: true, default: "" },
+    city: { type: mongoose.Schema.Types.ObjectId, ref: 'City', require: true, default: "" },
     zip: { type: String, require: true, default: "" },
     addressLine1: { type: String, defualt: "" },
     addressLine2: { type: String, defualt: "" },

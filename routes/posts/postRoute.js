@@ -4,10 +4,13 @@ const {
     createPost,
     updatePost,
     getPostByUser,
-    deletePostByUser
+    // deletePostByUser,
+    getPost,
+    deletePost,
+    countPostView
 } = require("../../controllers/posts/postCtrl");
 
-const { authMiddleware } = require("../../middleware/authMiddleware");
+const { authMiddleware, staffMiddleware, verifyToken } = require("../../middleware/authMiddleware");
 
 const multer = require("multer");
 const path = require("path");
@@ -30,8 +33,12 @@ var upload = multer({
 
 
 router.get("/user", authMiddleware, getPostByUser);
-router.post("/add_Post", authMiddleware, createPost);
-router.put("/update_Post/:id", authMiddleware, upload.array("image"), updatePost);
-router.delete("/delete_post/:id", authMiddleware, deletePostByUser);
+router.put("/updatePost/:id", staffMiddleware, upload.array("image"), updatePost);
+router.delete("/deletePost/:id", staffMiddleware, deletePost);
 
+router.post("/addPost", staffMiddleware, createPost);
+router.get("/getPost", staffMiddleware, getPost);
+
+router.get("/public/getPost", verifyToken, getPost);
+router.get("/public/views/:postId", /* verifyToken, */ countPostView)
 module.exports = router;

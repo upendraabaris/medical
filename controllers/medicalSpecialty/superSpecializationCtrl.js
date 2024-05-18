@@ -2,7 +2,11 @@ const SuperSpecializationModel = require("../../models/medicalSpecialty/superSpe
 
 const getSuperSpecialization = async(req,res,next)=>{
     try{
-        const SuperSpecialization = await SuperSpecializationModel.find();
+        const SuperSpecialization = await SuperSpecializationModel.find().populate({
+            path: 'medicalSpecialtyId subSpecialityId',
+            select: 'sub_speciality medical_specialty medical_specialty_icon'
+          }).sort({ super_specialization: 1 });
+          
         res.data = SuperSpecialization
         res.status_Code = "200"
         next()

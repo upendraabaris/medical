@@ -1,5 +1,7 @@
 const ChiefComplaintModel = require("../models/chiefComplaintModel")
 const Client = require("../middleware/redis")
+const MedicalConsultationQuestion = require("../models/medicalConsultationModel")
+
 const getChiefComplaint = async(req,res,next)=>{
     try{
         // let client = await Client.get('ChiefComplaint');
@@ -12,6 +14,21 @@ const getChiefComplaint = async(req,res,next)=>{
         //     ChiefComplaint = JSON.parse(client);
         // }
         const ChiefComplaint = await ChiefComplaintModel.find()
+        res.data = ChiefComplaint
+        res.status_Code = "200"
+        next()
+    }catch(error){
+        res.error = true;
+        res.status_Code = "403";
+        res.message = error.message
+        res.data = {}
+        next()
+    }
+}
+
+const getChiefComplaintOfNewBorn = async(req,res,next)=>{
+    try{
+        const ChiefComplaint = await ChiefComplaintModel.find({patient_type: 'Newborn'})
         res.data = ChiefComplaint
         res.status_Code = "200"
         next()
@@ -121,5 +138,47 @@ const addData = async (req, res) => {
       console.error('Error adding chief complaints:', error);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  }
-module.exports = {getChiefComplaint, getChiefComplaintById, addChiefComplaint, updateChiefComplaint, deleteChiefComplaint, deleteAllChiefComplaints, addData}
+}
+
+
+const getMedicalConsultant = async (req, res, next) => {
+    try {
+        const questions = await MedicalConsultationQuestion.find().populate({path:'symptoms', select:'chief_complaint'})
+        // const questions = await MedicalConsultationQuestion.aggregate([
+        //     {
+        //         $lookup: {
+        //             from: "medical_consultation_questions",
+        //             localField: "symptoms",
+        //             foreignField: "chief_complaint",
+        //             as: "symptoms"
+        //         }
+        //     },
+        //     // {
+        //     //     $unwind: "$symptoms"
+        //     // },
+        //     {
+        //         $project: {
+        //             _id: 1, // Exclude the _id field
+        //             // chief_complaint: "$symptoms.chief_complaint" // Project the chief_complaint field from the symptoms collection
+        //             category:1,
+        //             symptom: "$symptoms.chief_complaint",
+        //             img_banner:1,
+        //             question:1,
+        //             options:1                    
+        //         }
+        //     }
+        // ]);
+        res.data = questions;
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+
+module.exports = {getChiefComplaint, getChiefComplaintById, addChiefComplaint, updateChiefComplaint, deleteChiefComplaint, deleteAllChiefComplaints, addData, getMedicalConsultant, getChiefComplaintOfNewBorn}

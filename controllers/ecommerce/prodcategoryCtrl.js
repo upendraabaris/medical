@@ -9,7 +9,7 @@ __dirname = path.resolve(path.dirname(__filename), "../");
 const Sequence = require("../../models/ecommerce/SequenceUidMaster/categorySequenceModel");
 const mongoose = require("mongoose");
 //const ProductCostVariation = require("../models/productCostVariationModel");
-// const Language = require("../models/languageModel");
+const Language = require("../../models/languageModel");
 const Client = require("../../middleware/redis");
 
 const createCategory = asyncHandler(async (req, res) => {
@@ -199,16 +199,16 @@ const getCategory = asyncHandler(async (req, res) => {
 
 const getallCategory = asyncHandler(async (req, res) => {
   try {
-    if(req.type == 'Staff' || req.type == 'Seller') {    
+    // if(req.type == 'Staff' || req.type == 'Seller') {    
       const category = await Category.find({
-        accCompany_id: req.companyId,
-        language_id: req.user.language_id,
+        // accCompany_id: req.companyId,
+        // language_id: req.user.language_id,
       });
       res.json(category);
-    }
-    else {
-      throw new Error("You are not Authorize");
-    }
+    // }
+    // else {
+    //   throw new Error("You are not Authorize");
+    // }
   } catch (error) {
     throw new Error(error);
   }

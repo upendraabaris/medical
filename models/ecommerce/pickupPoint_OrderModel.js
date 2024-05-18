@@ -1,16 +1,45 @@
+
 const mongoose = require("mongoose"); // Erase if already required
-const orderPickupSeq = require("./orderMasterModel");
-// const Delivery = require("./deliveriesModel");
-const ProductStock = require("../../models/ecommerce/pickupPoint_stockModel");
-const ProductStockQty = require("./productStockModel");
-const ProductCostVariation = require("./productCostVariationModel");
-// const GeneralSetting = require("./generalSettingsModel");
-const OrderStatusTransaction = require("./orderStatusTransactionModel");
+const GeneralSetting = require("../generalSettingsModel")
+
+
+const userHealthProfileSchema = new mongoose.Schema({
+  question_answer: [{ question: { type: String }, answers: [{ type: String }], questionType: { type: String } }],
+  category: { type: String, required: true },
+  updated_date: { type: Date, default: Date.now }
+},
+  {
+    timestamps: true
+  });
+
+const patientVitalInfoSchema = new mongoose.Schema({
+  height: {
+    feet: { type: Number/* , required: true */ },
+    inches: { type: Number/* , required: true */ }
+  },
+  weight: { type: Number/* , required: true */ },
+  pulseRate: { type: Number, min: 60, max: 100/* , required: true */ },
+  respiratoryRate: { type: Number, min: 12, max: 16/* , required: true */ },
+  bodyTemperature: { type: Number, min: 90, max: 105/* , required: true */ },
+  bloodPressure: {
+    systolic: { type: Number/* , required: true */ },
+    diastolic: { type: Number/* , required: true */ }
+  },
+  oxygenSaturation: { type: Number, min: 70, max: 100/* , required: true */ },
+  dateTime: { type: Date, default: Date.now }
+},
+  {
+    timestamps: true,
+  });
+
 
 // Declare the Schema of the Mongo model
-var orderSchema = new mongoose.Schema(
+var ServiceHistorySchema = new mongoose.Schema(
   {
     parent_id: { type: mongoose.Schema.Types.ObjectId, ref: "Order" },
+    addedByUser: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    addedByStaff: { type: mongoose.Schema.Types.ObjectId, ref: 'Staff' },
+    cheif_complaint: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ChiefComplaint' }],
     products: [
       {
         product: {
@@ -49,13 +78,7 @@ var orderSchema = new mongoose.Schema(
     language: { type: mongoose.Schema.Types.ObjectId, ref: "languages" },
     currency_id: { type: mongoose.Schema.Types.ObjectId, ref: "currencies" },
 
-    timeSlot: { type: mongoose.Schema.Types.ObjectId, ref: "timeSlot" },
-
-    accCompany_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "accountCompany",
-      index: true
-    },
+    timeSlot: { type: Date, ref: "timeSlot" },
 
     ipAddress: { type: String },
     count: Number,
@@ -67,7 +90,6 @@ var orderSchema = new mongoose.Schema(
     shippingCost: Number,
     grandTotal: Number,
     Amount: String,
-    order_type: { type: String, enum: ["Regular", "From Pickup Point"] },
     Paid: { type: Number, default: 0 },
     Balance: {
       type: Number,
@@ -76,7 +98,7 @@ var orderSchema = new mongoose.Schema(
     discount: { type: Number, default: 0 },
     Delivery_Status: String,
     Payment_method: String,
-    deliveryType: {type: String},
+    deliveryType: { type: String },
     Payment_Status: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "paymentStatusMaster",
@@ -89,8 +111,6 @@ var orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "pickup_point",
     },
-    timeSlot: { type: String },
-    timeGroup: { type: String },
     date: { type: Date },
     country_id: { type: mongoose.Schema.Types.ObjectId, ref: "country" },
     seller_id: { type: mongoose.Schema.Types.ObjectId, ref: "sellers" },
@@ -120,7 +140,7 @@ var orderSchema = new mongoose.Schema(
       email: { type: String },
       order_notes: { type: String },
     },
-    user: {
+    user_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
@@ -131,6 +151,9 @@ var orderSchema = new mongoose.Schema(
     orderStatusTrans: [
       { type: mongoose.Schema.Types.ObjectId, ref: "orderStatus_Transaction" },
     ],
+    order_type: { type: String, index: true, enum: ['Medical Consultancy', 'Speciality Consultant'] },
+    questions: userHealthProfileSchema,
+    vitals: patientVitalInfoSchema,
   },
   {
     timestamps: true,
@@ -138,106 +161,36 @@ var orderSchema = new mongoose.Schema(
   }
 );
 
-orderSchema.pre("save", async function (next) {
-  const order_Mrn = await GeneralSetting.findOneAndUpdate(
-    { parent_id: "64882e43c2b806ddd3050c01", accCompany_id: this.accCompany_id },
-    { $inc: { referenceNo: 1, invoiceNo: 1 } }
-  );
-
-  
-  const generalSettings = await GeneralSetting.findOne(
-    { parent_id: "648823db48b5950c2889e68e",accCompany_id: this.accCompany_id }
-  );
-
-  
-  this.order_referenceNo =
-    generalSettings?.SalesReferencePrefix + order_Mrn.referenceNo;
-
-  if(order_Mrn.invoiceNo == undefined) {
-    order_Mrn.invoiceNo = 0;
-    await order_Mrn.save();
-  }
-
-  this.order_invoiceDate = new Date();
-  this.order_invoiceNo = generalSettings?.SalesReferencePrefix + order_Mrn.invoiceNo + this.order_invoiceDate.getMonth() + this.order_invoiceDate.getDate();
+ServiceHistorySchema.pre("save", async function (next) {
+    const order_Mrn = await GeneralSetting.findOneAndUpdate(
+      { _id: "64882e43c2b806ddd3050c01"},
+      { $inc: { referenceNo: 1, invoiceNo: 1 } }
+    );
 
 
-  if (this.products.length > 0) {
-    this.products.forEach(async (product) => {
-      if (product.deliveryType.toLowerCase() != "home delivery") {
-        let productStock = await ProductStock.create({
-          product_id: product.product,
-          variant_id: product.variant,
-          qty: product.count,
-          pickupPoint_id: product.pickupPoints,
-          seller_id: this.seller_id,
-          trans_type: "reserve",
-          sku: product.sku,
-          staff_id: this.staff_id,
-          seller_id: this.seller_id,
-          cost: product.subTotal + product.tax,
-        });
+    const generalSettings = await GeneralSetting.findOne(
+      { _id: "648823db48b5950c2889e68e" }
+    );
 
-        if (product.pickupPoints != undefined) {
-          let productStockQty = await ProductStock.find({
-            product_id: product.product,
-            variant_id: product.variant,
-            sku: product.sku,
-            pickupPoint_id: this.pickupAddress,
-          });
 
-          let qty = 0;
-          if (productStockQty.length > 0) {
-            productStockQty.forEach((product) => {
-              if (product.qty != undefined) {
-                if (product.trans_type == "credit") {
-                  qty += product.qty;
-                } else {
-                  qty -= product.qty;
-                }
-              }
-            });
-          }
+    this.order_referenceNo =
+      generalSettings?.SalesReferencePrefix + order_Mrn.referenceNo;
 
-          let productQty = await ProductStockQty.findOne({
-            product_id: product.product,
-            variant: product.variant,
-            pickupPoints: product.pickupPoints,
-            sku: product.sku,
-          });
-          if (productQty == null) {
-            await ProductStockQty.create({
-              product_id: product.product,
-              sku: product.sku,
-              variant: product.variant,
-              qty: qty,
-              pickupPoints: product.pickupPoints,
-            });
-          } else {
-            productQty.qty = qty;
-            await productQty.save();
-          }
-        }
-      }
-    });
-  }
+    if(order_Mrn.invoiceNo == undefined) {
+      order_Mrn.invoiceNo = 0;
+      await order_Mrn.save();
+    }
+
+    this.order_invoiceDate = new Date();
+    this.order_invoiceNo = generalSettings?.SalesReferencePrefix + order_Mrn.invoiceNo + this.order_invoiceDate.getMonth() + this.order_invoiceDate.getDate();
+
 
   this.Balance = this.grandTotal;
-  
+
   next();
 });
 
-/* orderSchema.post('save', async function(next)  {
-  await OrderStatusTransaction.create({
-    orderId: order._id,
-    orderStatusId: "6423edb20944088884f88cca",
-  });
-
-  next();
-})
- */
-
-orderSchema.index({ "$*": "text" });
+ServiceHistorySchema.index({ "$*": "text" });
 
 //Export the model
-module.exports = mongoose.model("pickupPoint_Order", orderSchema);
+module.exports = mongoose.model("invoice_orders", ServiceHistorySchema);

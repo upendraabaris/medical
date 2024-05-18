@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/user/userModel')
 const staffModel = require("../models/staff/staffModel")
-
+const sellerUserModel = require("../models/ecommerce/sellerUserModel")
 const authMiddleware = async (req,res,next)=>{
     next();
 }
@@ -26,7 +26,7 @@ const verifyToken = async(req,res,next)=>{
             return res.status(401).json({ message: 'Token not provided' });
         }
         let user = jwt.verify(token.replace('Bearer ', ''), "shicsdfhaljkvfjckds")
-        console.log(user)
+        // console.log(user)
         if(user != undefined){
             console.log(user);
             const user1 = await userModel.findOne({_id:user.user})
@@ -36,7 +36,7 @@ const verifyToken = async(req,res,next)=>{
                 throw new Error("You are not authorized.")
             }
             // res.status(201).send(user1)
-            console.log(token)
+            // console.log(token)
             req.user = user.user
             console.log("1 step ahead")
             next()
@@ -81,4 +81,35 @@ const staffMiddleware = async(req,res,next)=>{
     }
 }
 
-module.exports = {authMiddleware, checkDomain, isAdmin, authMiddlewareNotCompulsory, verifyToken, staffMiddleware}
+const sellerUserMiddleware = async(req,res,next)=>{
+    try{
+        const token = req.headers.authorization
+        console.log(token)
+        // const token = req.body.token
+
+        if (!token) {
+            return res.status(401).json({ message: 'Token not provided' });
+        }
+        if(token){
+            let sellerUser = jwt.verify(token.replace('Bearer ', ''), "rbhafjekdwfskdfdfvbgjkd")
+            // console.log(sellerUser);
+            const user = await sellerUserModel.findOne({_id:sellerUser.user})
+            // console.log(user)
+            if(user == null)
+            {
+                throw new Error("You are not authorized.")
+            }
+            // res.status(201).send(user1)
+            req.user = sellerUser.user
+            next()
+        }else
+        {
+            res.send("Invalid login details")
+        }
+    }catch(error){
+        res.status(400).send("Invalid token")
+    }
+}
+
+
+module.exports = {authMiddleware, checkDomain, isAdmin, authMiddlewareNotCompulsory, verifyToken, staffMiddleware, sellerUserMiddleware}

@@ -1,7 +1,8 @@
 const mongoose = require("mongoose")
 
 const currencySchema = new mongoose.Schema({
-    currency_name: { type: String },
+    country_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Country', index: true},
+    currency_name: { type: String, required: true },
     currency_code: { type: String },
     currency_symbol: { type: String }
 },

@@ -125,9 +125,69 @@ const checkout = asyncHandler(async (req, res) => {
   }
 });
 
+const MedicalConsultantOrder = require("../models/ecommerce/pickupPoint_OrderModel")
+const ParentInvoice = require("../models/ecommerce/orderModel")
+const mongoose = require("mongoose")
+const MedicalConsultantCheckout = asyncHandler(async (req, res) => {
+  try {
+       let payments;
+      //  const newTransWallet = await Transaction.create(req.body)
+      let body = req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
+
+    var crypto = require("crypto");
+    var expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZOR_SECRET)
+      .update(body.toString())
+      .digest("hex");
+    var response = { signatureIsValid: "false" };
+    if (expectedSignature === req.body.razorpay_signature) {
+      response = { signatureIsValid: "true" };
+      let trans = await Transaction.findOne({
+        reciept: req.body.razorpay_order_id,
+      });
+      trans.approval = true;
+      razorpay_payment_id = req.body.razorpay_payment_id;
+      razorpay_order_id = req.body.razorpay_order_id;
+      razorpay_signature = req.body.razorpay_signature;
+
+      await trans.save();
+
+      const [parentInvoice, transactions] = await Promise.all([ParentInvoice.findById(trans.orderId),Transaction.aggregate([
+        {
+          $match:{
+            orderId: new mongoose.Types.ObjectId(trans.orderId),
+            approval:true
+          }
+        },
+        {
+          $group:{
+            _id:null,
+            total: { $sum: "$amount"},
+          }
+        }
+      ])])
+
+      let balance = parentInvoice?.grandTotal-transactions[0].total
+      let status = balance>0 ? "644fba2b75eb6d3d4914a60f" : "644fba3275eb6d3d4914a611"
+      const [parentOrder, childrenOrder] = await Promise.all([ParentInvoice.findByIdAndUpdate(trans.orderId,{Balance: balance, Payment_Status: status}),MedicalConsultantOrder.updateMany({parent_id:trans.orderId}, {Payment_Status:status})])
+/*       let wallet = await User.findById(trans.userid);
+      wallet.wallet_Payment += trans.amount;
+      wallet.save();
+ */    
+}
+    // res.redirect("http://localhost:8100");
+    res.json({message:"success"})
+
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+
 module.exports = {
   createPaymentCheckSum,
   test,
   checkout,
-  transactionInitialize
+  transactionInitialize,
+  MedicalConsultantCheckout
 };

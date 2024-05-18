@@ -6,7 +6,7 @@ const getCurrency = async(req,res,next)=>{
         let client = await Client.get('currency:getCurrency');
         let currency;
         if(client == null) {
-            currency = await Currency.find()
+            currency = await Currency.find().populate('country_id')
             await Client.set(`currency:getCurrency`, JSON.stringify(currency));
         }
         else {
@@ -16,13 +16,45 @@ const getCurrency = async(req,res,next)=>{
         res.status_Code = "200"
         next()
     }catch(error){
-        res.error = true;
+        res.error = true;a
         res.status_Code = "403";
         res.message = error.message
         res.data = {}
         next()
     }
 }
+
+
+const getCurrencyByCountryId = async (req, res, next) => {
+    try {
+        const country_id  = req.params.id; 
+
+        if (!country_id) {
+            return res.status(400).json({ error: 'Country ID is required' });
+        }
+
+        let client = await Client.get(`currency:getCurrency:${country_id}`);
+        let currency;
+
+        if (client == null) {
+            currency = await Currency.find({ country_id });
+            await Client.set(`currency:getCurrency:${country_id}`, JSON.stringify(currency));
+        } else {
+            currency = JSON.parse(client);
+        }
+
+        res.data = currency;
+        res.status_Code = "200";
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = "500";
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+};
+
 
 const getCurrencyById = async(req,res,next)=>{
     try{
@@ -116,4 +148,4 @@ const deleteAllCurrency = async (req, res, next) => {
     }
 }
 
-module.exports = {getCurrency, getCurrencyById, addCurrency, updateCurrency, deleteCurrency, deleteAllCurrency}
+module.exports = {getCurrency, getCurrencyById, addCurrency, updateCurrency, deleteCurrency, deleteAllCurrency, getCurrencyByCountryId}

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const patientVitalInfoSchema = new mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true },
+    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'users'/* , required: true  */},
     height: {
         feet: { type: Number/* , required: true */ },
         inches: { type: Number/* , required: true */ }
@@ -15,6 +15,13 @@ const patientVitalInfoSchema = new mongoose.Schema({
         diastolic: { type: Number/* , required: true */ }
     },
     oxygenSaturation: { type: Number, min: 70, max: 100/* , required: true */ },
+    
+    patient_id: { type: mongoose.Schema.Types.ObjectId, ref:'NBSU_PATIENT_MASTER' },//general examination table related
+    bloodSugar:{
+        type: Number
+    },//general examination table related
+    heart_rate: { type: Number },//general examination table related
+    health_facility_id: { type: mongoose.Schema.Types.ObjectId, ref: 'SellerUser'},//general examination table related
     dateTime: { type: Date, default: Date.now }
 },
 {

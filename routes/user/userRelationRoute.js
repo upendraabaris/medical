@@ -9,7 +9,7 @@ const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware"
 
 router.get('/', staffMiddleware, getUserRelation, responseSend)
 
-router.get('/public', verifyToken, getUserRelation, responseSend)
+router.get('/public', /* verifyToken, */ getUserRelation, responseSend)
 
 router.get('/:id', staffMiddleware, getUserRelationById, responseSend)
 

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"); // Erase if already required
-// const Language = require("./languageModel");
+const Language = require("../../models/languageModel");
 
 // Declare the Schema of the Mongo model
 var prodcategorySchema = new mongoose.Schema(
@@ -23,27 +23,29 @@ var prodcategorySchema = new mongoose.Schema(
     uid: { type: String },
     name: {
       type: String,
-      required: true,
+      required: false,
     },
     order_level: {
       type: Number,
-      required: true,
+      required: false,
     },
     description: { type: String },
     commision_rate: {
       type: String,
     },
     banner: {
-      public_id: String,
-      url: String,
+      type: String
+      // public_id: String,
+      // url: String,
     },
     icon: {
-      public_id: String,
-      url: String,
+      type: String
+      // public_id: String,
+      // url: String,
     },
     featured: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     top: {
       type: Boolean,

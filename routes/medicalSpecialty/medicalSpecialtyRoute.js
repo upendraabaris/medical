@@ -9,7 +9,7 @@ const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware"
 
 router.get('/', staffMiddleware, getMedicalSpecialty, responseSend)
 
-router.get('/public', verifyToken , getMedicalSpecialty, responseSend)
+router.get('/public', /* verifyToken , */ getMedicalSpecialty, responseSend)
 
 router.get('/:id', staffMiddleware, getMedicalSpecialtyById, responseSend)
 

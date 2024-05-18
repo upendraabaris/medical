@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"); // Erase if already required
-// const Language = require("./languageModel");
+const Language = require("../../models/languageModel");
 
 // Declare the Schema of the Mongo model
 var brandSchema = new mongoose.Schema(
@@ -9,8 +9,7 @@ var brandSchema = new mongoose.Schema(
       required: true,
     },
     logo: {
-      public_id: String,
-      url: String,
+      type: String,
     },
     top: {
       type: String,
