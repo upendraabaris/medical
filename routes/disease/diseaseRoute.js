@@ -2,17 +2,19 @@ const router = require("express").Router()
 
 const {getDisease, getDiseaseById, addDisease, updateDisease, deleteDisease} = require("../../controllers/disease/diseaseCtrl")
 
+const {responseSend} = require("../../utils/response")
+
 // const {verifyToken} = require("../../middleware/authMiddleware")
 const {staffMiddleware} = require("../../middleware/authMiddleware")
 
-router.get('/', staffMiddleware, getDisease)
+router.get('/', staffMiddleware, getDisease, responseSend)
 
-router.get('/:id', staffMiddleware, getDiseaseById)
+router.get('/:id', staffMiddleware, getDiseaseById, responseSend)
 
-router.post('/addDisease', staffMiddleware, addDisease)
+router.post('/add', /* staffMiddleware, */ addDisease, responseSend)
 
-router.put('/updateDisease/:id', staffMiddleware, updateDisease)
+router.put('/update/:id', /* staffMiddleware, */ updateDisease, responseSend)
 
-router.delete('/deleteDisease/:id', staffMiddleware, deleteDisease)
+router.delete('/delete/:id', staffMiddleware, deleteDisease, responseSend)
 
 module.exports = router

@@ -932,6 +932,87 @@ const getUserStats = async (req, res) => {
   }
 };
 
+const addProductToWishlist = async (req, res, next) => {
+  try {
+    const userId = req.user;
+    const productId = req.body.productId;
+
+    // Find the user by their ID
+    const user = await UserModel.findById({_id:userId});
+    // console.log(user)
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Check if the product is already in the wishlist
+    // if (user.wishlist.includes(productId)) {
+    //   user.wishlist.pop(productId);
+    //   const updatedUser = await user.save();
+    //   res.status_Code = 200;
+    //   res.message = 'Product unlisted from wishlist';
+    //   res.data = user;
+    //   return next();
+    // }
+    const productIndex = user.wishlist.indexOf(productId);
+    if (productIndex > -1) {
+      // Product is already in wishlist, remove it
+      user.wishlist.splice(productIndex, 1);
+      res.message = 'Product removed from wishlist';
+    } else {
+      // Product is not in wishlist, add it
+      user.wishlist.push(productId);
+      res.message = 'Product added to wishlist';
+    }
+
+    // Add the product to the wishlist
+    // user.wishlist.push(productId);
+    
+    // Save the updated user document
+    const updatedUser = await user.save();
+
+    res.data = updatedUser;
+    res.status_Code = 200;
+    next();
+  } catch (error) {
+    res.error = true;
+    res.status_Code = 403;
+    res.message = error.message;
+    res.data = {};
+    next();
+  }
+}
 
 
-module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser, deleteUserVoluntary, getUserGenderRatio, getUserStats }
+const getWishlist = async (req, res, next) => {
+  try {
+    const userId = req.user;
+    console.log(userId)
+    // Find the user by their ID
+    const wishlist = await UserModel.findById(userId)
+  .select('first_name last_name') // You only need to select the fields you want from the user document
+  .populate({
+    path: 'wishlist', // Populate the 'wishlist' field
+    populate: {
+      path: 'category_id', // Populate the 'category_id' field within the 'wishlist' array
+      select: 'category_name' // Select only the 'category_name' field from the populated document
+    }
+  });
+    // console.log(user)
+    if (!wishlist) {
+      throw new Error('No item in wishlist');
+    }
+
+    res.data = wishlist;
+    res.status_Code = 200;
+    next();
+  } catch (error) {
+    res.error = true;
+    res.status_Code = 403;
+    res.message = error.message;
+    res.data = {};
+    next();
+  }
+}
+
+
+module.exports = { getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser, deleteUserVoluntary, getUserGenderRatio, getUserStats, addProductToWishlist, getWishlist }

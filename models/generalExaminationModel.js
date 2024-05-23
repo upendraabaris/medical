@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 const generalExaminationSchema = new mongoose.Schema({
-    patient_id: { type: mongoose.Schema.Types.ObjectId, ref: 'NBSU_PATIENT_MASTER'},
+    patient_id: { type: mongoose.Schema.Types.ObjectId, ref: 'NBSU_PATIENT_MASTER', index: true},
     general_condition: { 
         type: String,
     enum: ['Alert', 'Lethargic', 'Comatose']
@@ -102,8 +102,8 @@ const generalExaminationSchema = new mongoose.Schema({
     otherSignificantInformation:{
         type: String
     },
-    health_facility_id: { type: mongoose.Schema.Types.ObjectId, ref: 'sellers'},
-  addedBy: { type: mongoose.Schema.Types.ObjectId, ref:'SellerUser'} //which seller enter the data under health_facility_id
+    health_facility_id: { type: mongoose.Schema.Types.ObjectId, ref: 'sellers', index: true},
+  addedBy: { type: mongoose.Schema.Types.ObjectId, ref:'SellerUser', index: true} //which seller enter the data under health_facility_id
 },
 {
     timestamps: true

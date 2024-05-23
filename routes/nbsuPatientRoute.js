@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getNbsuPatient, getNbsuPatientById, addNbsuPatient, updateNbsuPatient, deleteNbsuPatient, getNbsuPatientParticularById} = require("../controllers/nbsuPatientCtrl")
+const {getNbsuPatient, getNbsuPatientById, addNbsuPatient, updateNbsuPatient, deleteNbsuPatient, getNbsuPatientParticularById, addMedicalData} = require("../controllers/nbsuPatientCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -18,5 +18,7 @@ router.put('/updateNbsuPatient/:id', staffMiddleware, updateNbsuPatient, respons
 router.delete('/deleteNbsuPatient/:id', staffMiddleware, deleteNbsuPatient, responseSend)
 
 // router.delete('/deleteAll/:id', staffMiddleware, deleteAllNbsuPatientType, responseSend)
+
+router.post('/addMedicalData', sellerUserMiddleware,addMedicalData, responseSend)
 
 module.exports = router

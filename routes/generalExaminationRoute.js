@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getGeneralExamination, getGeneralExaminationById, addGeneralExamination, updateGeneralExamination, deleteGeneralExamination, getGeneralExaminationVitalInfo} = require("../controllers/generalExaminationCtrl")
+const {getGeneralExamination, getGeneralExaminationById, addGeneralExamination, updateGeneralExamination, deleteGeneralExamination, getGeneralExaminationVitalInfo, getAllExaminationReport} = require("../controllers/generalExaminationCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -18,5 +18,7 @@ router.post('/add', sellerUserMiddleware, addGeneralExamination, responseSend)
 router.put('/updateGeneralExamination/:id', staffMiddleware, updateGeneralExamination, responseSend)
 
 router.delete('/deleteGeneralExamination/:id', staffMiddleware, deleteGeneralExamination, responseSend)
+
+router.get('/user/allreport/:id', /* sellerUserMiddleware, */ getAllExaminationReport, responseSend)
 
 module.exports = router

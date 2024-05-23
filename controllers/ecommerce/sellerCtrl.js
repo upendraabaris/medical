@@ -234,7 +234,6 @@ const getFavoriteDoctorSellerList = async(req,res)=>{
   }
 }
 
-
 const toggleFavoriteStatus = async (req, res) => {
   try {
       const { sellerId, isFavorite } = req.body;

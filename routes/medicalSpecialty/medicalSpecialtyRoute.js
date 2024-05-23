@@ -7,13 +7,13 @@ const {responseSend} = require("../../utils/response")
 // const {verifyToken} = require("../../middleware/authMiddleware")
 const {staffMiddleware, verifyToken} = require("../../middleware/authMiddleware")
 
-router.get('/', staffMiddleware, getMedicalSpecialty, responseSend)
+// router.get('/', staffMiddleware, getMedicalSpecialty, responseSend)
 
 router.get('/public', /* verifyToken , */ getMedicalSpecialty, responseSend)
 
 router.get('/:id', staffMiddleware, getMedicalSpecialtyById, responseSend)
 
-router.post('/addMedicalSpecialty', staffMiddleware, addMedicalSpecialty, responseSend)
+router.post('/addMedicalSpecialty', /* staffMiddleware, */ addMedicalSpecialty, responseSend)
 
 router.put('/updateMedicalSpecialty/:id', staffMiddleware, updateMedicalSpecialty, responseSend)
 

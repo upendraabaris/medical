@@ -42,7 +42,8 @@ const userSchema = new mongoose.Schema({
   // New field for deletion status
   deletionStatus: { type: String, enum: ['active', 'archived'], default: 'active' },
   is_active: { type: Boolean, default: true },
-  archivedAt: { type: Date }
+  archivedAt: { type: Date },
+  wishlist:[ { type: mongoose.Schema.Types.ObjectId, ref:'Product', index: true }]
 },
 {
   timestamps: true,

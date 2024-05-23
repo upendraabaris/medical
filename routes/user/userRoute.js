@@ -1,6 +1,6 @@
 const router = require("express").Router()
 
-const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser, deleteUserVoluntary, getUserGenderRatio, getUserStats } = require("../../controllers/user/userCtrl")
+const {getUser, getUserById, addUser, updateUser, deleteUser, pagination, addToFavorites, addFamilyMember, getFamilyMembers, deleteFamilyMember, getProfile, editProfile, userUpdateProfileImage, userTypeUpgrade, getFamilyMembersByStaff, addUserDoc, getUserDocumentsByCategory, addUserDocByStaff, updateUserDoc, deleteUserDoc, getCountByCategoryForUser, deleteUserVoluntary, getUserGenderRatio, getUserStats, addProductToWishlist, getWishlist } = require("../../controllers/user/userCtrl")
 
 const {responseSend} = require("../../utils/response")
 
@@ -119,7 +119,8 @@ router.get('/admin/user-status', getUserStats, responseSend)
 
 router.get('/:id', staffMiddleware, getUserById, responseSend)
 
+router.post('/addProductToWishlist', verifyToken, addProductToWishlist, responseSend)
 
-
+router.get('/Wishlist/get', verifyToken, getWishlist, responseSend)
 
 module.exports = router

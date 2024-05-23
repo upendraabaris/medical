@@ -37,6 +37,10 @@ const radiologySchema = new mongoose.Schema({
         type: Date,
         // required: true
     },
+    // test_time:{
+    //     type: Date,
+    //     default: Date.now()
+    //   },
     uploaded_report: {
         type: String,
         // required: true

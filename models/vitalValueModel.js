@@ -15,8 +15,28 @@ const vitalValueSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
+  testTime:{
+    type: String,
+    // default: Date.now()
+  },
   value: {
     type: String,
+    // required: true
+  },
+  leftEyeVision: {
+    type: Number,
+    // required: true
+  },
+  rightEyeVision: {
+    type: Number,
+    // required: true
+  },
+  overallVision: {
+    type: String,
+    // required: true
+  },
+  eyePressure: {
+    type: Number,
     // required: true
   },
   reported_by: {

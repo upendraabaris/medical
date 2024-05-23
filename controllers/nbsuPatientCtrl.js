@@ -129,5 +129,44 @@ const deleteAllNbsuPatient = async (req, res, next) => {
         next();
     }
 }
+const MedicationModel = require("../models/nbsuMedicationModel")
+const NbsuResponseMappingModel = require("../models/nbsuResponseMappingModel")
+const NbsuTherapyModel = require("../models/nbsuTherapiesModel")
+const addMedicalData = async(req,res,next)=>{
+    try {
+        const medicationData = req.body.medication;
+        const therapyData = req.body.therapy;
+        const responseMappingData = req.body.responseMapping;
 
-module.exports = {getNbsuPatient, getNbsuPatientById, addNbsuPatient, updateNbsuPatient, deleteNbsuPatient, deleteAllNbsuPatient, getNbsuPatientParticularById}
+        // const medication = MedicationModel.create(medicationData)
+        // const therapy = NbsuTherapyModel.create(therapyData)
+        // const responseMapping = NbsuResponseMappingModel.create(responseMappingData)
+        // res.data = {
+        //     medication,
+        //     therapy,
+        //     responseMapping,
+        //   };
+        // Use Promise.all to execute all create operations concurrently
+    const [medication, therapy, responseMapping] = await Promise.all([
+        MedicationModel.create(medicationData),
+        NbsuTherapyModel.create(therapyData),
+        NbsuResponseMappingModel.create(responseMappingData),
+      ]);
+  
+      res.data = {
+        medication,
+        therapy,
+        responseMapping,
+      };
+        res.status_Code = 200;
+        next();
+    } catch (error) {
+        res.error = true;
+        res.status_Code = 403;
+        res.message = error.message;
+        res.data = {};
+        next();
+    }
+}
+
+module.exports = {getNbsuPatient, getNbsuPatientById, addNbsuPatient, updateNbsuPatient, deleteNbsuPatient, deleteAllNbsuPatient, getNbsuPatientParticularById, addMedicalData}

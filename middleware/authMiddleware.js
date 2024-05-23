@@ -30,7 +30,7 @@ const verifyToken = async(req,res,next)=>{
         if(user != undefined){
             console.log(user);
             const user1 = await userModel.findOne({_id:user.user})
-            console.log(user1)
+            // console.log(user1)
             if(user1 == null)
             {
                 throw new Error("You are not authorized.")

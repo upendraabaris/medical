@@ -11,7 +11,7 @@ router.get('/public', getVitalListing, responseSend)
 
 router.get('/:id', staffMiddleware, getVitalListingById, responseSend)
 
-router.post('/add', /* staffMiddleware, */ addVitalListing, responseSend)
+router.post('/add', staffMiddleware, addVitalListing, responseSend)
 
 // router.post('/public/add', verifyToken, addVitalListing, responseSend)
 

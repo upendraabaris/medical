@@ -1,9 +1,9 @@
-const ServiceModel = require("../../models/service/serviceModel")
+const ProductOrderModel = require("../../models/service/productOrderModel")
 
-const getService = async(req,res,next)=>{
+const getProductOrder = async(req,res,next)=>{
     try{
-        const Service = await ServiceModel.find();
-        res.data = Service
+        const ProductOrder = await ProductOrderModel.find();
+        res.data = ProductOrder
         res.status_Code = "200"
         next()
     }catch(error){
@@ -15,10 +15,10 @@ const getService = async(req,res,next)=>{
     }
 }
 
-const getServiceById = async(req,res,next)=>{
+const getProductOrderById = async(req,res,next)=>{
     try{
-        const Service = await ServiceModel.findById(req.params.id);
-        res.data = Service
+        const ProductOrder = await ProductOrderModel.findById(req.params.id);
+        res.data = ProductOrder
         res.status_Code = "200"
         next()
     }catch(error){
@@ -30,10 +30,10 @@ const getServiceById = async(req,res,next)=>{
     }
 }
 
-const addService = async(req,res,next)=>{
+const addProductOrder = async(req,res,next)=>{
     try{
-        const Service = await ServiceModel.create(req.body);
-        res.data = Service
+        const ProductOrder = await ProductOrderModel.create(req.body);
+        res.data = ProductOrder
         res.status_Code = "200"
         next()
     }catch(error){
@@ -45,10 +45,10 @@ const addService = async(req,res,next)=>{
     }
 }
 
-const updateService = async(req,res,next)=>{
+const updateProductOrder = async(req,res,next)=>{
     try{
-        const Service = await ServiceModel.findByIdAndUpdate(req.params.id,req.body,{new:true});
-        res.data = Service
+        const ProductOrder = await ProductOrderModel.findByIdAndUpdate(req.params.id,req.body,{new:true});
+        res.data = ProductOrder
         res.status_Code = "200"
         next()
     }catch(error){
@@ -60,10 +60,10 @@ const updateService = async(req,res,next)=>{
     }
 }
 
-const deleteService = async(req,res,next)=>{
+const deleteProductOrder = async(req,res,next)=>{
     try{
-        const Service = await ServiceModel.findByIdAndDelete(req.params.id);
-        res.data = Service
+        const ProductOrder = await ProductOrderModel.findByIdAndDelete(req.params.id);
+        res.data = ProductOrder
         res.status_Code = "200"
         next()
     }catch(error){
@@ -75,4 +75,4 @@ const deleteService = async(req,res,next)=>{
     }
 }
 
-module.exports = {getService, getServiceById, addService, updateService, deleteService}
+module.exports = {getProductOrder, getProductOrderById, addProductOrder, updateProductOrder, deleteProductOrder}

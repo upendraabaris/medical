@@ -30,19 +30,33 @@ const getDiseaseById = async(req,res,next)=>{
     }
 }
 
+// const addDisease = async(req,res,next)=>{
+//     try{
+        
+//         const Disease = await DiseaseModel.create(req.body);
+//         res.data = Disease
+//         res.status_Code = "200"
+//         next()
+//     }catch(error){
+//         res.error = true;
+//         res.status_Code = "403";
+//         res.message = error.message
+//         res.data = {}
+//         next()
+//     }
+// }
+
+
 const addDisease = async(req,res,next)=>{
-    try{
-        const Disease = await DiseaseModel.create(req.body);
-        res.data = Disease
-        res.status_Code = "200"
-        next()
-    }catch(error){
-        res.error = true;
-        res.status_Code = "403";
-        res.message = error.message
-        res.data = {}
-        next()
-    }
+    try {
+        let diseases = req.body.diseases
+        const diseaseObjects = diseases.map(disease => ({ disease_name: disease }));
+        console.log(diseaseObjects)
+        // await DiseaseModel.insertMany(diseaseObjects);
+        res.send('Diseases inserted successfully');
+      } catch (error) {
+        res.status(500).send('Error inserting diseases: ' + error.message);
+      }
 }
 
 const updateDisease = async(req,res,next)=>{

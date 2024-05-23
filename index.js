@@ -40,8 +40,8 @@ const apiRoute = require("./routes/apiRoute")
 // const orderResponseTypeRoute = require("./routes/order/orderResponseTypeRoute")
 const departmentRoute = require("./routes/departmentRoute")
 
-const serviceRoute = require("./routes/service/serviceRoute")
-const serviceProductCategoryRoute = require("./routes/service/serviceProductCategoryRoute")
+const productRoute = require("./routes/service/productRoute")
+const ProductCategoryRoute = require("./routes/service/ProductCategoryRoute")
 const currencyRoute = require("./routes/currencyRoute")
 const financeRoute = require("./routes/financeRoute")
 const orderResponseRoute = require("./routes/order/orderResponseRoute")
@@ -80,9 +80,9 @@ const brandRoute = require("./routes/ecommerce/brandRoute")
 
 const doctorRoute = require("./routes/doctor/doctorRoute")
 const attributeSetMasterRoute = require("./routes/ecommerce/attributeSetMasterRoute")
-const productIndustryRoute = require("./routes/ecommerce/prodIndustryRoute")
-const productCategoryRoute = require("./routes/ecommerce/prodcategoryRoute")
-const productRoute = require("./routes/ecommerce/productRoute")
+// const productIndustryRoute = require("./routes/ecommerce/prodIndustryRoute")
+// const productCategoryRoute = require("./routes/ecommerce/prodcategoryRoute")
+// const productRoute = require("./routes/ecommerce/productRoute")
 
 const authRoute = require("./routes/authRoute")
 
@@ -203,9 +203,26 @@ const radiologyDiagnosisRoute = require("./routes/radiologyDiagnosisRoute")
 const generalExaminationRoute = require("./routes/generalExaminationRoute")
 const radiologyVitalValueRoute = require("./routes/radiologyVitalValueRoute")
 
+const productPostalCodeMappingRoute = require("./routes/service/productPostalCodeMappingRoute")
+const productSupplierMappingRoute = require("./routes/service/productSupplierMappingRoute")
+const productOrderRoute = require("./routes/service/productOrderRoute")
+
+const cartRoute = require("./routes/service/cartRoute")
+const medicationRoute = require("./routes/medicationRoute")
+const therapyRoute = require("./routes/therapyRoute")
+const nbsuResponseRoute = require("./routes/nbsuResponseRoute")
+
+const nbsuMedicationRoute = require("./routes/nbsuMedicationRoute")
+const nbsuTherapiesRoute = require("./routes/nbsuTherapiesRoute")
+const nbsuResponseMappingRoute = require("./routes/nbsuResponseMappingRoute")
+
 const cors = require("cors")
 
-
+// const corsOptions = {
+//   origin: ['https://apiuphealback.upheals.store', 'http://localhost:3300', 'http://localhost:3000'], // Allowed origins
+//   methods: ['GET', 'POST'], // Allowed methods
+//   credentials: true // Enable credentials (cookies, authorization headers, etc.)
+// };
 app.use(cors());
 
 app.use('/api/user', userRoute)
@@ -233,8 +250,8 @@ app.use('/api/apimaster', apiRoute)
 // app.use('/api/order-response-type', orderResponseTypeRoute)
 app.use('/api/department', departmentRoute)
 
-app.use('/api/service', serviceRoute)
-app.use('/api/service-productcategory', serviceProductCategoryRoute)
+app.use('/api/product', productRoute)
+app.use('/api/productcategory', ProductCategoryRoute)
 app.use('/api/currency', currencyRoute)
 app.use('/api/finance', financeRoute)
 app.use('/api/order-response', orderResponseRoute)
@@ -273,8 +290,8 @@ app.use('/api/brands', brandRoute)
 
 app.use('/api/doctor', doctorRoute)
 app.use('/api/attribute-set', attributeSetMasterRoute)
-app.use('/api/product-industry', productIndustryRoute)
-app.use('/api/product-category', productCategoryRoute)
+// app.use('/api/product-industry', productIndustryRoute)
+// app.use('/api/product-category', productCategoryRoute)
 app.use('/api/product', productRoute)
 
 app.use('/api/auth', authRoute)
@@ -388,6 +405,19 @@ app.use('/api/radiologyDiagnosis', radiologyDiagnosisRoute)
 app.use('/api/generalExamination', generalExaminationRoute)
 app.use('/api/radiologyVitalValue', radiologyVitalValueRoute)
 
+app.use('/api/productPostalCodeMapping', productPostalCodeMappingRoute)
+app.use('/api/productSupplierMapping', productSupplierMappingRoute)
+app.use('/api/productOrder', productOrderRoute)
+
+app.use('/api/cart', cartRoute)
+app.use('/api/medication', medicationRoute)
+app.use('/api/therapy', therapyRoute)
+app.use('/api/nbsuResponse', nbsuResponseRoute)
+
+app.use('/api/nbsuMedication', nbsuMedicationRoute)
+app.use('/api/nbsuTherapies', nbsuTherapiesRoute)
+app.use('/api/nbsuResponseMapping', nbsuResponseMappingRoute)
+
 // const axios = require("axios")
 // app.post('/send-sms', async(req, res, next) => {
 //     try{
@@ -438,10 +468,10 @@ const { Server } = require("socket.io")
 
 const server = http.createServer(app)
 const io = new Server(server, {
-  // cors: true,
   cors: {
-    origin: "*", // Replace with your Next.js app origin
-    methods: ['GET', 'POST']
+    origin: ['https://apiuphealback.upheals.store', 'http://localhost:3300', 'http://localhost:3000'], // Replace with your client domains
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 

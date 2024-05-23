@@ -1,5 +1,5 @@
 const router = require("express").Router()
-const {getZone, getZoneById, addZone, updateZone, deleteZone, deleteAllZone, getZoneCityMapping, getZoneByStateId} = require("../controllers/zoneCtrl")
+const {getZone, getZoneById, addZone, updateZone, deleteZone, deleteAllZone, getZoneCityMapping, getZoneByStateId, SocketHandler} = require("../controllers/zoneCtrl")
 const {responseSend} = require("../utils/response")
 
 // const {verifyToken} = require("../middleware/authMiddleware")
@@ -20,5 +20,7 @@ router.delete('/deleteZone/:id', staffMiddleware, deleteZone, responseSend)
 router.delete('/deleteAll/:id', staffMiddleware, deleteAllZone, responseSend)
 
 router.get('/zones/:state_id', getZoneByStateId, responseSend)
+
+router.get('/web/websocket', SocketHandler)
 
 module.exports = router
